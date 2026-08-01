@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="theme-color" content="#0A0A0A" />
+  <title>trueX — currency exchange for global travelers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Desktop shows the app inside a phone frame; mobile fills the screen -->
+  <div class="stage">
+    <div class="phone" id="phone">
+      <div class="notch" aria-hidden="true"></div>
+
+      <!-- ===================== SPLASH ===================== -->
+      <section class="screen splash is-active" id="screen-splash" data-screen="splash">
+        <div class="splash-poster">
+          <p class="splash-top mono">REAL RATES IN THE</p>
+          <canvas class="globe" id="globe" width="720" height="720" aria-hidden="true"></canvas>
+          <div class="splash-brand" id="splashBrand">
+            <span class="wordmark xl">true<span class="x">X</span></span>
+          </div>
+          <p class="splash-bottom mono">SAFE&nbsp;&nbsp;DIGITAL&nbsp;&nbsp;SPACE</p>
+          <button class="btn btn-volt splash-cta" id="splashCta" type="button">Get started</button>
+          <p class="splash-skip mono" id="splashSkip">tap anywhere to skip</p>
+        </div>
+      </section>
+
+      <!-- ===================== CREATE ACCOUNT ===================== -->
+      <section class="screen auth" id="screen-create" data-screen="create" hidden>
+        <header class="app-header">
+          <span class="wordmark">true<span class="x">X</span></span>
+        </header>
+        <div class="auth-body">
+          <h1 class="auth-title">Create your<br/>trueX account</h1>
+          <p class="auth-sub mono">Real rates. Zero surprises.</p>
+
+          <label class="field">
+            <span class="field-label mono">FULL NAME</span>
+            <input class="input" type="text" inputmode="text" placeholder="Alex Rivera" autocomplete="name" />
+          </label>
+          <label class="field">
+            <span class="field-label mono">EMAIL ADDRESS</span>
+            <input class="input" type="email" inputmode="email" placeholder="alex@truex.app" autocomplete="email" />
+          </label>
+          <label class="field">
+            <span class="field-label mono">PASSWORD</span>
+            <input class="input" type="password" placeholder="••••••••" autocomplete="new-password" />
+          </label>
+
+          <button class="btn btn-volt block" data-go="home" type="button">Create account</button>
+          <p class="auth-switch mono">Already travelling with us?
+            <button class="link" data-go="login" type="button">Log in</button>
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================== LOGIN ===================== -->
+      <section class="screen auth" id="screen-login" data-screen="login" hidden>
+        <header class="app-header">
+          <span class="wordmark">true<span class="x">X</span></span>
+        </header>
+        <div class="auth-body">
+          <h1 class="auth-title">Enter your<br/>trueX account</h1>
+          <p class="auth-sub mono">Welcome back, traveler.</p>
+
+          <label class="field">
+            <span class="field-label mono">EMAIL ADDRESS</span>
+            <input class="input" type="email" inputmode="email" placeholder="alex@truex.app" autocomplete="email" />
+          </label>
+          <label class="field">
+            <span class="field-label mono">PASSWORD</span>
+            <input class="input" type="password" placeholder="••••••••" autocomplete="current-password" />
+          </label>
+
+          <button class="btn btn-volt block" data-go="home" type="button">Log in</button>
+          <p class="auth-switch mono">New here?
+            <button class="link" data-go="create" type="button">Create an account</button>
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================== HOME / CONVERTER ===================== -->
+      <section class="screen app" id="screen-home" data-screen="home" hidden>
+        <header class="app-header gradient">
+          <span class="wordmark">true<span class="x">X</span></span>
+          <button class="avatar" data-go="profile" type="button" aria-label="Profile">AR</button>
+        </header>
+
+        <div class="app-body" id="homeBody">
+          <div class="hero">
+            <!-- two slowly floating coins -->
+            <div class="coin coin-volt" id="coinVolt" aria-hidden="true"><span>$</span></div>
+            <div class="coin coin-blue" id="coinBlue" aria-hidden="true"><span>€</span></div>
+
+            <div class="hero-text">
+              <p class="hero-kicker mono">LIVE MID-MARKET RATE</p>
+              <div class="hero-rate" id="heroRate">1 USD = 0.9200 EUR</div>
+              <div class="hero-trend mono" id="heroTrend">▲ 0.12% today · updated just now</div>
+            </div>
+          </div>
+
+          <!-- Converter -->
+          <div class="converter">
+            <div class="conv-card conv-from">
+              <div class="conv-row">
+                <span class="conv-tag mono">YOU SEND</span>
+                <button class="cur-chip" data-cur="from" type="button">
+                  <span class="flag" data-flag>🇺🇸</span>
+                  <span class="code" data-code>USD</span>
+                  <span class="chev">▾</span>
+                </button>
+              </div>
+              <input class="conv-amount" id="fromAmount" inputmode="decimal" value="600" aria-label="Amount to send" />
+            </div>
+
+            <button class="swap" id="swapBtn" type="button" aria-label="Swap currencies">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M7 4v13M7 4L3 8M7 4l4 4M17 20V7m0 13l4-4m-4 4l-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+
+            <div class="conv-card conv-to">
+              <div class="conv-row">
+                <span class="conv-tag mono">YOU GET</span>
+                <button class="cur-chip" data-cur="to" type="button">
+                  <span class="flag" data-flag>🇪🇺</span>
+                  <span class="code" data-code>EUR</span>
+                  <span class="chev">▾</span>
+                </button>
+              </div>
+              <div class="conv-amount out" id="toAmount">552.00</div>
+            </div>
+          </div>
+
+          <div class="fee-line mono" id="feeLine">
+            No hidden fees · trueX fee 0.4% · you save vs. banks
+          </div>
+
+          <button class="btn btn-blue block big" id="exchangeBtn" type="button">Exchange now</button>
+
+          <!-- quick rate strip -->
+          <div class="strip">
+            <div class="strip-head">
+              <span class="mono muted">QUICK RATES · 1 USD</span>
+              <button class="link small" data-go="rates" type="button">See all</button>
+            </div>
+            <div class="strip-rail" id="quickRail"><!-- injected --></div>
+          </div>
+
+          <!-- promo banner -->
+          <button class="promo" data-go="wallet" type="button">
+            <div class="promo-card" aria-hidden="true">
+              <span class="chip"></span>
+              <span class="wordmark tiny">true<span class="x">X</span></span>
+            </div>
+            <div class="promo-copy">
+              <strong>Your trueX travel card</strong>
+              <span class="mono muted">Spend abroad at the real rate →</span>
+            </div>
+          </button>
+        </div>
+
+        <nav class="tabbar" id="tabbar">
+          <button class="tab is-active" data-go="home" type="button">
+            <svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M5 10v9h5v-5h4v5h5v-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Convert</span>
+          </button>
+          <button class="tab" data-go="rates" type="button">
+            <svg viewBox="0 0 24 24"><path d="M4 19V5m0 14h16M8 15l3-4 3 3 4-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Rates</span>
+          </button>
+          <button class="tab" data-go="wallet" type="button">
+            <svg viewBox="0 0 24 24"><path d="M3 7h15a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7zm0 0V6a2 2 0 012-2h11M17 13h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Wallet</span>
+          </button>
+          <button class="tab" data-go="profile" type="button">
+            <svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zm-7 8a7 7 0 0114 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>You</span>
+          </button>
+        </nav>
+      </section>
+
+      <!-- ===================== RATES ===================== -->
+      <section class="screen app" id="screen-rates" data-screen="rates" hidden>
+        <header class="app-header gradient">
+          <span class="wordmark">true<span class="x">X</span></span>
+          <button class="avatar" data-go="profile" type="button" aria-label="Profile">AR</button>
+        </header>
+        <div class="app-body">
+          <h2 class="page-title">Live rates</h2>
+          <div class="base-row">
+            <span class="mono muted">BASE</span>
+            <button class="cur-chip solid" data-cur="base" type="button">
+              <span class="flag" data-flag>🇺🇸</span>
+              <span class="code" data-code>USD</span>
+              <span class="chev">▾</span>
+            </button>
+            <span class="mono muted grow" id="ratesUpdated">updated just now</span>
+          </div>
+          <ul class="rate-list" id="rateList"><!-- injected --></ul>
+        </div>
+        <nav class="tabbar" data-mirror></nav>
+      </section>
+
+      <!-- ===================== WALLET ===================== -->
+      <section class="screen app" id="screen-wallet" data-screen="wallet" hidden>
+        <header class="app-header gradient">
+          <span class="wordmark">true<span class="x">X</span></span>
+          <button class="avatar" data-go="profile" type="button" aria-label="Profile">AR</button>
+        </header>
+        <div class="app-body">
+          <div class="balance-card">
+            <span class="mono balance-label">TOTAL BALANCE</span>
+            <div class="balance-amount">$12,940<span>.00</span></div>
+            <div class="balance-actions">
+              <button class="pill" data-go="home" type="button">＋ Add money</button>
+              <button class="pill ghost" data-go="rates" type="button">Exchange</button>
+            </div>
+          </div>
+
+          <div class="strip-head plain">
+            <span class="mono muted">YOUR CURRENCIES</span>
+          </div>
+          <ul class="wallet-list" id="walletList"><!-- injected --></ul>
+
+          <button class="btn btn-blue block big" data-go="home" type="button">Exchange currency</button>
+        </div>
+        <nav class="tabbar" data-mirror></nav>
+      </section>
+
+      <!-- ===================== PROFILE ===================== -->
+      <section class="screen app" id="screen-profile" data-screen="profile" hidden>
+        <header class="app-header gradient">
+          <span class="wordmark">true<span class="x">X</span></span>
+        </header>
+        <div class="app-body">
+          <div class="profile-top">
+            <div class="profile-avatar">AR</div>
+            <div>
+              <strong class="profile-name">Alex Rivera</strong>
+              <span class="mono muted">alex@truex.app</span>
+            </div>
+          </div>
+          <ul class="menu">
+            <li><button type="button"><span>Travel card</span><span class="chev">›</span></button></li>
+            <li><button type="button"><span>Rate alerts</span><span class="chev">›</span></button></li>
+            <li><button type="button"><span>Security</span><span class="chev">›</span></button></li>
+            <li><button type="button"><span>Help &amp; support</span><span class="chev">›</span></button></li>
+          </ul>
+          <button class="btn btn-outline block" data-go="splash" type="button">Log out</button>
+        </div>
+        <nav class="tabbar" data-mirror></nav>
+      </section>
+
+      <!-- ===================== CURRENCY PICKER (bottom sheet) ===================== -->
+      <div class="sheet-scrim" id="scrim" hidden></div>
+      <div class="sheet" id="curSheet" hidden>
+        <div class="sheet-grip" aria-hidden="true"></div>
+        <div class="sheet-head">
+          <h3>Select currency</h3>
+          <button class="sheet-close" id="sheetClose" type="button" aria-label="Close">✕</button>
+        </div>
+        <input class="sheet-search" id="curSearch" placeholder="Search currency…" />
+        <ul class="sheet-list" id="curList"><!-- injected --></ul>
+      </div>
+
+      <!-- ===================== EXCHANGE CONFIRM (bottom sheet) ===================== -->
+      <div class="sheet tall" id="exSheet" hidden>
+        <div class="sheet-grip" aria-hidden="true"></div>
+        <div class="sheet-head">
+          <h3>Confirm exchange</h3>
+          <button class="sheet-close" id="exClose" type="button" aria-label="Close">✕</button>
+        </div>
+        <div class="ex-summary" id="exSummary"><!-- injected --></div>
+        <button class="btn btn-volt block big" id="exConfirm" type="button">Slide to exchange</button>
+      </div>
+
+      <!-- ===================== SUCCESS OVERLAY ===================== -->
+      <div class="success" id="success" hidden>
+        <div class="success-mark" id="successMark">
+          <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24" fill="none"/><path d="M14 27l8 8 16-18" fill="none"/></svg>
+        </div>
+        <p class="success-title">Exchange complete</p>
+        <p class="success-sub mono" id="successSub">You received —</p>
+        <button class="btn btn-volt" id="successDone" type="button">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/globe.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
