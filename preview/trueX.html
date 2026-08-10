@@ -1,0 +1,1183 @@
+<style>
+/* ============================================================
+   trueX — brand system
+   void black #0A0A0A · electric blue #2B3EFF · volt #D4FF3D
+   ============================================================ */
+:root{
+  --void:#0A0A0A;
+  --blue:#2B3EFF;
+  --volt:#D4FF3D;
+
+  --bg:#0A0A0A;
+  --surface:#141414;
+  --surface-2:#1b1b1b;
+  --line:rgba(255,255,255,.09);
+  --line-strong:rgba(255,255,255,.16);
+  --text:#f4f4f4;
+  --muted:#8a8a8a;
+  --muted-2:#5f5f5f;
+
+  --r-lg:26px;
+  --r-md:18px;
+  --r-sm:12px;
+
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,system-ui,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%}
+body{
+  background:#000;
+  color:var(--text);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow:hidden;
+}
+button{font-family:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input{font-family:inherit}
+.mono{font-family:var(--mono);letter-spacing:.04em}
+.muted{color:var(--muted)}
+
+/* ---------- stage + phone frame ---------- */
+.stage{
+  min-height:100%;
+  display:grid;place-items:center;
+  padding:24px;
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgba(43,62,255,.18), transparent 60%),
+    radial-gradient(1000px 600px at 100% 110%, rgba(212,255,61,.12), transparent 60%),
+    #050505;
+}
+.phone{
+  position:relative;
+  width:390px;height:844px;
+  background:var(--bg);
+  border-radius:52px;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 12px #0d0d0d,
+    0 0 0 13px #1e1e1e,
+    0 40px 120px rgba(0,0,0,.7);
+  isolation:isolate;
+}
+.notch{
+  position:absolute;top:12px;left:50%;transform:translateX(-50%);
+  width:126px;height:32px;background:#000;border-radius:20px;z-index:60;pointer-events:none;
+}
+
+/* On real phones, go full-bleed */
+@media (max-width:520px){
+  .stage{padding:0;background:#000}
+  .phone{width:100vw;height:100dvh;height:100vh;border-radius:0;box-shadow:none}
+  .notch{display:none}
+}
+
+/* ---------- screens ---------- */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;
+  animation:screenIn .42s var(--ease) both}
+.screen[hidden]{display:none}
+@keyframes screenIn{from{opacity:0;transform:translateY(10px) scale(.995)}to{opacity:1;transform:none}}
+
+/* ---------- wordmark ---------- */
+.wordmark{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;font-size:24px;color:#fff}
+.wordmark .x{color:var(--volt)}
+.wordmark.xl{font-size:54px}
+.wordmark.tiny{font-size:15px}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  height:52px;padding:0 22px;border-radius:999px;font-weight:600;font-size:16px;
+  transition:transform .12s var(--ease),filter .2s,box-shadow .2s;
+  will-change:transform;user-select:none;
+}
+.btn:active{transform:scale(.96)}
+.btn.block{width:100%}
+.btn.big{height:58px;font-size:17px}
+.btn-volt{background:var(--volt);color:#0a0a0a;box-shadow:0 10px 30px rgba(212,255,61,.22)}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 10px 30px rgba(43,62,255,.3)}
+.btn-outline{background:transparent;color:var(--text);box-shadow:inset 0 0 0 1.5px var(--line-strong)}
+.btn:hover{filter:brightness(1.03)}
+.link{color:var(--volt);font-weight:600;font-family:var(--mono);font-size:13px}
+.link.small{font-size:12px}
+
+/* ============================================================
+   SPLASH
+   ============================================================ */
+.splash{background:var(--void);overflow:hidden}
+.splash-poster{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:64px 24px 42px}
+.splash-top{color:#fff;font-size:12px;letter-spacing:.42em;margin:6px 0 0;opacity:0;
+  animation:fadeIn .8s .2s var(--ease) forwards}
+.globe{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);
+  width:340px;height:340px;filter:drop-shadow(0 30px 80px rgba(43,62,255,.18))}
+.splash-brand{position:absolute;left:0;right:0;bottom:150px;text-align:center;opacity:0;
+  transform:translateY(12px);animation:brandIn 1s 1.5s var(--ease) forwards}
+@keyframes brandIn{to{opacity:1;transform:none}}
+.splash-bottom{position:absolute;bottom:112px;color:#fff;font-size:12px;letter-spacing:.42em;opacity:0;
+  animation:fadeIn .8s .5s var(--ease) forwards}
+.splash-cta{position:absolute;bottom:46px;left:24px;right:24px;width:auto;opacity:0;transform:translateY(14px);
+  animation:brandIn .7s 2.3s var(--ease) forwards}
+.splash-skip{position:absolute;bottom:22px;color:var(--muted-2);font-size:10px;letter-spacing:.3em;
+  opacity:0;animation:fadeIn .6s 2.6s var(--ease) forwards}
+@keyframes fadeIn{to{opacity:1}}
+
+/* ============================================================
+   HEADER (shared)
+   ============================================================ */
+.app-header{
+  position:relative;z-index:5;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:56px 22px 16px;
+  flex:0 0 auto;
+}
+.app-header.gradient::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(100deg,rgba(212,255,61,.16),rgba(43,62,255,.16) 70%);
+  -webkit-mask:linear-gradient(#000,transparent);mask:linear-gradient(#000,transparent);
+}
+.avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--volt),var(--blue));
+  color:#0a0a0a;font-weight:700;font-size:13px;font-family:var(--mono);
+  display:grid;place-items:center;box-shadow:0 0 0 1px var(--line);
+}
+
+/* ============================================================
+   AUTH
+   ============================================================ */
+.auth{background:var(--void)}
+.auth-body{flex:1;padding:24px 26px;display:flex;flex-direction:column;gap:16px}
+.auth-title{font-family:var(--serif);font-weight:600;font-size:34px;line-height:1.08;margin:14px 0 2px}
+.auth-sub{color:var(--volt);font-size:12px;letter-spacing:.14em;margin:0 0 8px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field-label{color:var(--muted);font-size:11px;letter-spacing:.16em}
+.input{
+  height:54px;border-radius:14px;background:#fff;color:#0a0a0a;
+  border:0;padding:0 16px;font-size:16px;outline:none;
+  box-shadow:0 0 0 0 var(--volt);transition:box-shadow .2s;
+}
+.input::placeholder{color:#9a9a9a}
+.input:focus{box-shadow:0 0 0 3px rgba(212,255,61,.6)}
+.auth-body .btn.block{margin-top:8px}
+.auth-switch{text-align:center;color:var(--muted);font-size:12px;margin:4px 0 0}
+.auth-switch .link{font-size:12px}
+
+/* ============================================================
+   APP BODY (scroll area)
+   ============================================================ */
+.app{background:var(--void)}
+.app-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:6px 20px 22px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.app-body::-webkit-scrollbar{display:none}
+.page-title{font-family:var(--serif);font-weight:600;font-size:28px;margin:6px 2px 14px}
+
+/* ---------- hero + floating coins ---------- */
+.hero{position:relative;padding:16px 6px 22px;overflow:visible;min-height:120px}
+.hero-text{max-width:60%}
+.hero-kicker{color:var(--muted);font-size:11px;letter-spacing:.18em;margin:0 0 8px}
+.hero-rate{font-family:var(--serif);font-weight:600;font-size:23px;letter-spacing:-.01em;line-height:1.15}
+.hero-trend{color:var(--volt);font-size:11.5px;margin-top:8px}
+.coin{
+  position:absolute;width:60px;height:60px;border-radius:50%;
+  display:grid;place-items:center;font-weight:800;font-size:25px;z-index:1;
+  pointer-events:none;
+}
+.coin span{transform:translateY(-1px)}
+.coin::after{content:"";position:absolute;inset:6px;border-radius:50%;
+  box-shadow:inset 0 2px 6px rgba(255,255,255,.5),inset 0 -6px 12px rgba(0,0,0,.25)}
+.coin-volt{
+  right:14px;top:8px;color:#0a0a0a;
+  background:radial-gradient(circle at 32% 28%,#eaffb0,var(--volt) 60%,#a9cf1f);
+  box-shadow:0 14px 34px rgba(212,255,61,.28);
+  animation:floatA 9s ease-in-out infinite;
+}
+.coin-blue{
+  right:76px;top:60px;width:48px;height:48px;font-size:20px;color:#fff;
+  background:radial-gradient(circle at 32% 28%,#8b97ff,var(--blue) 62%,#1b28c2);
+  box-shadow:0 14px 34px rgba(43,62,255,.34);
+  animation:floatB 11s ease-in-out infinite;
+}
+@keyframes floatA{
+  0%,100%{transform:translate(0,0) rotate(-6deg)}
+  33%{transform:translate(-7px,-14px) rotate(3deg)}
+  66%{transform:translate(5px,-6px) rotate(-2deg)}
+}
+@keyframes floatB{
+  0%,100%{transform:translate(0,0) rotate(5deg)}
+  30%{transform:translate(8px,10px) rotate(-4deg)}
+  70%{transform:translate(-6px,16px) rotate(2deg)}
+}
+@media (prefers-reduced-motion:reduce){
+  .coin{animation:none}
+}
+
+/* ---------- converter ---------- */
+.converter{position:relative;display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.conv-card{background:var(--surface);border-radius:var(--r-md);padding:16px 18px 18px;
+  border:1px solid var(--line);position:relative}
+.conv-from{border-color:rgba(43,62,255,.55);box-shadow:0 0 0 1px rgba(43,62,255,.25)}
+.conv-to{border-color:rgba(212,255,61,.55);box-shadow:0 0 0 1px rgba(212,255,61,.22)}
+.conv-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.conv-tag{color:var(--muted);font-size:10.5px;letter-spacing:.16em}
+.conv-amount{
+  font-family:var(--serif);font-weight:600;font-size:38px;letter-spacing:-.02em;
+  background:none;border:0;outline:none;color:var(--text);width:100%;padding:0;
+}
+.conv-amount.out{color:var(--volt)}
+.cur-chip{
+  display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 12px;border-radius:999px;
+  background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line);
+  font-weight:600;font-size:14px;transition:transform .12s var(--ease),background .2s}
+.cur-chip:active{transform:scale(.95)}
+.cur-chip.solid{background:var(--surface)}
+.cur-chip .flag{font-size:18px;line-height:1}
+.cur-chip .chev{color:var(--muted);font-size:11px}
+.swap{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;
+  width:46px;height:46px;border-radius:50%;background:var(--volt);color:#0a0a0a;
+  display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.5),0 0 0 4px var(--void);
+  transition:transform .3s var(--ease)}
+.swap:active{transform:translate(-50%,-50%) scale(.9)}
+.swap.spin{transform:translate(-50%,-50%) rotate(180deg)}
+
+.fee-line{color:var(--muted);font-size:11px;text-align:center;margin:14px 0 12px}
+#exchangeBtn{margin-bottom:4px}
+
+/* ---------- quick rate strip ---------- */
+.strip{margin-top:24px}
+.strip-head{display:flex;align-items:center;justify-content:space-between;margin:0 2px 10px}
+.strip-head.plain{margin:22px 2px 12px}
+.strip-rail{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}
+.strip-rail::-webkit-scrollbar{display:none}
+.rate-pill{
+  flex:0 0 auto;display:flex;flex-direction:column;gap:2px;
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-width:96px}
+.rate-pill .rp-top{display:flex;align-items:center;gap:7px;font-weight:600;font-size:13px}
+.rate-pill .rp-val{font-family:var(--mono);font-size:15px}
+.rate-pill .rp-chg{font-family:var(--mono);font-size:10.5px}
+.up{color:var(--volt)} .down{color:#ff6a8a}
+
+/* ---------- promo ---------- */
+.promo{display:flex;align-items:center;gap:14px;width:100%;text-align:left;margin-top:22px;
+  background:linear-gradient(120deg,#12142e,#0f1024);border:1px solid var(--line);
+  border-radius:var(--r-md);padding:14px}
+.promo-card{position:relative;width:92px;height:60px;border-radius:10px;flex:0 0 auto;
+  background:linear-gradient(140deg,var(--blue),#1b28c2);box-shadow:0 8px 20px rgba(43,62,255,.4);
+  display:flex;align-items:flex-end;justify-content:flex-end;padding:8px}
+.promo-card .chip{position:absolute;left:9px;top:9px;width:16px;height:12px;border-radius:3px;
+  background:linear-gradient(135deg,#f4d27a,#c99b3c)}
+.promo-card .wordmark.tiny{font-size:12px}
+.promo-copy{display:flex;flex-direction:column;gap:3px}
+.promo-copy strong{font-size:15px}
+.promo-copy .mono{font-size:11px}
+
+/* ============================================================
+   RATES screen
+   ============================================================ */
+.base-row{display:flex;align-items:center;gap:10px;margin:0 2px 14px}
+.base-row .grow{margin-left:auto;font-size:11px}
+.rate-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.rate-item{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:13px 15px}
+.rate-item .flag{font-size:24px}
+.rate-item .ri-code{font-weight:700;font-size:15px}
+.rate-item .ri-name{font-size:11.5px;color:var(--muted)}
+.rate-item .ri-right{margin-left:auto;text-align:right}
+.rate-item .ri-val{font-family:var(--mono);font-size:15px}
+.rate-item .ri-chg{font-family:var(--mono);font-size:11px}
+
+/* ============================================================
+   WALLET
+   ============================================================ */
+.balance-card{
+  background:linear-gradient(135deg,var(--volt),#a9cf1f);
+  color:#0a0a0a;border-radius:var(--r-lg);padding:22px;margin:8px 0 4px;
+  box-shadow:0 20px 50px rgba(212,255,61,.18);position:relative;overflow:hidden}
+.balance-card::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;
+  border-radius:50%;background:rgba(255,255,255,.18)}
+.balance-label{font-size:11px;letter-spacing:.16em;opacity:.7}
+.balance-amount{font-family:var(--serif);font-weight:700;font-size:44px;margin:6px 0 16px;letter-spacing:-.02em}
+.balance-amount span{font-size:24px;opacity:.55}
+.balance-actions{display:flex;gap:10px;position:relative;z-index:1}
+.pill{height:40px;padding:0 16px;border-radius:999px;background:#0a0a0a;color:#fff;font-weight:600;font-size:13px;
+  transition:transform .12s var(--ease)}
+.pill:active{transform:scale(.95)}
+.pill.ghost{background:rgba(10,10,10,.12);color:#0a0a0a;box-shadow:inset 0 0 0 1.5px rgba(10,10,10,.35)}
+.wallet-list{list-style:none;margin:0 0 18px;padding:0;display:flex;flex-direction:column;gap:8px}
+.wallet-item{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:13px 15px}
+.wallet-item .flag{font-size:24px}
+.wallet-item .wi-code{font-weight:700;font-size:15px}
+.wallet-item .wi-sub{font-size:11.5px;color:var(--muted)}
+.wallet-item .wi-right{margin-left:auto;text-align:right}
+.wallet-item .wi-bal{font-family:var(--mono);font-size:15px}
+.wallet-item .wi-fiat{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+/* ============================================================
+   PROFILE
+   ============================================================ */
+.profile-top{display:flex;align-items:center;gap:14px;padding:10px 2px 20px}
+.profile-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--volt),var(--blue));
+  color:#0a0a0a;font-weight:800;display:grid;place-items:center;font-family:var(--mono)}
+.profile-name{display:block;font-size:18px}
+.profile-top .mono{font-size:12px}
+.menu{list-style:none;margin:0 0 20px;padding:0;display:flex;flex-direction:column;gap:8px}
+.menu button{display:flex;align-items:center;justify-content:space-between;width:100%;
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;font-size:15px}
+.menu .chev{color:var(--muted);font-size:18px}
+
+/* ============================================================
+   TABBAR
+   ============================================================ */
+.tabbar{flex:0 0 auto;display:flex;justify-content:space-around;align-items:center;
+  padding:10px 8px calc(18px + env(safe-area-inset-bottom,0));
+  background:rgba(10,10,10,.9);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted-2);
+  font-size:10.5px;font-weight:600;padding:4px 10px;transition:color .2s}
+.tab svg{width:24px;height:24px}
+.tab.is-active{color:var(--volt)}
+
+/* ============================================================
+   BOTTOM SHEETS
+   ============================================================ */
+.sheet-scrim{position:absolute;inset:0;background:rgba(0,0,0,.6);z-index:80;
+  animation:fadeIn .25s ease forwards;opacity:0}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:90;background:var(--surface);
+  border-top-left-radius:26px;border-top-right-radius:26px;padding:12px 20px 26px;
+  box-shadow:0 -20px 60px rgba(0,0,0,.6);
+  transform:translateY(100%);animation:sheetUp .34s var(--ease) forwards;
+  max-height:82%;display:flex;flex-direction:column}
+.sheet.tall{min-height:52%}
+@keyframes sheetUp{to{transform:translateY(0)}}
+.sheet.closing{animation:sheetDown .28s var(--ease) forwards}
+@keyframes sheetDown{to{transform:translateY(100%)}}
+.sheet-grip{width:40px;height:4px;border-radius:99px;background:var(--line-strong);margin:2px auto 12px}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sheet-head h3{margin:0;font-size:18px;font-family:var(--serif);font-weight:600}
+.sheet-close{width:32px;height:32px;border-radius:50%;background:var(--surface-2);color:var(--muted);font-size:14px}
+.sheet-search{height:46px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line);
+  color:var(--text);padding:0 14px;outline:none;margin-bottom:10px}
+.sheet-search:focus{border-color:var(--volt)}
+.sheet-list{list-style:none;margin:0;padding:0;overflow-y:auto;scrollbar-width:none}
+.sheet-list::-webkit-scrollbar{display:none}
+.sheet-item{display:flex;align-items:center;gap:12px;padding:13px 8px;border-radius:12px;cursor:pointer}
+.sheet-item:active{background:var(--surface-2)}
+.sheet-item .flag{font-size:24px}
+.sheet-item .si-code{font-weight:700;font-size:15px}
+.sheet-item .si-name{font-size:12px;color:var(--muted)}
+.sheet-item .si-check{margin-left:auto;color:var(--volt);opacity:0;font-weight:700}
+.sheet-item.sel .si-check{opacity:1}
+
+/* exchange summary */
+.ex-summary{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.ex-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;
+  background:var(--surface-2);border-radius:14px}
+.ex-row .ex-k{color:var(--muted);font-size:13px;font-family:var(--mono)}
+.ex-row .ex-v{font-weight:600;font-size:16px}
+.ex-big{font-family:var(--serif);font-size:22px}
+.ex-arrow{align-self:center;color:var(--volt);font-size:20px}
+
+/* success */
+.success{position:absolute;inset:0;z-index:120;background:var(--void);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:32px;
+  animation:fadeIn .3s ease}
+.success-mark svg{width:96px;height:96px}
+.success-mark circle{stroke:var(--volt);stroke-width:3;stroke-dasharray:151;stroke-dashoffset:151;
+  animation:draw .5s .05s var(--ease) forwards}
+.success-mark path{stroke:var(--volt);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:44;stroke-dashoffset:44;animation:draw .4s .45s var(--ease) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.success-title{font-family:var(--serif);font-size:26px;margin:8px 0 0}
+.success-sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+
+</style>
+
+<!-- Desktop shows the app inside a phone frame; mobile fills the screen -->
+  <div class="stage">
+    <div class="phone" id="phone">
+      <div class="notch" aria-hidden="true"></div>
+
+      <!-- ===================== SPLASH ===================== -->
+      <section class="screen splash is-active" id="screen-splash" data-screen="splash">
+        <div class="splash-poster">
+          <p class="splash-top mono">REAL RATES IN THE</p>
+          <canvas class="globe" id="globe" width="720" height="720" aria-hidden="true"></canvas>
+          <div class="splash-brand" id="splashBrand">
+            <span class="wordmark xl">true<span class="x">X</span></span>
+          </div>
+          <p class="splash-bottom mono">SAFE&nbsp;&nbsp;DIGITAL&nbsp;&nbsp;SPACE</p>
+          <button class="btn btn-volt splash-cta" id="splashCta" type="button">Get started</button>
+          <p class="splash-skip mono" id="splashSkip">tap anywhere to skip</p>
+        </div>
+      </section>
+
+      <!-- ===================== CREATE ACCOUNT ===================== -->
+      <section class="screen auth" id="screen-create" data-screen="create" hidden>
+        <header class="app-header">
+          <span class="wordmark">true<span class="x">X</span></span>
+        </header>
+        <div class="auth-body">
+          <h1 class="auth-title">Create your<br/>trueX account</h1>
+          <p class="auth-sub mono">Real rates. Zero surprises.</p>
+
+          <label class="field">
+            <span class="field-label mono">FULL NAME</span>
+            <input class="input" type="text" inputmode="text" placeholder="Alex Rivera" autocomplete="name" />
+          </label>
+          <label class="field">
+            <span class="field-label mono">EMAIL ADDRESS</span>
+            <input class="input" type="email" inputmode="email" placeholder="alex@truex.app" autocomplete="email" />
+          </label>
+          <label class="field">
+            <span class="field-label mono">PASSWORD</span>
+            <input class="input" type="password" placeholder="••••••••" autocomplete="new-password" />
+          </label>
+
+          <button class="btn btn-volt block" data-go="home" type="button">Create account</button>
+          <p class="auth-switch mono">Already travelling with us?
+            <button class="link" data-go="login" type="button">Log in</button>
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================== LOGIN ===================== -->
+      <section class="screen auth" id="screen-login" data-screen="login" hidden>
+        <header class="app-header">
+          <span class="wordmark">true<span class="x">X</span></span>
+        </header>
+        <div class="auth-body">
+          <h1 class="auth-title">Enter your<br/>trueX account</h1>
+          <p class="auth-sub mono">Welcome back, traveler.</p>
+
+          <label class="field">
+            <span class="field-label mono">EMAIL ADDRESS</span>
+            <input class="input" type="email" inputmode="email" placeholder="alex@truex.app" autocomplete="email" />
+          </label>
+          <label class="field">
+            <span class="field-label mono">PASSWORD</span>
+            <input class="input" type="password" placeholder="••••••••" autocomplete="current-password" />
+          </label>
+
+          <button class="btn btn-volt block" data-go="home" type="button">Log in</button>
+          <p class="auth-switch mono">New here?
+            <button class="link" data-go="create" type="button">Create an account</button>
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================== HOME / CONVERTER ===================== -->
+      <section class="screen app" id="screen-home" data-screen="home" hidden>
+        <header class="app-header gradient">
+          <span class="wordmark">true<span class="x">X</span></span>
+          <button class="avatar" data-go="profile" type="button" aria-label="Profile">AR</button>
+        </header>
+
+        <div class="app-body" id="homeBody">
+          <div class="hero">
+            <!-- two slowly floating coins -->
+            <div class="coin coin-volt" id="coinVolt" aria-hidden="true"><span>$</span></div>
+            <div class="coin coin-blue" id="coinBlue" aria-hidden="true"><span>€</span></div>
+
+            <div class="hero-text">
+              <p class="hero-kicker mono">LIVE MID-MARKET RATE</p>
+              <div class="hero-rate" id="heroRate">1 USD = 0.9200 EUR</div>
+              <div class="hero-trend mono" id="heroTrend">▲ 0.12% today · updated just now</div>
+            </div>
+          </div>
+
+          <!-- Converter -->
+          <div class="converter">
+            <div class="conv-card conv-from">
+              <div class="conv-row">
+                <span class="conv-tag mono">YOU SEND</span>
+                <button class="cur-chip" data-cur="from" type="button">
+                  <span class="flag" data-flag>🇺🇸</span>
+                  <span class="code" data-code>USD</span>
+                  <span class="chev">▾</span>
+                </button>
+              </div>
+              <input class="conv-amount" id="fromAmount" inputmode="decimal" value="600" aria-label="Amount to send" />
+            </div>
+
+            <button class="swap" id="swapBtn" type="button" aria-label="Swap currencies">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M7 4v13M7 4L3 8M7 4l4 4M17 20V7m0 13l4-4m-4 4l-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+
+            <div class="conv-card conv-to">
+              <div class="conv-row">
+                <span class="conv-tag mono">YOU GET</span>
+                <button class="cur-chip" data-cur="to" type="button">
+                  <span class="flag" data-flag>🇪🇺</span>
+                  <span class="code" data-code>EUR</span>
+                  <span class="chev">▾</span>
+                </button>
+              </div>
+              <div class="conv-amount out" id="toAmount">552.00</div>
+            </div>
+          </div>
+
+          <div class="fee-line mono" id="feeLine">
+            No hidden fees · trueX fee 0.4% · you save vs. banks
+          </div>
+
+          <button class="btn btn-blue block big" id="exchangeBtn" type="button">Exchange now</button>
+
+          <!-- quick rate strip -->
+          <div class="strip">
+            <div class="strip-head">
+              <span class="mono muted">QUICK RATES · 1 USD</span>
+              <button class="link small" data-go="rates" type="button">See all</button>
+            </div>
+            <div class="strip-rail" id="quickRail"><!-- injected --></div>
+          </div>
+
+          <!-- promo banner -->
+          <button class="promo" data-go="wallet" type="button">
+            <div class="promo-card" aria-hidden="true">
+              <span class="chip"></span>
+              <span class="wordmark tiny">true<span class="x">X</span></span>
+            </div>
+            <div class="promo-copy">
+              <strong>Your trueX travel card</strong>
+              <span class="mono muted">Spend abroad at the real rate →</span>
+            </div>
+          </button>
+        </div>
+
+        <nav class="tabbar" id="tabbar">
+          <button class="tab is-active" data-go="home" type="button">
+            <svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M5 10v9h5v-5h4v5h5v-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Convert</span>
+          </button>
+          <button class="tab" data-go="rates" type="button">
+            <svg viewBox="0 0 24 24"><path d="M4 19V5m0 14h16M8 15l3-4 3 3 4-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Rates</span>
+          </button>
+          <button class="tab" data-go="wallet" type="button">
+            <svg viewBox="0 0 24 24"><path d="M3 7h15a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7zm0 0V6a2 2 0 012-2h11M17 13h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Wallet</span>
+          </button>
+          <button class="tab" data-go="profile" type="button">
+            <svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zm-7 8a7 7 0 0114 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>You</span>
+          </button>
+        </nav>
+      </section>
+
+      <!-- ===================== RATES ===================== -->
+      <section class="screen app" id="screen-rates" data-screen="rates" hidden>
+        <header class="app-header gradient">
+          <span class="wordmark">true<span class="x">X</span></span>
+          <button class="avatar" data-go="profile" type="button" aria-label="Profile">AR</button>
+        </header>
+        <div class="app-body">
+          <h2 class="page-title">Live rates</h2>
+          <div class="base-row">
+            <span class="mono muted">BASE</span>
+            <button class="cur-chip solid" data-cur="base" type="button">
+              <span class="flag" data-flag>🇺🇸</span>
+              <span class="code" data-code>USD</span>
+              <span class="chev">▾</span>
+            </button>
+            <span class="mono muted grow" id="ratesUpdated">updated just now</span>
+          </div>
+          <ul class="rate-list" id="rateList"><!-- injected --></ul>
+        </div>
+        <nav class="tabbar" data-mirror></nav>
+      </section>
+
+      <!-- ===================== WALLET ===================== -->
+      <section class="screen app" id="screen-wallet" data-screen="wallet" hidden>
+        <header class="app-header gradient">
+          <span class="wordmark">true<span class="x">X</span></span>
+          <button class="avatar" data-go="profile" type="button" aria-label="Profile">AR</button>
+        </header>
+        <div class="app-body">
+          <div class="balance-card">
+            <span class="mono balance-label">TOTAL BALANCE</span>
+            <div class="balance-amount">$12,940<span>.00</span></div>
+            <div class="balance-actions">
+              <button class="pill" data-go="home" type="button">＋ Add money</button>
+              <button class="pill ghost" data-go="rates" type="button">Exchange</button>
+            </div>
+          </div>
+
+          <div class="strip-head plain">
+            <span class="mono muted">YOUR CURRENCIES</span>
+          </div>
+          <ul class="wallet-list" id="walletList"><!-- injected --></ul>
+
+          <button class="btn btn-blue block big" data-go="home" type="button">Exchange currency</button>
+        </div>
+        <nav class="tabbar" data-mirror></nav>
+      </section>
+
+      <!-- ===================== PROFILE ===================== -->
+      <section class="screen app" id="screen-profile" data-screen="profile" hidden>
+        <header class="app-header gradient">
+          <span class="wordmark">true<span class="x">X</span></span>
+        </header>
+        <div class="app-body">
+          <div class="profile-top">
+            <div class="profile-avatar">AR</div>
+            <div>
+              <strong class="profile-name">Alex Rivera</strong>
+              <span class="mono muted">alex@truex.app</span>
+            </div>
+          </div>
+          <ul class="menu">
+            <li><button type="button"><span>Travel card</span><span class="chev">›</span></button></li>
+            <li><button type="button"><span>Rate alerts</span><span class="chev">›</span></button></li>
+            <li><button type="button"><span>Security</span><span class="chev">›</span></button></li>
+            <li><button type="button"><span>Help &amp; support</span><span class="chev">›</span></button></li>
+          </ul>
+          <button class="btn btn-outline block" data-go="splash" type="button">Log out</button>
+        </div>
+        <nav class="tabbar" data-mirror></nav>
+      </section>
+
+      <!-- ===================== CURRENCY PICKER (bottom sheet) ===================== -->
+      <div class="sheet-scrim" id="scrim" hidden></div>
+      <div class="sheet" id="curSheet" hidden>
+        <div class="sheet-grip" aria-hidden="true"></div>
+        <div class="sheet-head">
+          <h3>Select currency</h3>
+          <button class="sheet-close" id="sheetClose" type="button" aria-label="Close">✕</button>
+        </div>
+        <input class="sheet-search" id="curSearch" placeholder="Search currency…" />
+        <ul class="sheet-list" id="curList"><!-- injected --></ul>
+      </div>
+
+      <!-- ===================== EXCHANGE CONFIRM (bottom sheet) ===================== -->
+      <div class="sheet tall" id="exSheet" hidden>
+        <div class="sheet-grip" aria-hidden="true"></div>
+        <div class="sheet-head">
+          <h3>Confirm exchange</h3>
+          <button class="sheet-close" id="exClose" type="button" aria-label="Close">✕</button>
+        </div>
+        <div class="ex-summary" id="exSummary"><!-- injected --></div>
+        <button class="btn btn-volt block big" id="exConfirm" type="button">Slide to exchange</button>
+      </div>
+
+      <!-- ===================== SUCCESS OVERLAY ===================== -->
+      <div class="success" id="success" hidden>
+        <div class="success-mark" id="successMark">
+          <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24" fill="none"/><path d="M14 27l8 8 16-18" fill="none"/></svg>
+        </div>
+        <p class="success-title">Exchange complete</p>
+        <p class="success-sub mono" id="successSub">You received —</p>
+        <button class="btn btn-volt" id="successDone" type="button">Done</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ============================================================
+   trueX splash globe
+   Left hemisphere: a quiet, shaded "real" Earth.
+   Right hemisphere: a morse-style dot/dash matrix that ripples
+   in — strictly in the two brand colors (volt + electric blue).
+   ============================================================ */
+(function () {
+  const VOLT = '#D4FF3D';
+  const BLUE = '#2B3EFF';
+
+  const canvas = document.getElementById('globe');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+  const R = W * 0.46;
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // --- pre-compute the dot/dash cells for the right hemisphere ---
+  const cells = [];
+  const step = 30;              // grid spacing
+  const gap = 8;                // keep dots off the exact seam
+  for (let y = -R; y <= R; y += step) {
+    for (let x = gap; x <= R; x += step) {
+      // jitter so it feels organic rather than a rigid grid
+      const jx = (Math.random() - 0.5) * 8;
+      const jy = (Math.random() - 0.5) * 8;
+      const px = x + jx, py = y + jy;
+      if (px * px + py * py > (R - 6) * (R - 6)) continue; // stay inside the sphere
+      const isDash = Math.random() < 0.22;                 // ~1 in 5 is a "dash"
+      cells.push({
+        x: cx + px,
+        y: cy + py,
+        r: isDash ? 5.5 : 4.6,
+        len: isDash ? step * 0.72 : 0,
+        color: Math.random() < 0.5 ? VOLT : BLUE,
+        // ripple delay grows with distance from the seam -> sweeps outward
+        delay: (px / R) * 620 + Math.random() * 260,
+        tw: Math.random() * Math.PI * 2            // twinkle phase
+      });
+    }
+  }
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  const start = performance.now();
+
+  function drawEarth() {
+    // clip to the left hemisphere
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(cx - R - 4, cy - R - 4, R + 4, (R + 4) * 2);
+    ctx.clip();
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.clip();
+
+    // base sphere shading — lit from the right seam, dark to the left limb
+    const g = ctx.createRadialGradient(cx - R * 0.05, cy - R * 0.15, R * 0.15, cx, cy, R);
+    g.addColorStop(0, '#26302a');
+    g.addColorStop(0.55, '#141a17');
+    g.addColorStop(1, '#050706');
+    ctx.fillStyle = g;
+    ctx.fillRect(cx - R, cy - R, R * 2, R * 2);
+
+    // faint continents / clouds so the "real" half reads as a planet
+    const blobs = [
+      [-0.55, -0.35, 0.28, 'rgba(70,84,60,.55)'],
+      [-0.30, 0.10, 0.34, 'rgba(56,70,48,.5)'],
+      [-0.62, 0.42, 0.22, 'rgba(48,60,44,.5)'],
+      [-0.15, -0.55, 0.20, 'rgba(90,100,70,.35)'],
+      [-0.10, 0.55, 0.26, 'rgba(40,52,40,.45)']
+    ];
+    blobs.forEach(([dx, dy, rr, col]) => {
+      const bg = ctx.createRadialGradient(cx + dx * R, cy + dy * R, 0, cx + dx * R, cy + dy * R, rr * R);
+      bg.addColorStop(0, col);
+      bg.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.arc(cx + dx * R, cy + dy * R, rr * R, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // atmosphere rim light along the seam
+    const rim = ctx.createLinearGradient(cx - R * 0.4, 0, cx, 0);
+    rim.addColorStop(0, 'rgba(0,0,0,0)');
+    rim.addColorStop(1, 'rgba(120,150,255,.10)');
+    ctx.fillStyle = rim;
+    ctx.fillRect(cx - R, cy - R, R, R * 2);
+
+    ctx.restore();
+  }
+
+  function frame(now) {
+    const t = now - start;
+    ctx.clearRect(0, 0, W, H);
+
+    drawEarth();
+
+    // seam glow
+    const seam = ctx.createLinearGradient(cx - 20, 0, cx + 30, 0);
+    seam.addColorStop(0, 'rgba(212,255,61,0)');
+    seam.addColorStop(1, 'rgba(212,255,61,.10)');
+    ctx.fillStyle = seam;
+    ctx.fillRect(cx - 20, cy - R, 60, R * 2);
+
+    // dot / dash matrix
+    for (const c of cells) {
+      let appear = reduce ? 1 : Math.min(1, Math.max(0, (t - c.delay) / 520));
+      if (appear <= 0) continue;
+      // ease-out
+      const e = 1 - Math.pow(1 - appear, 3);
+      const twinkle = reduce ? 0.92 : 0.78 + 0.22 * Math.sin(now / 700 + c.tw);
+      ctx.globalAlpha = e * twinkle;
+      ctx.fillStyle = c.color;
+      ctx.shadowColor = c.color;
+      ctx.shadowBlur = 10 * e;
+      if (c.len) {
+        roundRect(c.x - c.r, c.y - c.r, c.len + c.r * 2, c.r * 2, c.r);
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.r * e, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+
+    if (!reduce) requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+})();
+
+</script>
+
+<script>
+/* ============================================================
+   trueX — app interactions
+   Navigation · live-ish rates · converter · currency picker ·
+   exchange confirm + success. No dependencies.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  /* ---------- currency data (mid-market vs USD) ---------- */
+  const CUR = {
+    USD: { flag: '🇺🇸', name: 'US Dollar',        rate: 1,       sym: '$' },
+    EUR: { flag: '🇪🇺', name: 'Euro',             rate: 0.9200,  sym: '€' },
+    GBP: { flag: '🇬🇧', name: 'British Pound',    rate: 0.7850,  sym: '£' },
+    JPY: { flag: '🇯🇵', name: 'Japanese Yen',     rate: 156.30,  sym: '¥' },
+    AUD: { flag: '🇦🇺', name: 'Australian Dollar',rate: 1.5200,  sym: '$' },
+    CAD: { flag: '🇨🇦', name: 'Canadian Dollar',  rate: 1.3700,  sym: '$' },
+    CHF: { flag: '🇨🇭', name: 'Swiss Franc',      rate: 0.8850,  sym: 'Fr' },
+    CNY: { flag: '🇨🇳', name: 'Chinese Yuan',     rate: 7.2400,  sym: '¥' },
+    INR: { flag: '🇮🇳', name: 'Indian Rupee',     rate: 83.500,  sym: '₹' },
+    SGD: { flag: '🇸🇬', name: 'Singapore Dollar', rate: 1.3500,  sym: '$' },
+    AED: { flag: '🇦🇪', name: 'UAE Dirham',       rate: 3.6700,  sym: 'د.إ' },
+    THB: { flag: '🇹🇭', name: 'Thai Baht',        rate: 36.200,  sym: '฿' },
+    MXN: { flag: '🇲🇽', name: 'Mexican Peso',     rate: 18.700,  sym: '$' }
+  };
+  const WALLET = ['USD', 'EUR', 'GBP', 'JPY', 'AUD']; // currencies the traveler holds
+
+  const state = {
+    from: 'USD',
+    to: 'EUR',
+    base: 'USD',
+    amount: 600,
+    picking: null,        // 'from' | 'to' | 'base'
+  };
+
+  /* ---------- helpers ---------- */
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+  function crossRate(from, to) {
+    // rates are per-USD, so: amount_from -> USD -> to
+    return CUR[to].rate / CUR[from].rate;
+  }
+  function fmt(n, code) {
+    const dp = CUR[code] && (CUR[code].rate >= 20 || code === 'JPY') ? 0 : 2;
+    return n.toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+  }
+  function haptic() {
+    if (navigator.vibrate) { try { navigator.vibrate(8); } catch (e) {} }
+  }
+
+  /* ---------- navigation ---------- */
+  const screens = {};
+  $$('.screen').forEach(s => { screens[s.dataset.screen] = s; });
+  let current = 'splash';
+
+  function go(name) {
+    if (!screens[name] || name === current) {
+      if (name === current) return;
+    }
+    if (!screens[name]) return;
+    screens[current].hidden = true;
+    screens[current].classList.remove('is-active');
+    const el = screens[name];
+    el.hidden = false;
+    // restart entrance animation
+    el.classList.remove('is-active');
+    void el.offsetWidth;
+    el.classList.add('is-active');
+    if (el.querySelector('.app-body')) el.querySelector('.app-body').scrollTop = 0;
+    current = name;
+    syncTabs();
+    haptic();
+  }
+
+  // any element with data-go
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-go]');
+    if (!t) return;
+    go(t.dataset.go);
+  });
+
+  function syncTabs() {
+    $$('.tab').forEach(tab => {
+      tab.classList.toggle('is-active', tab.dataset.go === current);
+    });
+  }
+
+  // mirror the tabbar markup into screens that requested it
+  const tabTemplate = $('#tabbar');
+  $$('.tabbar[data-mirror]').forEach(nav => { nav.innerHTML = tabTemplate.innerHTML; });
+
+  /* ---------- splash ---------- */
+  const splashScreen = screens.splash;
+  let splashDone = false;
+  function leaveSplash() {
+    if (splashDone) return;
+    splashDone = true;
+    go('create');
+  }
+  $('#splashCta').addEventListener('click', e => { e.stopPropagation(); leaveSplash(); });
+  splashScreen.addEventListener('click', e => {
+    // let the CTA handle its own click; tapping elsewhere skips
+    if (e.target.closest('#splashCta')) return;
+    leaveSplash();
+  });
+  // auto-advance after the intro plays
+  setTimeout(() => { if (current === 'splash') { /* wait for user */ } }, 4200);
+
+  /* ---------- converter ---------- */
+  const fromAmount = $('#fromAmount');
+  const toAmount = $('#toAmount');
+  const heroRate = $('#heroRate');
+  const heroTrend = $('#heroTrend');
+  const feeLine = $('#feeLine');
+  const FEE = 0.004;
+
+  function renderChips() {
+    // update from/to chips + base chip flags & codes
+    $$('.cur-chip').forEach(chip => {
+      const which = chip.dataset.cur;
+      const code = state[which];
+      if (!code) return;
+      chip.querySelector('[data-flag]').textContent = CUR[code].flag;
+      chip.querySelector('[data-code]').textContent = code;
+    });
+  }
+
+  function computeConversion() {
+    const a = parseFloat(String(fromAmount.value).replace(/[^0-9.]/g, '')) || 0;
+    state.amount = a;
+    const rate = crossRate(state.from, state.to);
+    const gross = a * rate;
+    const net = gross * (1 - FEE);
+    toAmount.textContent = fmt(net, state.to);
+    heroRate.textContent = `1 ${state.from} = ${crossRate(state.from, state.to).toFixed(4)} ${state.to}`;
+    const saved = (gross * FEE * (CUR[state.from].rate / CUR[state.to].rate)); // rough "vs bank"
+    feeLine.textContent = `trueX fee ${(FEE * 100).toFixed(1)}% · you get ${CUR[state.to].sym}${fmt(net, state.to)} · no hidden markup`;
+  }
+
+  fromAmount.addEventListener('input', () => {
+    // keep it numeric-ish while typing
+    computeConversion();
+  });
+  fromAmount.addEventListener('blur', () => {
+    const a = parseFloat(String(fromAmount.value).replace(/[^0-9.]/g, '')) || 0;
+    fromAmount.value = a ? String(a) : '0';
+    computeConversion();
+  });
+
+  const swapBtn = $('#swapBtn');
+  swapBtn.addEventListener('click', () => {
+    swapBtn.classList.toggle('spin');
+    [state.from, state.to] = [state.to, state.from];
+    renderChips();
+    computeConversion();
+    haptic();
+  });
+
+  /* ---------- live-ish rate ticker ---------- */
+  function jitterRates() {
+    Object.keys(CUR).forEach(code => {
+      if (code === 'USD') return;
+      const drift = 1 + (Math.random() - 0.5) * 0.0025; // ±0.25%
+      CUR[code].rate *= drift;
+      CUR[code].chg = (CUR[code].chg || 0) * 0.6 + (drift - 1) * 100 * 0.4;
+    });
+    computeConversion();
+    buildQuickRail();
+    buildRateList();
+    const upPct = (0.02 + Math.random() * 0.28).toFixed(2);
+    heroTrend.textContent = `▲ ${upPct}% today · updated just now`;
+    const ru = $('#ratesUpdated'); if (ru) ru.textContent = 'updated just now';
+  }
+
+  /* ---------- quick rate strip ---------- */
+  const quickRail = $('#quickRail');
+  function buildQuickRail() {
+    if (!quickRail) return;
+    const list = ['EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'INR', 'SGD'];
+    quickRail.innerHTML = list.map(code => {
+      const chg = CUR[code].chg || 0;
+      const cls = chg >= 0 ? 'up' : 'down';
+      const arr = chg >= 0 ? '▲' : '▼';
+      return `<div class="rate-pill">
+        <span class="rp-top"><span>${CUR[code].flag}</span>${code}</span>
+        <span class="rp-val">${CUR[code].rate.toFixed(CUR[code].rate >= 20 ? 2 : 4)}</span>
+        <span class="rp-chg ${cls}">${arr} ${Math.abs(chg).toFixed(2)}%</span>
+      </div>`;
+    }).join('');
+  }
+
+  /* ---------- rates list ---------- */
+  const rateList = $('#rateList');
+  function buildRateList() {
+    if (!rateList) return;
+    rateList.innerHTML = Object.keys(CUR).filter(c => c !== state.base).map(code => {
+      const r = crossRate(state.base, code);
+      const chg = CUR[code].chg || 0;
+      const cls = chg >= 0 ? 'up' : 'down';
+      const arr = chg >= 0 ? '▲' : '▼';
+      return `<li class="rate-item">
+        <span class="flag">${CUR[code].flag}</span>
+        <div><div class="ri-code">${code}</div><div class="ri-name">${CUR[code].name}</div></div>
+        <div class="ri-right">
+          <div class="ri-val">${r.toFixed(r >= 20 ? 2 : 4)}</div>
+          <div class="ri-chg ${cls}">${arr} ${Math.abs(chg).toFixed(2)}%</div>
+        </div>
+      </li>`;
+    }).join('');
+  }
+
+  /* ---------- wallet list ---------- */
+  const walletList = $('#walletList');
+  const HOLDINGS = { USD: 8250, EUR: 2140, GBP: 640, JPY: 92000, AUD: 380 };
+  function buildWallet() {
+    if (!walletList) return;
+    walletList.innerHTML = WALLET.map(code => {
+      const bal = HOLDINGS[code] || 0;
+      const usd = bal / CUR[code].rate;
+      return `<li class="wallet-item">
+        <span class="flag">${CUR[code].flag}</span>
+        <div><div class="wi-code">${code}</div><div class="wi-sub">${CUR[code].name}</div></div>
+        <div class="wi-right">
+          <div class="wi-bal">${CUR[code].sym}${fmt(bal, code)}</div>
+          <div class="wi-fiat">≈ $${fmt(usd, 'USD')}</div>
+        </div>
+      </li>`;
+    }).join('');
+  }
+
+  /* ---------- currency picker sheet ---------- */
+  const scrim = $('#scrim');
+  const curSheet = $('#curSheet');
+  const curList = $('#curList');
+  const curSearch = $('#curSearch');
+
+  function openSheet(sheet) {
+    scrim.hidden = false;
+    sheet.hidden = false;
+    sheet.classList.remove('closing');
+  }
+  function closeSheet(sheet) {
+    sheet.classList.add('closing');
+    scrim.hidden = true;
+    setTimeout(() => { sheet.hidden = true; sheet.classList.remove('closing'); }, 260);
+  }
+
+  function buildCurList(filter = '') {
+    const f = filter.trim().toUpperCase();
+    const active = state[state.picking];
+    curList.innerHTML = Object.keys(CUR)
+      .filter(code => code.includes(f) || CUR[code].name.toUpperCase().includes(f))
+      .map(code => `<li class="sheet-item ${code === active ? 'sel' : ''}" data-pick="${code}">
+        <span class="flag">${CUR[code].flag}</span>
+        <div><div class="si-code">${code}</div><div class="si-name">${CUR[code].name}</div></div>
+        <span class="si-check">✓</span>
+      </li>`).join('');
+  }
+
+  $$('.cur-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      state.picking = chip.dataset.cur;
+      curSearch.value = '';
+      buildCurList();
+      openSheet(curSheet);
+    });
+  });
+  curSearch.addEventListener('input', () => buildCurList(curSearch.value));
+  curList.addEventListener('click', e => {
+    const item = e.target.closest('[data-pick]');
+    if (!item) return;
+    const code = item.dataset.pick;
+    const which = state.picking;
+    // avoid picking the same currency on both sides of the converter
+    if (which === 'from' && code === state.to) state.to = state.from;
+    if (which === 'to' && code === state.from) state.from = state.to;
+    state[which] = code;
+    renderChips();
+    computeConversion();
+    buildRateList();
+    closeSheet(curSheet);
+  });
+  $('#sheetClose').addEventListener('click', () => closeSheet(curSheet));
+  scrim.addEventListener('click', () => {
+    if (!curSheet.hidden) closeSheet(curSheet);
+    if (!exSheet.hidden) closeSheet(exSheet);
+  });
+
+  /* ---------- exchange confirm ---------- */
+  const exSheet = $('#exSheet');
+  const exSummary = $('#exSummary');
+  const success = $('#success');
+  const successSub = $('#successSub');
+
+  $('#exchangeBtn').addEventListener('click', () => {
+    const a = state.amount;
+    const rate = crossRate(state.from, state.to);
+    const net = a * rate * (1 - FEE);
+    exSummary.innerHTML = `
+      <div class="ex-row">
+        <span class="ex-k">You send</span>
+        <span class="ex-v ex-big">${CUR[state.from].sym}${fmt(a, state.from)} ${state.from}</span>
+      </div>
+      <div class="ex-arrow">↓</div>
+      <div class="ex-row">
+        <span class="ex-k">You get</span>
+        <span class="ex-v ex-big" style="color:var(--volt)">${CUR[state.to].sym}${fmt(net, state.to)} ${state.to}</span>
+      </div>
+      <div class="ex-row">
+        <span class="ex-k">Rate</span>
+        <span class="ex-v">1 ${state.from} = ${rate.toFixed(4)} ${state.to}</span>
+      </div>
+      <div class="ex-row">
+        <span class="ex-k">trueX fee</span>
+        <span class="ex-v">${(FEE * 100).toFixed(1)}%</span>
+      </div>`;
+    openSheet(exSheet);
+  });
+  $('#exClose').addEventListener('click', () => closeSheet(exSheet));
+
+  $('#exConfirm').addEventListener('click', () => {
+    const a = state.amount;
+    const net = a * crossRate(state.from, state.to) * (1 - FEE);
+    closeSheet(exSheet);
+    setTimeout(() => {
+      successSub.textContent = `You received ${CUR[state.to].sym}${fmt(net, state.to)} ${state.to}`;
+      success.hidden = false;
+      haptic();
+    }, 260);
+  });
+  $('#successDone').addEventListener('click', () => {
+    success.hidden = true;
+    go('wallet');
+  });
+
+  /* ---------- press ripple feedback on buttons ---------- */
+  document.addEventListener('pointerdown', e => {
+    const b = e.target.closest('.btn, .pill, .cur-chip, .tab, .swap, .promo');
+    if (!b) return;
+    b.style.transition = 'transform .08s var(--ease)';
+  });
+
+  /* ---------- init ---------- */
+  renderChips();
+  computeConversion();
+  buildQuickRail();
+  buildRateList();
+  buildWallet();
+  buildCurList();
+
+  // gentle live updates
+  setInterval(jitterRates, 4000);
+})();
+
+</script>
