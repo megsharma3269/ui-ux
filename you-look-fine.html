@@ -1,0 +1,766 @@
+<title>You Look Fine</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
+
+<style>
+/* ── Page tokens ── */
+:root {
+  --pg-bg: #F2EFE6;
+  --pg-text: #1A1A22;
+  --pg-text-2: #6E6E7A;
+  --pg-border: #DBD7CC;
+  --pg-card: #ECEAE2;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --pg-bg: #0E0E14;
+    --pg-text: #E5E3DE;
+    --pg-text-2: #7A7A86;
+    --pg-border: #252530;
+    --pg-card: #18181F;
+  }
+}
+:root[data-theme="dark"]{
+  --pg-bg: #0E0E14;
+  --pg-text: #E5E3DE;
+  --pg-text-2: #7A7A86;
+  --pg-border: #252530;
+  --pg-card: #18181F;
+}
+
+/* ── Base ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--pg-bg);
+  color:var(--pg-text);
+  font-family:'DM Sans',system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:940px;margin:0 auto;padding:0 24px}
+
+/* ── Page header ── */
+.pg-head{padding:56px 0 14px;text-align:center}
+.pg-head h1{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(2rem,5vw,3.4rem);
+  font-weight:700;
+  font-style:italic;
+  color:var(--pg-text);
+  letter-spacing:0.01em;
+  line-height:1.1;
+}
+.pg-head p{font-size:0.85rem;color:var(--pg-text-2);margin-top:10px}
+hr.div{border:none;border-top:1px solid var(--pg-border);margin:32px 0 40px}
+
+/* ── Section labels ── */
+.sec-label{
+  font-size:0.6rem;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--pg-text-2);margin-bottom:14px;
+}
+.sec-note{
+  font-size:0.78rem;color:var(--pg-text-2);
+  margin-top:10px;font-style:italic;max-width:62ch;
+}
+
+/* ══════════════════════════════════════════════════ */
+/* ████  BRIEF  ████ */
+/* ══════════════════════════════════════════════════ */
+.brief{
+  display:grid;grid-template-columns:1fr 1fr;gap:40px;
+  margin-bottom:8px;
+}
+@media(max-width:640px){.brief{grid-template-columns:1fr}}
+.brief-main h2{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.45rem;font-weight:700;font-style:italic;
+  line-height:1.2;color:var(--pg-text);
+  margin-bottom:12px;
+}
+.brief-main p{
+  font-size:0.88rem;line-height:1.7;color:var(--pg-text);max-width:48ch;
+}
+.brief-meta{display:flex;flex-direction:column;gap:16px}
+.meta-item{display:flex;flex-direction:column;gap:3px}
+.meta-label{
+  font-size:0.55rem;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--pg-text-2);
+}
+.meta-val{font-size:0.85rem;color:var(--pg-text);line-height:1.5}
+
+/* ══════════════════════════════════════════════════ */
+/* ████  MOOD BOARD  ████ */
+/* ══════════════════════════════════════════════════ */
+.mood{margin-bottom:8px}
+.swatches{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.swatch{
+  width:72px;height:72px;border-radius:6px;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:6px;
+  font-size:0.5rem;font-weight:600;letter-spacing:0.04em;
+  border:1px solid rgba(128,128,128,0.12);
+}
+.type-sample{
+  padding:24px 28px;
+  border-radius:8px;
+  background:var(--pg-card);
+  border:1px solid var(--pg-border);
+}
+.type-sample .display{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(1.4rem,3vw,2rem);
+  font-weight:700;font-style:italic;
+  color:var(--pg-text);line-height:1.15;
+  margin-bottom:10px;
+}
+.type-sample .body-t{
+  font-family:'DM Sans',sans-serif;
+  font-size:0.85rem;color:var(--pg-text-2);
+  max-width:50ch;
+}
+
+/* ══════════════════════════════════════════════════ */
+/* ████  SHARED BANNER RESET  ████ */
+/* ══════════════════════════════════════════════════ */
+.banner{width:100%;border-radius:8px;overflow:hidden;position:relative}
+.slot{margin-bottom:48px}
+
+/* ══════════════════════════════════════════════════ */
+/* ████  HERO BANNER  ████ */
+/* ══════════════════════════════════════════════════ */
+.b-hero{
+  aspect-ratio:2.5/1;
+  background:#0C0C16;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  position:relative;
+}
+@media(max-width:600px){.b-hero{aspect-ratio:1.8/1}}
+.hero-txt{
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:clamp(20px,5vw,56px);
+  z-index:2;
+}
+.hero-eyebrow{
+  font-size:clamp(0.42rem,0.8vw,0.6rem);
+  font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;color:#00D4AA;
+  margin-bottom:clamp(6px,1.2vw,14px);
+}
+.hero-hl{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(1.4rem,3.6vw,3rem);
+  font-weight:700;font-style:italic;
+  line-height:1.05;color:#EDEBE6;
+  letter-spacing:0.01em;
+  margin-bottom:clamp(8px,1.5vw,18px);
+  text-wrap:balance;
+}
+.hero-sub{
+  font-size:clamp(0.48rem,0.95vw,0.78rem);
+  color:#7A7A8E;line-height:1.55;
+  max-width:30ch;
+  margin-bottom:clamp(12px,2vw,24px);
+}
+.hero-cta{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:clamp(0.46rem,0.85vw,0.68rem);
+  font-weight:700;letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:#0C0C16;background:#00D4AA;
+  padding:clamp(6px,0.9vw,11px) clamp(14px,2vw,26px);
+  border-radius:4px;width:fit-content;
+}
+/* hero portrait area */
+.hero-portrait{
+  display:flex;align-items:flex-end;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.hero-glow{
+  position:absolute;
+  width:clamp(200px,40vw,450px);height:clamp(200px,40vw,450px);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(232,64,64,0.12) 0%,rgba(240,154,58,0.06) 40%,transparent 68%);
+  bottom:30%;left:50%;transform:translateX(-50%);
+}
+.hero-fig{
+  position:relative;z-index:1;
+  width:clamp(140px,28vw,280px);
+  height:auto;
+  display:block;
+}
+.hero-score{
+  position:absolute;
+  top:clamp(20px,6vw,60px);
+  left:50%;transform:translateX(-50%);
+  z-index:3;
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(2rem,6vw,4.5rem);
+  font-weight:700;
+  color:rgba(232,64,64,0.85);
+  line-height:1;
+  text-shadow:0 0 40px rgba(232,64,64,0.3);
+}
+.hero-score-label{
+  position:absolute;
+  top:clamp(52px,13vw,118px);
+  left:50%;transform:translateX(-50%);
+  z-index:3;
+  font-size:clamp(0.38rem,0.65vw,0.52rem);
+  font-weight:700;letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:rgba(240,154,58,0.7);
+  white-space:nowrap;
+}
+
+/* ══════════════════════════════════════════════════ */
+/* ████  DIPTYCH  ████ */
+/* ══════════════════════════════════════════════════ */
+.dip{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:500px){.dip{grid-template-columns:1fr}}
+.dip-panel{
+  aspect-ratio:3/4;
+  border-radius:8px;overflow:hidden;
+  position:relative;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-end;
+  padding:clamp(16px,3vw,32px);
+}
+.dip-panel.warm{background:#0C0C16}
+.dip-panel.cool{background:#0C0C16}
+.dip-glow-warm{
+  position:absolute;width:80%;height:60%;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(232,64,64,0.1) 0%,rgba(240,154,58,0.05) 40%,transparent 65%);
+  bottom:20%;left:50%;transform:translateX(-50%);
+}
+.dip-glow-cool{
+  position:absolute;width:80%;height:60%;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(0,212,170,0.1) 0%,rgba(78,205,196,0.05) 40%,transparent 65%);
+  bottom:20%;left:50%;transform:translateX(-50%);
+}
+.dip-fig{
+  position:relative;z-index:1;
+  width:clamp(100px,22vw,200px);height:auto;
+  margin-bottom:clamp(6px,1.5vw,14px);
+}
+.dip-score{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(2.5rem,7vw,4rem);
+  font-weight:700;line-height:1;
+  position:absolute;top:clamp(10px,4vw,40px);
+  left:50%;transform:translateX(-50%);z-index:2;
+}
+.dip-score.warm-s{color:rgba(232,64,64,0.8);text-shadow:0 0 30px rgba(232,64,64,0.25)}
+.dip-score.cool-s{color:rgba(0,212,170,0.8);text-shadow:0 0 30px rgba(0,212,170,0.25)}
+.dip-hl{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(0.9rem,2.2vw,1.5rem);
+  font-weight:700;font-style:italic;
+  color:#EDEBE6;text-align:center;
+  z-index:2;line-height:1.15;
+}
+.dip-brand{
+  font-size:clamp(0.35rem,0.6vw,0.48rem);
+  font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:#4A4A5A;
+  margin-top:clamp(6px,1vw,12px);z-index:2;
+}
+
+/* ══════════════════════════════════════════════════ */
+/* ████  SOCIAL SERIES  ████ */
+/* ══════════════════════════════════════════════════ */
+.series{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:640px){.series{grid-template-columns:1fr;max-width:280px;margin:0 auto}}
+.phone{
+  border-radius:20px;overflow:hidden;
+  background:#0C0C16;
+  border:2px solid #2A2A36;
+  position:relative;
+}
+.phone-screen{
+  aspect-ratio:9/16;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-end;
+  position:relative;
+  padding:clamp(10px,2vw,20px);
+}
+.phone-glow{
+  position:absolute;width:90%;height:50%;
+  border-radius:50%;bottom:15%;
+  left:50%;transform:translateX(-50%);
+}
+.phone-glow.g-red{background:radial-gradient(circle,rgba(232,64,64,0.1) 0%,transparent 60%)}
+.phone-glow.g-amber{background:radial-gradient(circle,rgba(240,154,58,0.1) 0%,transparent 60%)}
+.phone-glow.g-teal{background:radial-gradient(circle,rgba(0,212,170,0.1) 0%,transparent 60%)}
+.phone-fig{
+  position:relative;z-index:1;
+  width:clamp(80px,70%,160px);height:auto;
+  margin-bottom:clamp(4px,1vw,10px);
+}
+.phone-score{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(1.8rem,5vw,2.8rem);
+  font-weight:700;line-height:1;
+  position:absolute;top:clamp(16px,10%,50px);
+  left:50%;transform:translateX(-50%);z-index:2;
+}
+.phone-score.s-red{color:rgba(232,64,64,0.8)}
+.phone-score.s-amber{color:rgba(240,154,58,0.8)}
+.phone-score.s-teal{color:rgba(0,212,170,0.8)}
+.phone-hl{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(0.7rem,1.6vw,1.1rem);
+  font-weight:700;font-style:italic;
+  color:#EDEBE6;text-align:center;
+  z-index:2;line-height:1.15;
+}
+.phone-sub{
+  font-size:clamp(0.35rem,0.7vw,0.5rem);
+  color:#6E6E7A;text-align:center;
+  z-index:2;margin-top:clamp(2px,0.4vw,5px);
+}
+.phone-brand{
+  font-size:clamp(0.32rem,0.55vw,0.42rem);
+  font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:#4A4A5A;
+  z-index:2;margin-top:clamp(6px,1.2vw,12px);
+}
+
+/* ══════════════════════════════════════════════════ */
+/* ████  BILLBOARD  ████ */
+/* ══════════════════════════════════════════════════ */
+.b-bill{
+  aspect-ratio:3.5/1;
+  background:#0C0C16;
+  display:grid;
+  grid-template-columns:auto 1fr auto auto;
+  align-items:center;
+  padding:0 clamp(16px,3vw,40px);
+  gap:clamp(10px,3vw,36px);
+  border-radius:8px;overflow:hidden;
+  position:relative;
+}
+@media(max-width:600px){.b-bill{aspect-ratio:2.5/1}}
+.bill-fig{width:clamp(50px,10vw,110px);height:auto;position:relative;z-index:1}
+.bill-center{display:flex;flex-direction:column;gap:clamp(2px,0.5vw,6px)}
+.bill-hl{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(1rem,2.6vw,2.2rem);
+  font-weight:700;font-style:italic;
+  color:#EDEBE6;line-height:1.1;
+  text-wrap:balance;
+}
+.bill-sub{
+  font-size:clamp(0.4rem,0.8vw,0.65rem);
+  color:#7A7A8E;max-width:38ch;
+}
+.bill-score{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(1.5rem,4vw,3.2rem);
+  font-weight:700;
+  line-height:1;
+}
+.bill-score.bs-warm{color:rgba(232,64,64,0.8)}
+.bill-spectrum{
+  width:clamp(60px,12vw,140px);
+  display:flex;flex-direction:column;align-items:center;gap:clamp(2px,0.4vw,5px);
+}
+.bill-bar{
+  width:100%;height:clamp(3px,0.5vw,5px);
+  border-radius:3px;
+  background:linear-gradient(90deg,#E84040,#F09A3A,#F0C65A,#4ECDC4,#00D4AA);
+  position:relative;
+}
+.bill-mark{
+  position:absolute;top:50%;left:75%;
+  transform:translate(-50%,-50%);
+  width:clamp(7px,1.1vw,12px);height:clamp(7px,1.1vw,12px);
+  background:#E84040;border:2px solid #0C0C16;border-radius:50%;
+}
+.bill-labels{
+  width:100%;display:flex;justify-content:space-between;
+}
+.bill-lbl{
+  font-size:clamp(0.28rem,0.5vw,0.4rem);
+  font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+}
+.bill-lbl-r{color:#E84040}
+.bill-lbl-t{color:#00D4AA}
+.bill-cta{
+  font-size:clamp(0.4rem,0.75vw,0.62rem);
+  font-weight:700;letter-spacing:0.04em;
+  text-transform:uppercase;
+  color:#0C0C16;background:#00D4AA;
+  padding:clamp(5px,0.7vw,10px) clamp(10px,1.6vw,22px);
+  border-radius:4px;white-space:nowrap;
+}
+.bill-glow-bg{
+  position:absolute;
+  width:clamp(120px,22vw,260px);height:clamp(120px,22vw,260px);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(232,64,64,0.08) 0%,transparent 65%);
+  left:clamp(20px,6vw,60px);top:50%;transform:translateY(-50%);
+}
+
+/* ══════════════════════════════════════════════════ */
+/* ████  LIGHT EDITORIAL  ████ */
+/* ══════════════════════════════════════════════════ */
+.b-light{
+  aspect-ratio:2/1;
+  background:#F2EFE6;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  border-radius:8px;overflow:hidden;
+  border:1px solid #DBD7CC;
+}
+@media(max-width:600px){.b-light{aspect-ratio:1.4/1}}
+.lt-left{
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:clamp(20px,4vw,52px);
+}
+.lt-eyebrow{
+  font-size:clamp(0.4rem,0.75vw,0.55rem);
+  font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:#00A88A;
+  margin-bottom:clamp(4px,0.8vw,10px);
+}
+.lt-hl{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(1.1rem,2.8vw,2.2rem);
+  font-weight:700;font-style:italic;
+  line-height:1.05;color:#1A1A22;
+  margin-bottom:clamp(4px,0.8vw,10px);
+  text-wrap:balance;
+}
+.lt-sub{
+  font-size:clamp(0.45rem,0.85vw,0.72rem);
+  color:#6E6E7A;line-height:1.55;
+  max-width:30ch;
+  margin-bottom:clamp(10px,1.5vw,20px);
+}
+.lt-cta{
+  display:inline-block;
+  font-size:clamp(0.42rem,0.75vw,0.62rem);
+  font-weight:700;letter-spacing:0.04em;
+  text-transform:uppercase;
+  color:#F2EFE6;background:#1A1A22;
+  padding:clamp(5px,0.7vw,10px) clamp(12px,1.6vw,22px);
+  border-radius:4px;width:fit-content;
+}
+.lt-right{
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  background:linear-gradient(135deg,rgba(0,168,138,0.04) 0%,rgba(232,64,64,0.03) 100%);
+}
+.lt-fig{width:clamp(80px,16vw,160px);height:auto;position:relative;z-index:1}
+.lt-score-wrap{
+  position:absolute;top:clamp(16px,4vw,40px);
+  left:50%;transform:translateX(-50%);z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+}
+.lt-score{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(1.4rem,3.5vw,2.6rem);
+  font-weight:700;color:#1A1A22;line-height:1;
+}
+.lt-score-lbl{
+  font-size:clamp(0.32rem,0.55vw,0.45rem);
+  font-weight:700;letter-spacing:0.1em;
+  text-transform:uppercase;color:#00A88A;
+}
+
+:focus-visible{outline:2px solid #00D4AA;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+
+<!-- ████  PAGE HEADER  ████ -->
+<section class="pg-head">
+  <div class="wrap">
+    <h1>&ldquo;You Look Fine.&rdquo;</h1>
+    <p>Luna AI-Stress Index &mdash; A portrait-driven campaign for the stress you can&rsquo;t see.</p>
+  </div>
+</section>
+<hr class="div wrap">
+
+<div class="wrap">
+
+  <!-- ═══  CAMPAIGN BRIEF  ═══ -->
+  <div class="slot">
+    <p class="sec-label">Campaign Concept</p>
+    <div class="brief">
+      <div class="brief-main">
+        <h2>&ldquo;You Look Fine&rdquo; &mdash; but you&rsquo;re not.</h2>
+        <p>Everyone says they&rsquo;re fine. They smile in meetings, laugh at dinner, post the sunrise run. But the body keeps a different score. <strong>&ldquo;You Look Fine.&rdquo;</strong> is a portrait-driven campaign that puts a number on the disconnect between how we present and how we actually feel. Each execution features a composed, editorial human figure &mdash; contradicted by a stress score that tells the truth. The Luna AI-Stress Index doesn&rsquo;t ask how you&rsquo;re doing. It already knows. The campaign flips in its final beat: <em>&ldquo;You Look Better.&rdquo;</em> &mdash; same person, score now 42, because Luna didn&rsquo;t just reveal the problem. It guided them out of it.</p>
+      </div>
+      <div class="brief-meta">
+        <div class="meta-item">
+          <span class="meta-label">Target Audience</span>
+          <span class="meta-val">Young professionals (22&ndash;38) who perform wellness but don&rsquo;t measure it &mdash; the &ldquo;I&rsquo;m fine&rdquo; generation.</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Tone</span>
+          <span class="meta-val">Intimate, editorial, quietly confrontational. Not preachy &mdash; conspiratorial.</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Tagline</span>
+          <span class="meta-val">&ldquo;You Look Fine.&rdquo; / &ldquo;You Look Better.&rdquo;</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Key Visual</span>
+          <span class="meta-val">Human silhouettes filled with the stress spectrum &mdash; the body becomes the data. Warm red tones for high stress; cool teal for balance.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- ═══  MOOD BOARD  ═══ -->
+  <div class="slot mood">
+    <p class="sec-label">Visual Direction &middot; Mood Board</p>
+    <div class="swatches">
+      <div class="swatch" style="background:#0C0C16;color:#6E6E7A">Void</div>
+      <div class="swatch" style="background:#E84040;color:rgba(255,255,255,0.8)">Stress</div>
+      <div class="swatch" style="background:#F09A3A;color:rgba(255,255,255,0.85)">Amber</div>
+      <div class="swatch" style="background:#F0C65A;color:rgba(0,0,0,0.55)">Gold</div>
+      <div class="swatch" style="background:#4ECDC4;color:rgba(0,0,0,0.5)">Aqua</div>
+      <div class="swatch" style="background:#00D4AA;color:rgba(0,0,0,0.55)">Calm</div>
+      <div class="swatch" style="background:#F2EFE6;color:#6E6E7A;border-color:#DBD7CC">Paper</div>
+    </div>
+    <div class="type-sample">
+      <p class="display">&ldquo;You Look Fine.&rdquo;<br>Your Stress Has a Score.</p>
+      <p class="body-t">Cormorant Garamond italic for headlines &mdash; intimate, editorial, like a whisper not a shout. DM Sans for everything else &mdash; clean, modern, quiet. The serif-in-a-tech-campaign breaks the pattern and says: this is about the person, not the device.</p>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- ═══  HERO BANNER  ═══ -->
+  <div class="slot">
+    <p class="sec-label">Website Hero Banner &middot; 2.5 : 1</p>
+    <div class="banner b-hero">
+      <div class="hero-txt">
+        <p class="hero-eyebrow">Luna AI-Stress Index</p>
+        <h2 class="hero-hl">&ldquo;You Look Fine.&rdquo;</h2>
+        <p class="hero-sub">Your body keeps a different score. Luna&rsquo;s AI-Stress Index monitors your stress in real time &mdash; and tells you what to do about it.</p>
+        <div class="hero-cta">Discover Luna &rarr;</div>
+      </div>
+      <div class="hero-portrait">
+        <div class="hero-glow"></div>
+        <span class="hero-score">87</span>
+        <span class="hero-score-label">Stress Index</span>
+        <!-- Woman bust silhouette, warm stress gradient -->
+        <svg class="hero-fig" viewBox="0 0 300 400" fill="none">
+          <defs>
+            <linearGradient id="hw" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+              <stop offset="0%" stop-color="#E84040"/>
+              <stop offset="30%" stop-color="#F09A3A"/>
+              <stop offset="55%" stop-color="#D4A070"/>
+              <stop offset="80%" stop-color="#C49880"/>
+              <stop offset="100%" stop-color="#B89080"/>
+            </linearGradient>
+          </defs>
+          <path d="M150,10 C200,10 240,50 240,100 C240,138 228,165 212,182 C200,192 194,204 192,218 C190,232 200,242 228,254 C262,268 290,284 300,308 L300,400 L0,400 L0,308 C10,284 38,268 72,254 C100,242 110,232 108,218 C106,204 100,192 88,182 C72,165 60,138 60,100 C60,50 100,10 150,10Z" fill="url(#hw)"/>
+        </svg>
+      </div>
+    </div>
+    <p class="sec-note">The portrait IS the data. The warm gradient flooding the figure visualises a stress score of 87 &mdash; the body literally coloured by its state. Italic serif headline whispers the irony: you look fine, but the number says otherwise.</p>
+  </div>
+
+  <hr class="div">
+
+  <!-- ═══  THE DIPTYCH  ═══ -->
+  <div class="slot">
+    <p class="sec-label">The Diptych &middot; Before &amp; After</p>
+    <div class="dip">
+      <!-- BEFORE -->
+      <div class="dip-panel warm">
+        <div class="dip-glow-warm"></div>
+        <span class="dip-score warm-s">87</span>
+        <svg class="dip-fig" viewBox="0 0 300 400" fill="none">
+          <defs>
+            <linearGradient id="dw" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+              <stop offset="0%" stop-color="#E84040"/>
+              <stop offset="35%" stop-color="#F09A3A"/>
+              <stop offset="60%" stop-color="#D4A070"/>
+              <stop offset="100%" stop-color="#B89080"/>
+            </linearGradient>
+          </defs>
+          <path d="M150,10 C200,10 240,50 240,100 C240,138 228,165 212,182 C200,192 194,204 192,218 C190,232 200,242 228,254 C262,268 290,284 300,308 L300,400 L0,400 L0,308 C10,284 38,268 72,254 C100,242 110,232 108,218 C106,204 100,192 88,182 C72,165 60,138 60,100 C60,50 100,10 150,10Z" fill="url(#dw)"/>
+        </svg>
+        <h3 class="dip-hl">&ldquo;You Look Fine.&rdquo;</h3>
+        <p class="dip-brand">Luna &middot; AI-Stress Index</p>
+      </div>
+      <!-- AFTER -->
+      <div class="dip-panel cool">
+        <div class="dip-glow-cool"></div>
+        <span class="dip-score cool-s">42</span>
+        <svg class="dip-fig" viewBox="0 0 300 400" fill="none">
+          <defs>
+            <linearGradient id="dc" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+              <stop offset="0%" stop-color="#00D4AA"/>
+              <stop offset="35%" stop-color="#4ECDC4"/>
+              <stop offset="60%" stop-color="#88B5A5"/>
+              <stop offset="100%" stop-color="#A0B8B0"/>
+            </linearGradient>
+          </defs>
+          <path d="M150,10 C200,10 240,50 240,100 C240,138 228,165 212,182 C200,192 194,204 192,218 C190,232 200,242 228,254 C262,268 290,284 300,308 L300,400 L0,400 L0,308 C10,284 38,268 72,254 C100,242 110,232 108,218 C106,204 100,192 88,182 C72,165 60,138 60,100 C60,50 100,10 150,10Z" fill="url(#dc)"/>
+        </svg>
+        <h3 class="dip-hl">&ldquo;You Look Better.&rdquo;</h3>
+        <p class="dip-brand">Luna &middot; AI-Stress Index</p>
+      </div>
+    </div>
+    <p class="sec-note">Same person, same day. Left: the lie &mdash; composed exterior, stress score of 87 flooding the figure in warm red. Right: the truth after Luna&rsquo;s guidance &mdash; score 42, the figure cooled to teal. &ldquo;Better&rdquo; now means something measurable.</p>
+  </div>
+
+  <hr class="div">
+
+  <!-- ═══  SOCIAL SERIES  ═══ -->
+  <div class="slot">
+    <p class="sec-label">Social Media Series &middot; 9 : 16</p>
+    <div class="series">
+      <!-- Post 1 -->
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-glow g-red"></div>
+          <span class="phone-score s-red">87</span>
+          <svg class="phone-fig" viewBox="0 0 300 400" fill="none">
+            <defs>
+              <linearGradient id="p1" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+                <stop offset="0%" stop-color="#E84040"/>
+                <stop offset="40%" stop-color="#F09A3A"/>
+                <stop offset="70%" stop-color="#D4A070"/>
+                <stop offset="100%" stop-color="#B89080"/>
+              </linearGradient>
+            </defs>
+            <path d="M150,10 C200,10 240,50 240,100 C240,138 228,165 212,182 C200,192 194,204 192,218 C190,232 200,242 228,254 C262,268 290,284 300,308 L300,400 L0,400 L0,308 C10,284 38,268 72,254 C100,242 110,232 108,218 C106,204 100,192 88,182 C72,165 60,138 60,100 C60,50 100,10 150,10Z" fill="url(#p1)"/>
+          </svg>
+          <h3 class="phone-hl">&ldquo;You Look Fine.&rdquo;</h3>
+          <p class="phone-sub">The meeting smile.</p>
+          <p class="phone-brand">Luna</p>
+        </div>
+      </div>
+      <!-- Post 2 -->
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-glow g-amber"></div>
+          <span class="phone-score s-amber">73</span>
+          <svg class="phone-fig" viewBox="0 0 300 420" fill="none">
+            <defs>
+              <linearGradient id="p2" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+                <stop offset="0%" stop-color="#F09A3A"/>
+                <stop offset="35%" stop-color="#D4A070"/>
+                <stop offset="65%" stop-color="#C4A080"/>
+                <stop offset="100%" stop-color="#B09888"/>
+              </linearGradient>
+            </defs>
+            <path d="M150,18 C198,18 232,55 234,102 C235,132 226,158 214,174 C204,186 198,198 196,212 C194,228 206,238 232,250 C264,264 288,280 300,302 L300,420 L0,420 L0,302 C12,280 36,264 68,250 C94,238 106,228 104,212 C102,198 96,186 86,174 C74,158 65,132 66,102 C68,55 102,18 150,18Z" fill="url(#p2)"/>
+          </svg>
+          <h3 class="phone-hl">&ldquo;You Look Fine.&rdquo;</h3>
+          <p class="phone-sub">The 2am scroll.</p>
+          <p class="phone-brand">Luna</p>
+        </div>
+      </div>
+      <!-- Post 3: the payoff -->
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-glow g-teal"></div>
+          <span class="phone-score s-teal">42</span>
+          <svg class="phone-fig" viewBox="0 0 300 420" fill="none">
+            <defs>
+              <linearGradient id="p3" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+                <stop offset="0%" stop-color="#00D4AA"/>
+                <stop offset="35%" stop-color="#4ECDC4"/>
+                <stop offset="65%" stop-color="#88B5A5"/>
+                <stop offset="100%" stop-color="#A0B8B0"/>
+              </linearGradient>
+            </defs>
+            <path d="M170,10 C215,10 250,40 258,75 C264,95 266,108 262,120 C260,128 268,136 274,144 C280,152 278,162 270,170 C264,176 264,184 266,192 C270,202 268,214 256,230 C242,248 230,264 225,278 C220,290 222,302 230,318 C240,336 268,350 300,370 L300,420 L0,420 L0,365 C28,345 58,328 78,310 C92,296 100,278 96,258 C90,228 80,178 78,140 C76,98 96,52 132,22 C148,10 160,10 170,10Z" fill="url(#p3)"/>
+          </svg>
+          <h3 class="phone-hl">&ldquo;You Look Better.&rdquo;</h3>
+          <p class="phone-sub">Because you are.</p>
+          <p class="phone-brand">Luna</p>
+        </div>
+      </div>
+    </div>
+    <p class="sec-note">A three-post Instagram series. The first two show composed people flooded in stress colours &mdash; &ldquo;the meeting smile,&rdquo; &ldquo;the 2am scroll.&rdquo; The third flips the gradient to teal: &ldquo;You Look Better. Because you are.&rdquo; The profile silhouette in the payoff marks a literal change of perspective.</p>
+  </div>
+
+  <hr class="div">
+
+  <!-- ═══  BILLBOARD  ═══ -->
+  <div class="slot">
+    <p class="sec-label">Billboard &middot; Wide Format</p>
+    <div class="b-bill">
+      <div class="bill-glow-bg"></div>
+      <!-- Profile silhouette -->
+      <svg class="bill-fig" viewBox="0 0 300 420" fill="none">
+        <defs>
+          <linearGradient id="bfg" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+            <stop offset="0%" stop-color="#E84040"/>
+            <stop offset="40%" stop-color="#F09A3A"/>
+            <stop offset="70%" stop-color="#D4A070"/>
+            <stop offset="100%" stop-color="#B89080"/>
+          </linearGradient>
+        </defs>
+        <path d="M170,10 C215,10 250,40 258,75 C264,95 266,108 262,120 C260,128 268,136 274,144 C280,152 278,162 270,170 C264,176 264,184 266,192 C270,202 268,214 256,230 C242,248 230,264 225,278 C220,290 222,302 230,318 C240,336 268,350 300,370 L300,420 L0,420 L0,365 C28,345 58,328 78,310 C92,296 100,278 96,258 C90,228 80,178 78,140 C76,98 96,52 132,22 C148,10 160,10 170,10Z" fill="url(#bfg)"/>
+      </svg>
+      <div class="bill-center">
+        <h2 class="bill-hl">&ldquo;You Look Fine.&rdquo;</h2>
+        <p class="bill-sub">Your body disagrees. Luna&rsquo;s AI-Stress Index knows.</p>
+      </div>
+      <div class="bill-spectrum">
+        <span class="bill-score bs-warm">87</span>
+        <div class="bill-bar"><div class="bill-mark"></div></div>
+        <div class="bill-labels">
+          <span class="bill-lbl bill-lbl-t">Calm</span>
+          <span class="bill-lbl bill-lbl-r">Stressed</span>
+        </div>
+      </div>
+      <div class="bill-cta">Get Luna</div>
+    </div>
+    <p class="sec-note">Wide-format billboard: profile silhouette at left draws the eye, italic headline drives the message, spectrum bar + score anchors the product story, CTA closes. Reads in under three seconds &mdash; the silhouette, the number, the name.</p>
+  </div>
+
+  <hr class="div">
+
+  <!-- ═══  LIGHT EDITORIAL  ═══ -->
+  <div class="slot">
+    <p class="sec-label">Light Editorial &middot; 2 : 1</p>
+    <div class="banner b-light">
+      <div class="lt-left">
+        <p class="lt-eyebrow">Luna AI-Stress Index</p>
+        <h2 class="lt-hl">&ldquo;You Look Fine.&rdquo;</h2>
+        <p class="lt-sub">Luna monitors your stress in real time. Not how you say you feel &mdash; how you actually feel. And then it helps.</p>
+        <div class="lt-cta">Learn More</div>
+      </div>
+      <div class="lt-right">
+        <div class="lt-score-wrap">
+          <span class="lt-score">87</span>
+          <span class="lt-score-lbl">Stress Index</span>
+        </div>
+        <svg class="lt-fig" viewBox="0 0 300 400" fill="none">
+          <defs>
+            <linearGradient id="ltg" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+              <stop offset="0%" stop-color="#1A1A22"/>
+              <stop offset="45%" stop-color="#3A3A44"/>
+              <stop offset="100%" stop-color="#6E6E7A"/>
+            </linearGradient>
+          </defs>
+          <path d="M150,10 C200,10 240,50 240,100 C240,138 228,165 212,182 C200,192 194,204 192,218 C190,232 200,242 228,254 C262,268 290,284 300,308 L300,400 L0,400 L0,308 C10,284 38,268 72,254 C100,242 110,232 108,218 C106,204 100,192 88,182 C72,165 60,138 60,100 C60,50 100,10 150,10Z" fill="url(#ltg)"/>
+        </svg>
+      </div>
+    </div>
+    <p class="sec-note">Light variant for editorial placements and sites that require a clean background. The silhouette shifts to neutral dark tones &mdash; the portrait stays present but lets the typography lead. The score floats above: quiet but undeniable.</p>
+  </div>
+
+</div>
+
+<div style="height:48px"></div>
