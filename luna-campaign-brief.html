@@ -1,0 +1,912 @@
+<title>Luna AI-Stress Index Campaign</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Oswald:wght@400;500;700&family=Syne:wght@400;600;700;800&display=swap">
+
+<style>
+/* ── Tokens ── */
+:root {
+  --bg: #FAFAF6;
+  --bg-raised: #F0EDE7;
+  --text: #1C1C22;
+  --text-2: #6B6B7A;
+  --accent: #C8AD83;
+  --accent-dim: rgba(200,173,131,0.15);
+  --border: #E2DFD8;
+  --hero-bg: #0F0F14;
+  --hero-text: #E8E6E1;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg: #111116;
+    --bg-raised: #1A1A22;
+    --text: #E4E2DD;
+    --text-2: #8A8A96;
+    --accent: #C8AD83;
+    --accent-dim: rgba(200,173,131,0.10);
+    --border: #28283A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg: #111116;
+  --bg-raised: #1A1A22;
+  --text: #E4E2DD;
+  --text-2: #8A8A96;
+  --accent: #C8AD83;
+  --accent-dim: rgba(200,173,131,0.10);
+  --border: #28283A;
+}
+
+/* ── Base ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',system-ui,-apple-system,sans-serif;
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{display:block;max-width:100%}
+
+/* ── Typography ── */
+.serif{font-family:'Libre Baskerville',Georgia,'Times New Roman',serif}
+h1,h2,h3{font-family:'Libre Baskerville',Georgia,serif;font-weight:400}
+h1{font-size:clamp(2rem,4vw,3rem);line-height:1.2;letter-spacing:-0.02em;text-wrap:balance}
+h2{font-size:clamp(1.4rem,2.8vw,2rem);line-height:1.28;letter-spacing:-0.01em;text-wrap:balance}
+h3{font-size:1.15rem;line-height:1.35}
+p{max-width:62ch}
+.label{
+  font-size:0.75rem;
+  font-weight:600;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+.small{font-size:0.875rem;color:var(--text-2)}
+
+/* ── Layout ── */
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+.section{padding:72px 0}
+.section + .section{border-top:1px solid var(--border)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+@media(max-width:640px){.grid-2{grid-template-columns:1fr}}
+
+/* ── Hero ── */
+.hero{
+  background:#0F0F14;
+  color:#E8E6E1;
+  padding:100px 0 88px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero h1{color:#E8E6E1;margin-bottom:16px}
+.hero .label{color:#C8AD83}
+.hero p{color:#9A98A0;margin:0 auto}
+.hero-ring-wrap{
+  display:flex;justify-content:center;
+  margin-bottom:40px;position:relative;
+}
+.hero-ring{
+  width:100px;height:100px;border-radius:50%;
+  border:3px solid rgba(200,173,131,0.5);
+  position:relative;
+}
+.hero-ring::before,.hero-ring::after{
+  content:'';position:absolute;border-radius:50%;
+  border:1px solid rgba(200,173,131,0.15);
+}
+.hero-ring::before{inset:-24px}
+.hero-ring::after{inset:-48px}
+.hero-pulse{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:100px;height:100px;border-radius:50%;
+  border:2px solid rgba(200,173,131,0.3);
+  animation:pulse 3s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.4}
+  50%{transform:translate(-50%,-50%) scale(1.8);opacity:0}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-pulse{animation:none;opacity:0}
+}
+
+/* ── Context ── */
+.context{background:var(--bg);padding:56px 0}
+.context-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:24px;
+}
+@media(max-width:640px){.context-grid{grid-template-columns:1fr}}
+.context-card{padding:20px 0;border-top:2px solid var(--accent)}
+.context-card h3{font-size:0.95rem;margin-bottom:8px;font-family:'DM Sans',sans-serif;font-weight:600}
+.context-card p{font-size:0.875rem;color:var(--text-2);max-width:none}
+
+/* ── Campaign Direction ── */
+.direction{padding:80px 0 64px;position:relative}
+.direction-num{
+  font-family:'DM Sans',sans-serif;
+  font-size:0.7rem;font-weight:700;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:8px;
+}
+.direction-name{
+  font-size:clamp(1.6rem,3.5vw,2.6rem);
+  line-height:1.15;margin-bottom:8px;
+}
+.direction-tagline{
+  font-family:'Libre Baskerville',Georgia,serif;
+  font-style:italic;
+  font-size:1.1rem;
+  color:var(--text-2);
+  margin-bottom:28px;
+}
+.direction-body{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+  margin-bottom:48px;
+}
+@media(max-width:640px){.direction-body{grid-template-columns:1fr}}
+.direction-body p{font-size:0.95rem;line-height:1.7;color:var(--text-2)}
+.key-lines{list-style:none;padding:0;margin-top:16px}
+.key-lines li{
+  padding:8px 0;font-size:0.9rem;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+.key-lines li:last-child{border-bottom:none}
+.key-lines li::before{
+  content:'\201C';
+  color:var(--accent);font-weight:700;margin-right:4px;
+}
+
+/* ── Mood Board ── */
+.moodboard{margin-bottom:56px}
+.moodboard-title{
+  font-family:'DM Sans',sans-serif;
+  font-size:0.7rem;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-2);margin-bottom:16px;
+}
+.palette{
+  display:flex;gap:8px;flex-wrap:wrap;
+  margin-bottom:24px;
+}
+.swatch{
+  width:64px;height:64px;border-radius:6px;
+  position:relative;
+  box-shadow:0 1px 3px rgba(0,0,0,0.12);
+}
+.swatch-label{
+  font-size:0.65rem;color:var(--text-2);
+  margin-top:6px;text-align:center;
+  font-variant-numeric:tabular-nums;
+}
+.type-sample{
+  padding:24px;
+  background:var(--bg-raised);
+  border-radius:8px;
+  margin-bottom:12px;
+}
+.type-sample .display{
+  font-size:clamp(1.8rem,3vw,2.4rem);
+  line-height:1.2;margin-bottom:8px;
+  color:var(--text);
+}
+.type-sample .body-text{
+  font-size:0.9rem;line-height:1.6;
+  color:var(--text-2);max-width:50ch;
+}
+.type-meta{font-size:0.75rem;color:var(--text-2);font-style:italic}
+
+/* ── Mockup Frames ── */
+.mockup-row{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:48px;
+  align-items:start;
+  margin-bottom:56px;
+}
+@media(max-width:720px){
+  .mockup-row{grid-template-columns:1fr;justify-items:center}
+}
+.mockup-label{
+  font-size:0.7rem;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--text-2);margin-bottom:12px;
+}
+.mockup-caption{font-size:0.85rem;color:var(--text-2);max-width:44ch;margin-top:12px}
+
+/* Phone frame */
+.phone{
+  width:280px;flex-shrink:0;
+  background:#1A1A1A;
+  border-radius:32px;
+  padding:12px;
+  box-shadow:0 24px 64px rgba(0,0,0,0.18);
+}
+.phone-notch{
+  width:80px;height:6px;
+  background:#0A0A0A;
+  border-radius:3px;
+  margin:0 auto 8px;
+}
+.phone-screen{
+  border-radius:20px;
+  overflow:hidden;
+  aspect-ratio:1/1;
+  position:relative;
+}
+
+/* Banner frame */
+.banner-wrap{margin-bottom:56px}
+.banner{
+  border-radius:8px;
+  overflow:hidden;
+  aspect-ratio:3.2/1;
+  position:relative;
+  box-shadow:0 8px 32px rgba(0,0,0,0.12);
+}
+@media(max-width:640px){.banner{aspect-ratio:2/1}}
+
+/* ── Campaign 1 Mockup Styles ── */
+.c1-social{
+  background:linear-gradient(145deg,#C17817 0%,#C7907D 60%,#B8766A 100%);
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  padding:28px 24px;
+  height:100%;
+}
+.c1-social .wave-wrap{
+  position:absolute;top:20%;left:0;right:0;
+  opacity:0.25;
+}
+.c1-social .headline{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.55rem;font-weight:300;font-style:italic;
+  color:#FFF8EE;line-height:1.25;
+  margin-bottom:16px;position:relative;z-index:1;
+}
+.c1-social .brand{
+  font-family:'DM Sans',sans-serif;
+  font-size:0.6rem;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(255,248,238,0.6);position:relative;z-index:1;
+}
+.c1-banner{
+  background:linear-gradient(100deg,#C17817 0%,#C7907D 45%,#F5EDE4 45%,#F5EDE4 100%);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  height:100%;
+}
+.c1-banner-left{
+  display:flex;align-items:center;justify-content:center;
+  position:relative;padding:24px;
+}
+.c1-banner-ring{
+  width:60px;height:60px;border-radius:50%;
+  border:3px solid rgba(255,248,238,0.5);
+  position:relative;z-index:1;
+}
+.c1-banner-ring::before{
+  content:'';position:absolute;inset:-16px;border-radius:50%;
+  border:1px solid rgba(255,248,238,0.2);
+}
+.c1-banner-wave{
+  position:absolute;bottom:30%;left:0;right:0;opacity:0.2;
+}
+.c1-banner-right{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:24px 32px;
+}
+.c1-banner-right h3{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(1rem,2vw,1.5rem);font-weight:400;
+  color:#2A2420;line-height:1.3;margin-bottom:10px;
+}
+.c1-banner-right p{
+  font-size:0.7rem;line-height:1.55;
+  color:#7A6E62;margin-bottom:14px;max-width:36ch;
+}
+.c1-banner-right .cta{
+  display:inline-block;
+  font-size:0.65rem;font-weight:600;
+  letter-spacing:0.06em;text-transform:uppercase;
+  padding:8px 20px;
+  background:#2A2420;color:#F5EDE4;
+  border-radius:2px;width:fit-content;
+}
+
+/* ── Campaign 2 Mockup Styles ── */
+.c2-social{
+  background:#0A0A0F;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  height:100%;position:relative;
+  overflow:hidden;
+}
+.c2-fine{
+  font-family:'Oswald',sans-serif;
+  font-size:5rem;font-weight:700;
+  color:#FFFFFF;letter-spacing:0.04em;
+  line-height:1;position:relative;
+  text-transform:uppercase;
+}
+.c2-glitch{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  clip-path:polygon(0 38%,100% 38%,100% 62%,0 62%);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.c2-glitch-inner{
+  font-family:'Oswald',sans-serif;
+  font-size:5rem;font-weight:700;
+  letter-spacing:0.04em;line-height:1;
+  color:#3A86FF;text-transform:uppercase;
+  filter:blur(0.5px);
+}
+.c2-glitch svg{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  opacity:0.7;
+}
+.c2-sub{
+  font-family:'DM Sans',sans-serif;
+  font-size:0.7rem;font-weight:500;
+  color:#6A6A80;
+  margin-top:16px;letter-spacing:0.04em;
+  text-align:center;position:relative;z-index:2;
+}
+.c2-brand{
+  position:absolute;bottom:20px;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.55rem;font-weight:600;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:#3A86FF;
+}
+.c2-line{
+  position:absolute;top:50%;left:0;right:0;
+  height:1px;background:#3A86FF;opacity:0.3;
+}
+.c2-banner{
+  background:#0A0A0F;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  height:100%;position:relative;
+}
+.c2-banner-left{
+  display:flex;flex-direction:column;
+  align-items:flex-start;justify-content:center;
+  padding:24px 32px;
+  position:relative;
+}
+.c2-banner-left h3{
+  font-family:'Oswald',sans-serif;
+  font-size:clamp(1.2rem,2.5vw,2rem);
+  font-weight:700;text-transform:uppercase;
+  color:#FFFFFF;letter-spacing:0.02em;
+  line-height:1.1;margin-bottom:10px;
+}
+.c2-banner-left p{
+  font-size:0.7rem;color:#6A6A80;
+  line-height:1.55;margin-bottom:14px;max-width:32ch;
+}
+.c2-banner-left .cta{
+  display:inline-block;
+  font-size:0.65rem;font-weight:600;
+  letter-spacing:0.06em;text-transform:uppercase;
+  padding:8px 20px;
+  background:#3A86FF;color:#FFFFFF;
+  border-radius:2px;width:fit-content;
+}
+.c2-banner-right{
+  display:flex;align-items:center;justify-content:center;
+  position:relative;padding:20px;
+}
+.c2-banner-accent{
+  position:absolute;bottom:0;left:0;right:0;
+  height:2px;background:linear-gradient(90deg,transparent,#3A86FF,transparent);
+}
+.c2-ui-card{
+  background:#13131A;border:1px solid #2A2A3A;
+  border-radius:8px;padding:16px;width:160px;
+}
+.c2-ui-card .ui-label{
+  font-size:0.55rem;font-weight:600;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:#6A6A80;margin-bottom:8px;
+}
+.c2-ui-card .ui-number{
+  font-family:'Oswald',sans-serif;
+  font-size:2.2rem;font-weight:700;
+  color:#3A86FF;line-height:1;margin-bottom:4px;
+}
+.c2-ui-card .ui-status{
+  font-size:0.6rem;color:#FF006E;font-weight:500;
+}
+
+/* ── Campaign 3 Mockup Styles ── */
+.c3-social{
+  background:linear-gradient(160deg,#FF6B6B 0%,#FFB347 35%,#4ECDC4 100%);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  height:100%;position:relative;
+}
+.c3-circles{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.c3-circle{
+  position:absolute;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,0.3);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+.c3-circle:nth-child(1){width:60px;height:60px;border-color:rgba(255,255,255,0.5)}
+.c3-circle:nth-child(2){width:110px;height:110px}
+.c3-circle:nth-child(3){width:160px;height:160px;border-style:dashed;border-color:rgba(255,255,255,0.18)}
+.c3-circle:nth-child(4){width:210px;height:210px;border-color:rgba(255,255,255,0.1)}
+.c3-title{
+  font-family:'Syne',sans-serif;
+  font-size:2rem;font-weight:800;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:#FFFFFF;position:relative;z-index:1;
+  text-shadow:0 2px 20px rgba(0,0,0,0.15);
+}
+.c3-tagline{
+  font-family:'DM Sans',sans-serif;
+  font-size:0.75rem;font-weight:400;
+  color:rgba(255,255,255,0.8);
+  margin-top:8px;position:relative;z-index:1;
+}
+.c3-brand{
+  position:absolute;bottom:20px;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.55rem;font-weight:600;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(255,255,255,0.5);
+}
+.c3-banner{
+  background:linear-gradient(95deg,#FF6B6B 0%,#FFB347 30%,#FFE66D 50%,#4ECDC4 100%);
+  display:grid;grid-template-columns:1fr auto 1fr;
+  height:100%;position:relative;
+}
+.c3-banner-left{
+  display:flex;flex-direction:column;
+  justify-content:center;padding:24px 32px;
+}
+.c3-banner-left h3{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(1.2rem,2.5vw,2rem);
+  font-weight:800;text-transform:uppercase;
+  letter-spacing:0.06em;
+  color:#1A1A2E;line-height:1.1;margin-bottom:8px;
+}
+.c3-banner-left p{
+  font-size:0.7rem;color:rgba(26,26,46,0.6);
+  line-height:1.5;max-width:28ch;
+}
+.c3-banner-center{
+  display:flex;align-items:center;justify-content:center;
+  padding:12px;
+}
+.c3-gauge{
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(255,255,255,0.2);
+  backdrop-filter:blur(8px);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  border:2px solid rgba(255,255,255,0.4);
+}
+.c3-gauge-num{
+  font-family:'Syne',sans-serif;
+  font-size:1.6rem;font-weight:800;
+  color:#1A1A2E;line-height:1;
+}
+.c3-gauge-label{
+  font-size:0.45rem;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:rgba(26,26,46,0.5);margin-top:2px;
+}
+.c3-banner-right{
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:flex-end;
+  padding:24px 32px;
+}
+.c3-banner-right .cta{
+  display:inline-block;
+  font-family:'Syne',sans-serif;
+  font-size:0.65rem;font-weight:700;
+  letter-spacing:0.06em;text-transform:uppercase;
+  padding:8px 20px;
+  background:#1A1A2E;color:#FFFFFF;
+  border-radius:2px;
+}
+
+/* ── Extensibility ── */
+.extend{
+  background:var(--bg-raised);
+  border-radius:8px;padding:24px;
+  margin-top:24px;
+}
+.extend-title{
+  font-family:'DM Sans',sans-serif;
+  font-size:0.7rem;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-2);margin-bottom:12px;
+}
+.extend-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:8px}
+.extend-list li{
+  font-size:0.85rem;color:var(--text);
+  padding-left:16px;position:relative;
+}
+.extend-list li::before{
+  content:'';position:absolute;left:0;top:8px;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--accent);
+}
+
+/* ── Closing ── */
+.closing{text-align:center;padding:64px 0 80px}
+.closing h2{margin-bottom:12px}
+.closing p{margin:0 auto;color:var(--text-2)}
+
+/* ── Dividers ── */
+.rule{
+  width:48px;height:2px;
+  background:var(--accent);
+  margin:32px 0;
+}
+
+/* Focus */
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<!-- ████  HERO  ████ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-ring-wrap">
+      <div class="hero-ring"></div>
+      <div class="hero-pulse"></div>
+    </div>
+    <p class="label" style="margin-bottom:16px">Campaign Brief</p>
+    <h1>AI-Stress Index</h1>
+    <p style="font-size:1.05rem;margin-top:12px">
+      Three creative directions for launching Luna's breakthrough stress-monitoring feature to the world.
+    </p>
+  </div>
+</section>
+
+<!-- ████  CONTEXT  ████ -->
+<section class="context">
+  <div class="wrap">
+    <div class="context-grid">
+      <div class="context-card">
+        <h3>The Product</h3>
+        <p>Luna smart ring's AI-Stress Index monitors stress biometrics in real time, delivering personalized breathing exercises, relaxation prompts, and activity recommendations directly to the wearer.</p>
+      </div>
+      <div class="context-card">
+        <h3>The Audience</h3>
+        <p>Global, 22-45, digitally fluent professionals who feel the weight of modern life and want proactive tools — not reactive fixes — for managing stress.</p>
+      </div>
+      <div class="context-card">
+        <h3>The Objective</h3>
+        <p>Position AI-Stress Index as the first wearable feature that doesn't just track stress but actively helps you do something about it — in the moment, every day.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ████████████████████████████████████████████████████████ -->
+<!-- ████  DIRECTION 1: YOUR BODY ALREADY KNOWS  ████ -->
+<!-- ████████████████████████████████████████████████████████ -->
+<section class="section direction" id="dir-1">
+  <div class="wrap">
+    <p class="direction-num">Direction One</p>
+    <h2 class="direction-name" style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-style:italic">Your Body Already Knows</h2>
+    <p class="direction-tagline">Now you will too.</p>
+
+    <div class="direction-body">
+      <div>
+        <p>Your body signals stress twenty minutes before your conscious mind catches up. Micro-tensions in the jaw, shifts in heart-rate variability, subtle changes in skin temperature — they're happening beneath awareness, every day.</p>
+        <p style="margin-top:12px">This campaign leads with that human truth, not with technology. Luna is the bridge between what your body already senses and what you can finally act on. The tone is poetic and intimate — science refracted through personal experience.</p>
+      </div>
+      <div>
+        <p class="label" style="margin-bottom:8px">Key lines</p>
+        <ul class="key-lines">
+          <li>Your body already knows. Now you will too.</li>
+          <li>It knew at 3pm when you reached for coffee. At 11pm when sleep wouldn't come.</li>
+          <li>Your body keeps the score. Luna reads it.</li>
+          <li>Meet your stress before it meets you.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Mood Board -->
+    <div class="moodboard">
+      <p class="moodboard-title">Visual Direction</p>
+      <div class="palette">
+        <div><div class="swatch" style="background:#C17817"></div><p class="swatch-label">Amber</p></div>
+        <div><div class="swatch" style="background:#C7907D"></div><p class="swatch-label">Terra</p></div>
+        <div><div class="swatch" style="background:#264653"></div><p class="swatch-label">Deep Teal</p></div>
+        <div><div class="swatch" style="background:#FEFAE0"></div><p class="swatch-label">Cream</p></div>
+        <div><div class="swatch" style="background:#2A2420"></div><p class="swatch-label">Espresso</p></div>
+      </div>
+      <div class="type-sample">
+        <p class="display" style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-style:italic">Your body already knows.</p>
+        <p class="body-text">Warm, tactile, close. Macro shots of pulse points, morning light on skin, a hand wrapped around a mug with the ring catching amber light. Organic biometric waveforms echo through the visual language — not as data, but as a living rhythm.</p>
+      </div>
+      <p class="type-meta">Cormorant Garamond Light Italic + DM Sans for body. Imagery: warm, macro, intimate.</p>
+    </div>
+
+    <!-- Social Mockup -->
+    <div class="mockup-row">
+      <div>
+        <p class="mockup-label">Social Media Post</p>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="c1-social">
+              <div class="wave-wrap">
+                <svg viewBox="0 0 280 60" fill="none" style="width:100%">
+                  <path d="M0,30 C13,20 27,20 40,30 C53,40 67,40 80,30 C93,20 107,20 120,30 C133,40 147,40 160,30 C173,20 187,20 200,30 C213,40 227,40 240,30 C253,20 267,20 280,30" stroke="rgba(255,248,238,0.5)" stroke-width="1.5"/>
+                  <path d="M0,35 C15,28 30,28 45,35 C60,42 75,42 90,35 C105,28 120,28 135,35 C150,42 165,42 180,35 C195,28 210,28 225,35 C240,42 255,42 270,35 L280,35" stroke="rgba(255,248,238,0.25)" stroke-width="1"/>
+                </svg>
+              </div>
+              <p class="headline">Your body<br>already knows.</p>
+              <p class="brand">Luna &middot; AI-Stress Index</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="padding-top:32px">
+        <p class="mockup-caption">Instagram/TikTok format. Golden-hour warmth with an organic biometric waveform layered beneath the headline. The serif italic creates an intimate, confessional tone — like the ring is whispering something your body has been trying to tell you.</p>
+        <div class="extend">
+          <p class="extend-title">Campaign Extensions</p>
+          <ul class="extend-list">
+            <li>Interview series: real people share "My body knew when..." stories</li>
+            <li>Podcast partnerships with wellness voices and sleep scientists</li>
+            <li>User-generated content: share what your body was trying to tell you</li>
+            <li>Morning routine collab content — "What does your first hour reveal?"</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Banner Mockup -->
+    <div class="banner-wrap">
+      <p class="mockup-label">Website Banner</p>
+      <div class="banner">
+        <div class="c1-banner">
+          <div class="c1-banner-left">
+            <div class="c1-banner-ring"></div>
+            <svg class="c1-banner-wave" viewBox="0 0 460 40" fill="none" style="width:100%">
+              <path d="M0,20 C15,12 30,12 45,20 C60,28 75,28 90,20 C105,12 120,12 135,20 C150,28 165,28 180,20 C195,12 210,12 225,20 C240,28 255,28 270,20 C285,12 300,12 315,20 C330,28 345,28 360,20 C375,12 390,12 405,20 C420,28 435,28 460,20" stroke="rgba(255,248,238,0.45)" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="c1-banner-right">
+            <h3>Your body already knows.<br>Now you will too.</h3>
+            <p>Luna's AI-Stress Index reads what you can't feel yet — and tells you what to do about it, in real time.</p>
+            <div class="cta">Learn More</div>
+          </div>
+        </div>
+      </div>
+      <p class="mockup-caption" style="margin-top:12px">Split composition: atmospheric warmth on the left with the ring silhouette and biometric waveform, clean editorial right panel with headline and CTA. The gradient boundary line creates a natural reading flow.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ████████████████████████████████████████████████████████ -->
+<!-- ████  DIRECTION 2: FINE IS NOT A FEELING  ████ -->
+<!-- ████████████████████████████████████████████████████████ -->
+<section class="section direction" id="dir-2">
+  <div class="wrap">
+    <p class="direction-num">Direction Two</p>
+    <h2 class="direction-name" style="font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.02em">Fine Is Not a Feeling</h2>
+    <p class="direction-tagline">Replace the lie with data.</p>
+
+    <div class="direction-body">
+      <div>
+        <p>"I'm fine" is the most common deflection in the English language. We say it an average of fourteen times a day. We say it when we're overwhelmed, anxious, exhausted, and running on adrenaline. We perform calm so convincingly we even fool ourselves.</p>
+        <p style="margin-top:12px">This campaign calls that out — not cruelly, but honestly. It's editorial, typographic, and confrontational in a way that stops the scroll. Luna doesn't accept "fine." It shows you the truth, and the truth is actionable.</p>
+      </div>
+      <div>
+        <p class="label" style="margin-bottom:8px">Key lines</p>
+        <ul class="key-lines">
+          <li>Fine is not a feeling.</li>
+          <li>You said 'I'm fine' 14 times today. Your stress index said otherwise.</li>
+          <li>Stop performing calm. Start knowing it.</li>
+          <li>Replace the lie with data.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Mood Board -->
+    <div class="moodboard">
+      <p class="moodboard-title">Visual Direction</p>
+      <div class="palette">
+        <div><div class="swatch" style="background:#0A0A0F"></div><p class="swatch-label">Void</p></div>
+        <div><div class="swatch" style="background:#FFFFFF"></div><p class="swatch-label">White</p></div>
+        <div><div class="swatch" style="background:#3A86FF"></div><p class="swatch-label">Truth Blue</p></div>
+        <div><div class="swatch" style="background:#FF006E"></div><p class="swatch-label">Stress Pink</p></div>
+        <div><div class="swatch" style="background:#6A6A80"></div><p class="swatch-label">Slate</p></div>
+      </div>
+      <div class="type-sample" style="background:#0A0A0F">
+        <p class="display" style="font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;color:#FFFFFF;letter-spacing:0.02em">Fine is not a feeling.</p>
+        <p class="body-text" style="color:#6A6A80">Stark, high-contrast, editorial. The word "FINE" is the hero motif — glitched, sliced, or dissolved to reveal raw biometric data underneath. Black-and-white base with electric blue as the single color of truth. Typography as provocation.</p>
+      </div>
+      <p class="type-meta">Oswald Bold Condensed + DM Sans. Aesthetic: journalistic, confrontational, graphic.</p>
+    </div>
+
+    <!-- Social Mockup -->
+    <div class="mockup-row">
+      <div>
+        <p class="mockup-label">Social Media Post</p>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="c2-social">
+              <div class="c2-line"></div>
+              <div style="position:relative">
+                <div class="c2-fine">FINE</div>
+                <div class="c2-glitch">
+                  <div class="c2-glitch-inner">FINE</div>
+                  <svg viewBox="0 0 280 280" preserveAspectRatio="none" style="position:absolute;top:0;left:0;width:100%;height:100%">
+                    <path d="M0,140 C8,120 16,160 24,125 C32,155 40,115 48,150 C56,130 64,160 72,120 C80,145 88,125 96,155 C104,135 112,145 120,120 C128,150 136,130 144,140 C152,125 160,155 168,135 C176,145 184,120 192,150 C200,130 208,155 216,125 C224,145 232,130 240,150 C248,120 256,145 264,135 C272,150 280,130 280,140" fill="none" stroke="#3A86FF" stroke-width="2" opacity="0.8"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="c2-sub">is not a feeling.</p>
+              <p class="c2-brand">Luna AI-Stress Index</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="padding-top:32px">
+        <p class="mockup-caption">The word "FINE" dominates the frame — but a glitch strip cuts through it, revealing biometric data in electric blue. It's a scroll-stopper: visually arresting, immediately understandable, shareable. The contrast between the bold white claim and the blue data truth is the entire campaign in one frame.</p>
+        <div class="extend">
+          <p class="extend-title">Campaign Extensions</p>
+          <ul class="extend-list">
+            <li>"Fine Counter" AR filter — tracks how many times you say "I'm fine" in a day</li>
+            <li>Workplace wellness partnerships — "Your team says fine 847 times a week"</li>
+            <li>Data-driven email drip: "Your week in real feelings" (post-launch, with user data)</li>
+            <li>OOH billboards in commuter corridors: "FINE" glitching to reveal stress data</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Banner Mockup -->
+    <div class="banner-wrap">
+      <p class="mockup-label">Website Banner</p>
+      <div class="banner">
+        <div class="c2-banner">
+          <div class="c2-banner-left">
+            <h3>Fine Is Not<br>a Feeling.</h3>
+            <p>Luna sees what "I'm fine" hides. Real-time stress data. Real-time recommendations. No more guessing.</p>
+            <div class="cta">Know Your Number</div>
+          </div>
+          <div class="c2-banner-right">
+            <div class="c2-ui-card">
+              <p class="ui-label">Stress Index</p>
+              <p class="ui-number">73</p>
+              <p class="ui-status">Elevated &middot; Breathe</p>
+            </div>
+          </div>
+          <div class="c2-banner-accent"></div>
+        </div>
+      </div>
+      <p class="mockup-caption" style="margin-top:12px">Dark, cinematic banner. The bold headline on the left confronts; the floating UI card on the right reveals — a real stress score, a real status, a real recommendation. The electric blue accent line connects them. The CTA "Know Your Number" turns provocation into action.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ████████████████████████████████████████████████████████ -->
+<!-- ████  DIRECTION 3: RECALIBRATE  ████ -->
+<!-- ████████████████████████████████████████████████████████ -->
+<section class="section direction" id="dir-3">
+  <div class="wrap">
+    <p class="direction-num">Direction Three</p>
+    <h2 class="direction-name" style="font-family:'Syne',sans-serif;font-weight:800;letter-spacing:0.04em;text-transform:uppercase">Recalibrate</h2>
+    <p class="direction-tagline">Find your baseline. Come back to it.</p>
+
+    <div class="direction-body">
+      <div>
+        <p>The goal isn't zero stress — that's impossible and, honestly, undesirable. Stress is a signal. It sharpens focus, fuels deadlines, and alerts you to things that matter. The problem isn't stress itself — it's losing track of where your baseline is and how far you've drifted from it.</p>
+        <p style="margin-top:12px">Recalibrate reframes the conversation. It's not about eliminating stress — it's about understanding your relationship with it. Luna gives you a personal spectrum, a daily baseline, and the tools to return to center. The visual language uses warm-to-cool gradients as a literal, intuitive metaphor: warm means stressed, cool means calm, and you can see exactly where you are.</p>
+      </div>
+      <div>
+        <p class="label" style="margin-bottom:8px">Key lines</p>
+        <ul class="key-lines">
+          <li>Recalibrate.</li>
+          <li>Find your baseline. Come back to it.</li>
+          <li>Stress is a signal. Not a sentence.</li>
+          <li>You're not broken. You're just off-center.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Mood Board -->
+    <div class="moodboard">
+      <p class="moodboard-title">Visual Direction</p>
+      <div class="palette">
+        <div><div class="swatch" style="background:#FF6B6B"></div><p class="swatch-label">Warm</p></div>
+        <div><div class="swatch" style="background:#FFB347"></div><p class="swatch-label">Amber</p></div>
+        <div><div class="swatch" style="background:#FFE66D"></div><p class="swatch-label">Sun</p></div>
+        <div><div class="swatch" style="background:#4ECDC4"></div><p class="swatch-label">Cool</p></div>
+        <div><div class="swatch" style="background:#1A1A2E"></div><p class="swatch-label">Deep</p></div>
+      </div>
+      <div class="type-sample" style="background:linear-gradient(135deg,rgba(255,107,107,0.08),rgba(78,205,196,0.08))">
+        <p class="display" style="font-family:'Syne',sans-serif;font-weight:800;letter-spacing:0.04em;text-transform:uppercase">Recalibrate.</p>
+        <p class="body-text">Gradient-based, modern, optimistic. The warm-to-cool spectrum is the core visual device — it appears in backgrounds, UI elements, and data visualizations. Concentric circles echo the ring's form factor. The aesthetic is tech-forward but human: geometric shapes, generous whitespace, confidence without coldness.</p>
+      </div>
+      <p class="type-meta">Syne Extra Bold + DM Sans. Aesthetic: gradient-driven, geometric, optimistic.</p>
+    </div>
+
+    <!-- Social Mockup -->
+    <div class="mockup-row">
+      <div>
+        <p class="mockup-label">Social Media Post</p>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="c3-social">
+              <div class="c3-circles">
+                <div class="c3-circle"></div>
+                <div class="c3-circle"></div>
+                <div class="c3-circle"></div>
+                <div class="c3-circle"></div>
+              </div>
+              <p class="c3-title">Recalibrate</p>
+              <p class="c3-tagline">Find your baseline. Come back to it.</p>
+              <p class="c3-brand">Luna &middot; AI-Stress Index</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="padding-top:32px">
+        <p class="mockup-caption">The full stress-to-calm gradient fills the frame — instantly communicating what the product does without a single word of explanation. Concentric circles evoke the ring form while suggesting expansion and return. The bold geometric type feels confident and contemporary.</p>
+        <div class="extend">
+          <p class="extend-title">Campaign Extensions</p>
+          <ul class="extend-list">
+            <li>"What's Your Color?" social engagement — share where you are on the spectrum</li>
+            <li>Gradient-template story format: users fill in their daily stress-to-calm journey</li>
+            <li>Partnerships with meditation apps and fitness brands (spectrum co-branding)</li>
+            <li>Ambient installation at tech conferences — a room that shifts color with collective stress</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Banner Mockup -->
+    <div class="banner-wrap">
+      <p class="mockup-label">Website Banner</p>
+      <div class="banner">
+        <div class="c3-banner">
+          <div class="c3-banner-left">
+            <h3>Recalibrate.</h3>
+            <p>Know your stress. Find your baseline. Come back to it — with Luna's AI-Stress Index.</p>
+          </div>
+          <div class="c3-banner-center">
+            <div class="c3-gauge">
+              <p class="c3-gauge-num">42</p>
+              <p class="c3-gauge-label">Balanced</p>
+            </div>
+          </div>
+          <div class="c3-banner-right">
+            <div class="cta">Find Your Baseline</div>
+          </div>
+        </div>
+      </div>
+      <p class="mockup-caption" style="margin-top:12px">The full gradient spectrum runs left to right — warm stress on the left, cool calm on the right. A floating gauge in the center shows a real score, grounding the abstract gradient in concrete data. The three-column layout creates a clear narrative: problem, data, action.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ████  CLOSING  ████ -->
+<section class="section closing">
+  <div class="wrap">
+    <div class="rule" style="margin:0 auto 32px"></div>
+    <h2>Three Directions, One Truth</h2>
+    <p style="font-size:0.95rem;margin-top:12px">Each direction approaches the same insight from a different angle: people are more stressed than they realize, and Luna is the first wearable that does something about it. <em>Your Body Already Knows</em> leads with emotion, <em>Fine Is Not a Feeling</em> leads with provocation, and <em>Recalibrate</em> leads with empowerment. The strongest campaigns often blend elements from multiple directions — a warm visual language with a provocative headline, or a gradient-driven identity with intimate storytelling.</p>
+  </div>
+</section>
