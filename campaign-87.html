@@ -1,0 +1,926 @@
+<title>Campaign 87</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,400&display=swap">
+
+<style>
+/* ── Tokens ── */
+:root {
+  --red: #FF3B30;
+  --teal: #00C9A7;
+  --void: #0D0D12;
+  --surface: #1A1A26;
+  --warm-white: #F5F4F0;
+  --text-dim: #6A6878;
+  --text-bright: #EEECEA;
+  --bg: #0D0D12;
+  --text: #EEECEA;
+  --text-2: #6A6878;
+  --section-border: rgba(255,255,255,0.06);
+}
+
+/* Light mode for text-heavy sections */
+@media(prefers-color-scheme:light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #F5F4F0;
+    --text: #1A1A26;
+    --text-2: #6A6878;
+    --section-border: rgba(0,0,0,0.08);
+  }
+}
+:root[data-theme="light"] {
+  --bg: #F5F4F0;
+  --text: #1A1A26;
+  --text-2: #6A6878;
+  --section-border: rgba(0,0,0,0.08);
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Typography ── */
+.bebas { font-family: 'Bebas Neue', Impact, sans-serif; }
+h2 {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
+}
+h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+p { max-width: 58ch; }
+.label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.small { font-size: 0.875rem; }
+
+/* ── Layout ── */
+.wrap { max-width: 840px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 80px 0; }
+
+/* ── Hero: The Number ── */
+.hero {
+  background: #0D0D12;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 40px 24px;
+}
+.hero-number {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: clamp(12rem, 35vw, 26rem);
+  color: #FF3B30;
+  line-height: 0.82;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 120px rgba(255,59,48,0.25), 0 0 240px rgba(255,59,48,0.08);
+  position: relative;
+  user-select: none;
+}
+.hero-sub {
+  color: #6A6878;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-top: 32px;
+  font-weight: 500;
+}
+
+/* ── Insight ── */
+.insight {
+  background: #0D0D12;
+  padding: 64px 0 80px;
+  text-align: center;
+}
+.insight-text {
+  font-size: clamp(1.15rem, 2.2vw, 1.4rem);
+  line-height: 1.6;
+  color: #EEECEA;
+  max-width: 52ch;
+  margin: 0 auto;
+}
+.insight-text em {
+  color: #FF3B30;
+  font-style: normal;
+  font-weight: 600;
+}
+.insight-rule {
+  width: 40px;
+  height: 2px;
+  background: #FF3B30;
+  margin: 0 auto 32px;
+}
+
+/* ── Phase Sections ── */
+.phase {
+  padding: 72px 0;
+  position: relative;
+}
+.phase-eyebrow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.phase-desc {
+  color: var(--text-2);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-top: 16px;
+}
+
+/* Phase 1 — Mystery */
+.phase-1 {
+  background: #0D0D12;
+  color: #EEECEA;
+}
+.phase-1 .phase-eyebrow { color: #FF3B30; }
+.phase-1 h2 { color: #EEECEA; }
+.phase-1 .phase-desc { color: #6A6878; }
+
+/* Phase 2 — Reveal */
+.phase-2 {
+  background: #0D0D12;
+  color: #EEECEA;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.phase-2 .phase-eyebrow { color: #FF3B30; }
+.phase-2 h2 { color: #EEECEA; }
+.phase-2 .phase-desc { color: #6A6878; }
+
+/* Phase 3 — Movement */
+.phase-3 {
+  background: #0F1014;
+  color: #EEECEA;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.phase-3 .phase-eyebrow { color: #00C9A7; }
+.phase-3 h2 { color: #EEECEA; }
+.phase-3 .phase-desc { color: #6A6878; }
+
+/* Phase 4 — Product */
+.phase-4 {
+  background: var(--bg);
+  color: var(--text);
+  border-top: 1px solid var(--section-border);
+}
+.phase-4 .phase-eyebrow { color: #00C9A7; }
+.phase-4 h2 { color: var(--text); }
+.phase-4 .phase-desc { color: var(--text-2); }
+
+/* ── Mockups ── */
+.mockup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 40px;
+}
+@media(max-width:640px) { .mockup-grid { grid-template-columns: 1fr; } }
+
+.mockup-note {
+  font-size: 0.75rem;
+  color: #6A6878;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* Billboard */
+.billboard {
+  aspect-ratio: 2.5 / 1;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.4);
+}
+.billboard-mystery {
+  background: #0A0A0E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.billboard-mystery .num {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: clamp(3rem, 8vw, 5rem);
+  color: #FF3B30;
+  line-height: 1;
+  text-shadow: 0 0 40px rgba(255,59,48,0.3);
+}
+.billboard-reveal {
+  background: #0A0A0E;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+.billboard-reveal .num {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  color: #FF3B30;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.billboard-reveal .reveal-text {
+  font-size: clamp(0.5rem, 1.2vw, 0.7rem);
+  color: #6A6878;
+  max-width: 32ch;
+  line-height: 1.5;
+}
+.billboard-reveal .luna-mark {
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #EEECEA;
+  margin-top: 10px;
+}
+
+/* Phone */
+.phone {
+  width: 220px;
+  background: #1A1A1A;
+  border-radius: 28px;
+  padding: 10px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+  margin: 0 auto;
+}
+.phone-notch {
+  width: 60px; height: 5px;
+  background: #0A0A0A;
+  border-radius: 3px;
+  margin: 0 auto 6px;
+}
+.phone-screen {
+  border-radius: 18px;
+  overflow: hidden;
+  aspect-ratio: 9/16;
+  position: relative;
+}
+
+/* Social: teaser */
+.social-teaser {
+  background: #0A0A0E;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.social-teaser .num {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: 4.5rem;
+  color: #FF3B30;
+  line-height: 1;
+  text-shadow: 0 0 30px rgba(255,59,48,0.3);
+}
+.social-teaser .caption {
+  font-size: 0.45rem;
+  color: #4A4858;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 14px;
+}
+
+/* Social: reveal */
+.social-reveal {
+  background: #0A0A0E;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+}
+.social-reveal .num-small {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: 2.4rem;
+  color: #FF3B30;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.social-reveal .reveal-line {
+  font-size: 0.5rem;
+  color: #EEECEA;
+  line-height: 1.55;
+  max-width: 22ch;
+  margin-bottom: 12px;
+}
+.social-reveal .data-card {
+  background: #13131E;
+  border: 1px solid #2A2A3A;
+  border-radius: 8px;
+  padding: 12px 16px;
+  width: 100%;
+  max-width: 160px;
+  text-align: left;
+}
+.social-reveal .data-card .dc-label {
+  font-size: 0.4rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6A6878;
+  margin-bottom: 4px;
+}
+.social-reveal .data-card .dc-num {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: 1.8rem;
+  color: #FF3B30;
+  line-height: 1;
+}
+.social-reveal .data-card .dc-status {
+  font-size: 0.4rem;
+  color: #FF3B30;
+  font-weight: 600;
+  margin-top: 2px;
+}
+.social-reveal .luna-tag {
+  font-size: 0.4rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #4A4858;
+  margin-top: 12px;
+}
+
+/* Social: share your number */
+.social-share {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.social-share .spectrum {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, #FF3B30 0%, #FF8C42 30%, #FFD166 50%, #4ECDC4 75%, #00C9A7 100%);
+  opacity: 0.12;
+}
+.social-share .share-content {
+  position: relative; z-index: 1;
+}
+.social-share .im-a {
+  font-size: 0.55rem;
+  color: #6A6878;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.social-share .share-num {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: 5rem;
+  line-height: 0.85;
+  color: #00C9A7;
+}
+.social-share .share-status {
+  display: inline-block;
+  font-size: 0.45rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #00C9A7;
+  border: 1px solid rgba(0,201,167,0.3);
+  border-radius: 12px;
+  padding: 3px 10px;
+  margin-top: 8px;
+}
+.social-share .share-bar {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #FF3B30, #FF8C42, #FFD166, #4ECDC4, #00C9A7);
+  margin-top: 20px;
+  position: relative;
+}
+.social-share .share-marker {
+  position: absolute;
+  top: -4px;
+  left: 42%;
+  width: 14px; height: 14px;
+  background: #00C9A7;
+  border: 2px solid #0D0D12;
+  border-radius: 50%;
+}
+.social-share .share-tag {
+  font-size: 0.4rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #4A4858;
+  margin-top: 16px;
+}
+.social-share-bg { background: #0D0D12; }
+
+/* ── Product Banner ── */
+.product-banner {
+  aspect-ratio: 3.2/1;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  margin-top: 40px;
+}
+@media(max-width:640px) { .product-banner { aspect-ratio: 2/1; } }
+.product-banner-inner {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+}
+/* Light mode banner */
+.product-banner-light {
+  background: #F5F4F0;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+/* Dark mode banner for dark theme */
+.product-banner-dark {
+  background: #13131E;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  display: none;
+}
+@media(prefers-color-scheme:dark) {
+  :root:not([data-theme="light"]) .product-banner-light { display: none; }
+  :root:not([data-theme="light"]) .product-banner-dark { display: block; }
+}
+:root[data-theme="dark"] .product-banner-light { display: none; }
+:root[data-theme="dark"] .product-banner-dark { display: block; }
+
+.pb-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px 32px;
+}
+.pb-left h3 {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  margin-bottom: 8px;
+}
+.pb-left-light h3 { color: #1A1A26; }
+.pb-left-dark h3 { color: #EEECEA; }
+.pb-left p {
+  font-size: 0.7rem;
+  line-height: 1.55;
+  margin-bottom: 14px;
+  max-width: 30ch;
+}
+.pb-left-light p { color: #6A6878; }
+.pb-left-dark p { color: #6A6878; }
+.pb-cta {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  border-radius: 2px;
+  width: fit-content;
+}
+.pb-cta-light { background: #1A1A26; color: #F5F4F0; }
+.pb-cta-dark { background: #00C9A7; color: #0D0D12; }
+
+.pb-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 20px;
+}
+.pb-ring {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  position: relative;
+}
+.pb-ring-light { border: 3px solid #1A1A26; }
+.pb-ring-dark { border: 3px solid #00C9A7; }
+.pb-ring::before, .pb-ring::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+.pb-ring::before { inset: -14px; }
+.pb-ring::after { inset: -28px; }
+.pb-ring-light::before { border: 1px solid rgba(26,26,38,0.15); }
+.pb-ring-light::after { border: 1px solid rgba(26,26,38,0.06); }
+.pb-ring-dark::before { border: 1px solid rgba(0,201,167,0.2); }
+.pb-ring-dark::after { border: 1px solid rgba(0,201,167,0.08); }
+.pb-score {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.pb-score-light { color: #1A1A26; }
+.pb-score-dark { color: #00C9A7; }
+
+/* ── Timeline ── */
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-top: 40px;
+}
+@media(max-width:640px) {
+  .timeline { grid-template-columns: 1fr 1fr; gap: 2px; }
+}
+.tl-phase {
+  padding: 20px 16px;
+  border-radius: 4px;
+}
+.tl-phase-dark {
+  background: #13131E;
+}
+.tl-phase-light {
+  background: var(--bg);
+  border: 1px solid var(--section-border);
+}
+/* Use dark cards in dark phases, light in light */
+.phase-1 .tl-phase-light,
+.phase-2 .tl-phase-light,
+.phase-3 .tl-phase-light { display: none; }
+
+@media(prefers-color-scheme:light) {
+  :root:not([data-theme="dark"]) .closing .tl-phase-dark { display: none; }
+  :root:not([data-theme="dark"]) .closing .tl-phase-light { display: block; }
+}
+:root[data-theme="light"] .closing .tl-phase-dark { display: none; }
+:root[data-theme="light"] .closing .tl-phase-light { display: block; }
+
+@media(prefers-color-scheme:dark) {
+  :root:not([data-theme="light"]) .closing .tl-phase-light { display: none; }
+  :root:not([data-theme="light"]) .closing .tl-phase-dark { display: block; }
+}
+:root[data-theme="dark"] .closing .tl-phase-light { display: none; }
+:root[data-theme="dark"] .closing .tl-phase-dark { display: block; }
+
+.tl-week {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.tl-week-red { color: #FF3B30; }
+.tl-week-teal { color: #00C9A7; }
+.tl-name {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.tl-name-dark { color: #EEECEA; }
+.tl-name-light { color: var(--text); }
+.tl-desc {
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+.tl-desc-dark { color: #6A6878; }
+.tl-desc-light { color: var(--text-2); }
+
+/* ── Closing ── */
+.closing {
+  background: var(--bg);
+  color: var(--text);
+  padding: 72px 0 88px;
+}
+.closing h2 { color: var(--text); }
+.win-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 32px;
+}
+@media(max-width:640px) { .win-grid { grid-template-columns: 1fr; } }
+.win-item { padding: 0; }
+.win-item h3 {
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+.win-item p {
+  font-size: 0.85rem;
+  color: var(--text-2);
+  line-height: 1.6;
+  max-width: none;
+}
+.win-accent {
+  width: 24px; height: 2px;
+  margin-bottom: 12px;
+}
+
+/* ── Focus ── */
+:focus-visible { outline: 2px solid #FF3B30; outline-offset: 2px; }
+</style>
+
+<!-- ████  HERO  ████ -->
+<section class="hero">
+  <div class="hero-number">87</div>
+  <p class="hero-sub">What if one number changed everything?</p>
+</section>
+
+<!-- ████  INSIGHT  ████ -->
+<section class="insight">
+  <div class="wrap">
+    <div class="insight-rule"></div>
+    <p class="insight-text">
+      People don't know how stressed they are. They say <em>"I'm fine"</em> fourteen times a day. They wear their exhaustion like a badge. And they have no idea that right now, in this moment, their body is running at <em>87 out of 100</em> on the stress scale — and has been for weeks.
+    </p>
+    <p class="insight-text" style="margin-top:20px">
+      Don't launch a product. <em>Launch a number.</em>
+    </p>
+  </div>
+</section>
+
+<!-- ████  PHASE 1: THE NUMBER  ████ -->
+<section class="phase phase-1">
+  <div class="wrap">
+    <p class="phase-eyebrow">Weeks 1 &ndash; 2 &middot; The Number</p>
+    <h2>Nobody Knows What 87 Means. Yet.</h2>
+    <p class="phase-desc">
+      Mysterious billboards appear in London, Tokyo, New York, Mumbai, and S&atilde;o Paulo. Social ads flood feeds. Influencer posts. Guerrilla projections on buildings at night. They all show the same thing: the number 87 in red on black. No logo. No product. No explanation. Nothing but two digits and a growing wave of speculation.
+    </p>
+    <p class="phase-desc">
+      People search "what is 87." Reddit threads spiral. News outlets run "the mystery of 87" segments. The number becomes a cultural object before anyone knows it belongs to Luna.
+    </p>
+
+    <div class="mockup-grid" style="margin-top:40px">
+      <div>
+        <div class="billboard billboard-mystery">
+          <span class="num">87</span>
+        </div>
+        <p class="mockup-note">OOH billboard &mdash; no branding, no context, just the number</p>
+      </div>
+      <div style="display:flex;justify-content:center">
+        <div>
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="social-teaser">
+                <span class="num">87</span>
+                <span class="caption">Do you know your number?</span>
+              </div>
+            </div>
+          </div>
+          <p class="mockup-note" style="text-align:center">Social teaser &mdash; story/reel format</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ████  PHASE 2: THE REVEAL  ████ -->
+<section class="phase phase-2">
+  <div class="wrap">
+    <p class="phase-eyebrow">Week 3 &middot; The Reveal</p>
+    <h2>87 Is How Stressed You Are.<br>You Just Didn't Know.</h2>
+    <p class="phase-desc">
+      Luna drops the reveal. The billboards update overnight. The same red 87, but now with context: <em>"87 is the average stress level of 10,000 people who said they were fine."</em> And for the first time, the Luna wordmark appears.
+    </p>
+    <p class="phase-desc">
+      A short documentary drops simultaneously: researchers, real participants, the moment they see their real number for the first time. The contrast between "I'm fine" and "you're at 91" is visceral, shareable, and impossible to ignore.
+    </p>
+
+    <div class="mockup-grid" style="margin-top:40px">
+      <div>
+        <div class="billboard billboard-reveal">
+          <span class="num">87</span>
+          <p class="reveal-text">is the average stress level of 10,000 people who said they were fine.</p>
+          <p class="luna-mark">Luna &middot; AI-Stress Index</p>
+        </div>
+        <p class="mockup-note">Billboard reveal &mdash; same placement, now with context</p>
+      </div>
+      <div style="display:flex;justify-content:center">
+        <div>
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="social-reveal">
+                <span class="num-small">87</span>
+                <p class="reveal-line">is the average stress level of people who said "I'm fine."</p>
+                <div class="data-card">
+                  <p class="dc-label">Your city's average</p>
+                  <p class="dc-num">91</p>
+                  <p class="dc-status">Higher than global average</p>
+                </div>
+                <p class="luna-tag">Luna AI-Stress Index</p>
+              </div>
+            </div>
+          </div>
+          <p class="mockup-note" style="text-align:center">Social reveal &mdash; localized data hook</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ████  PHASE 3: THE MOVEMENT  ████ -->
+<section class="phase phase-3">
+  <div class="wrap">
+    <p class="phase-eyebrow">Weeks 4 &ndash; 6 &middot; The Movement</p>
+    <h2>What's Your Number?</h2>
+    <p class="phase-desc">
+      Pop-up "Stress Stations" appear in high-traffic locations. Step in, put on a Luna ring for sixty seconds, and get your real stress number. The reveal moment — when someone who said "I'm fine" sees their actual score — is filmed with consent and shared as a social series. People start sharing their numbers the way they share personality types and horoscope signs: "I'm a 72." "I got mine down to 54 after the breathing exercise."
+    </p>
+    <p class="phase-desc">
+      The number becomes a social object. Templates for Instagram stories. TikTok creators comparing numbers. Morning shows testing their hosts live on air. "What's your number?" enters the cultural lexicon as a wellness check-in, not a pickup line.
+    </p>
+
+    <div class="mockup-grid" style="margin-top:40px">
+      <div style="display:flex;justify-content:center">
+        <div>
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="social-share social-share-bg">
+                <div class="spectrum"></div>
+                <div class="share-content">
+                  <p class="im-a">My number is</p>
+                  <p class="share-num">42</p>
+                  <span class="share-status">Balanced</span>
+                  <div class="share-bar">
+                    <div class="share-marker"></div>
+                  </div>
+                  <p class="share-tag">Luna AI-Stress Index</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="mockup-note" style="text-align:center">UGC template &mdash; shareable score card</p>
+        </div>
+      </div>
+      <div>
+        <h3 style="color:#EEECEA;margin-bottom:16px">Why numbers go viral</h3>
+        <p class="phase-desc" style="margin-top:0">
+          People share Wordle grids, Spotify Wrapped stats, and MBTI types for the same reason: a number or label gives language to something personal. "I'm a 72" is more specific than "I'm kind of stressed," more shareable than a journal entry, and more interesting than a product feature list.
+        </p>
+        <p class="phase-desc">
+          Luna doesn't need to convince people to talk about the product. The number IS the conversation. Every shared score is an organic ad that puts AI-Stress Index in front of a new audience — with social proof built in.
+        </p>
+        <div style="margin-top:24px;padding:20px;background:#13131E;border-radius:6px">
+          <p class="label" style="color:#00C9A7;margin-bottom:10px">Activation ideas</p>
+          <p class="phase-desc" style="margin-top:0;font-size:0.85rem">"Check Your Number" challenge on TikTok &middot; Morning-show live tests &middot; Corporate wellness pop-ups ("Your office's average: 83") &middot; City leaderboards &middot; Couples comparing numbers &middot; "Number drop" events at music festivals</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ████  PHASE 4: THE PRODUCT  ████ -->
+<section class="phase phase-4">
+  <div class="wrap">
+    <p class="phase-eyebrow">Week 7+ &middot; The Product</p>
+    <h2>Don't Guess Your Number.<br>Know It.</h2>
+    <p class="phase-desc">
+      Now Luna launches AI-Stress Index as a permanent feature. The product pitch writes itself: you saw your number once at a pop-up. Now know it every minute of every day — and get real-time recommendations to bring it down. The campaign's cultural momentum flows directly into product adoption. Every person who shared their number is a warm lead. Every "what's your number?" conversation is a product demo waiting to happen.
+    </p>
+
+    <!-- Light banner -->
+    <div class="product-banner product-banner-light">
+      <div class="product-banner-inner">
+        <div class="pb-left pb-left-light">
+          <h3>Don't guess your<br>number. Know it.</h3>
+          <p>Luna AI-Stress Index. Real-time stress monitoring. Real-time relief.</p>
+          <div class="pb-cta pb-cta-light">Get Luna</div>
+        </div>
+        <div class="pb-right">
+          <div class="pb-ring pb-ring-light">
+            <span class="pb-score pb-score-light">42</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Dark banner -->
+    <div class="product-banner product-banner-dark">
+      <div class="product-banner-inner">
+        <div class="pb-left pb-left-dark">
+          <h3>Don't guess your<br>number. Know it.</h3>
+          <p>Luna AI-Stress Index. Real-time stress monitoring. Real-time relief.</p>
+          <div class="pb-cta pb-cta-dark">Get Luna</div>
+        </div>
+        <div class="pb-right">
+          <div class="pb-ring pb-ring-dark">
+            <span class="pb-score pb-score-dark">42</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mockup-note" style="color:var(--text-2)">Product-launch banner &mdash; the number is now yours to track every day</p>
+  </div>
+</section>
+
+<!-- ████  CLOSING  ████ -->
+<section class="closing">
+  <div class="wrap">
+    <h2>Why 87 Wins</h2>
+
+    <div class="win-grid">
+      <div class="win-item">
+        <div class="win-accent" style="background:#FF3B30"></div>
+        <h3>Mystery drives earned media</h3>
+        <p>Phase 1 generates press, social speculation, and organic search volume before Luna spends a dollar on branded advertising. The reveal converts all that attention into product awareness overnight.</p>
+      </div>
+      <div class="win-item">
+        <div class="win-accent" style="background:#FF3B30"></div>
+        <h3>A number is a social object</h3>
+        <p>People share scores compulsively — Wordle, Wrapped, personality tests. "What's your number?" gives Luna a viral mechanic that's native to how people already behave on social platforms.</p>
+      </div>
+      <div class="win-item">
+        <div class="win-accent" style="background:#00C9A7"></div>
+        <h3>The product demo IS the campaign</h3>
+        <p>Every pop-up station, every shared score, every live TV test is a real demonstration of AI-Stress Index. The campaign doesn't describe the product — it IS the product, experienced for the first time.</p>
+      </div>
+      <div class="win-item">
+        <div class="win-accent" style="background:#00C9A7"></div>
+        <h3>Global, culture-agnostic</h3>
+        <p>A number needs no translation. 87 means the same thing in Tokyo, Mumbai, London, and S&atilde;o Paulo. The campaign scales globally without localization, and city-specific data hooks create local relevance.</p>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <h2 style="margin-top:56px;font-size:clamp(1.4rem,3vw,2rem)">Rollout</h2>
+
+    <div class="timeline">
+      <div>
+        <div class="tl-phase tl-phase-dark">
+          <p class="tl-week tl-week-red">Weeks 1&ndash;2</p>
+          <p class="tl-name tl-name-dark">The Number</p>
+          <p class="tl-desc tl-desc-dark">Billboards, social teasers, guerrilla projections. No branding. Pure mystery.</p>
+        </div>
+        <div class="tl-phase tl-phase-light" style="display:none">
+          <p class="tl-week tl-week-red">Weeks 1&ndash;2</p>
+          <p class="tl-name tl-name-light">The Number</p>
+          <p class="tl-desc tl-desc-light">Billboards, social teasers, guerrilla projections. No branding. Pure mystery.</p>
+        </div>
+      </div>
+      <div>
+        <div class="tl-phase tl-phase-dark">
+          <p class="tl-week tl-week-red">Week 3</p>
+          <p class="tl-name tl-name-dark">The Reveal</p>
+          <p class="tl-desc tl-desc-dark">Billboards update. Documentary drops. Luna claims the number.</p>
+        </div>
+        <div class="tl-phase tl-phase-light" style="display:none">
+          <p class="tl-week tl-week-red">Week 3</p>
+          <p class="tl-name tl-name-light">The Reveal</p>
+          <p class="tl-desc tl-desc-light">Billboards update. Documentary drops. Luna claims the number.</p>
+        </div>
+      </div>
+      <div>
+        <div class="tl-phase tl-phase-dark">
+          <p class="tl-week tl-week-teal">Weeks 4&ndash;6</p>
+          <p class="tl-name tl-name-dark">The Movement</p>
+          <p class="tl-desc tl-desc-dark">Pop-up stations. UGC wave. "What's your number?" goes mainstream.</p>
+        </div>
+        <div class="tl-phase tl-phase-light" style="display:none">
+          <p class="tl-week tl-week-teal">Weeks 4&ndash;6</p>
+          <p class="tl-name tl-name-light">The Movement</p>
+          <p class="tl-desc tl-desc-light">Pop-up stations. UGC wave. "What's your number?" goes mainstream.</p>
+        </div>
+      </div>
+      <div>
+        <div class="tl-phase tl-phase-dark">
+          <p class="tl-week tl-week-teal">Week 7+</p>
+          <p class="tl-name tl-name-dark">The Product</p>
+          <p class="tl-desc tl-desc-dark">AI-Stress Index launches. Cultural momentum converts to adoption.</p>
+        </div>
+        <div class="tl-phase tl-phase-light" style="display:none">
+          <p class="tl-week tl-week-teal">Week 7+</p>
+          <p class="tl-name tl-name-light">The Product</p>
+          <p class="tl-desc tl-desc-light">AI-Stress Index launches. Cultural momentum converts to adoption.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
