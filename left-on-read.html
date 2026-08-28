@@ -1,0 +1,536 @@
+<title>Left on Read</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap">
+
+<style>
+/* ── Tokens ── */
+:root {
+  --bg: #FAFAFC;
+  --text: #18181B;
+  --text-2: #6E6E78;
+  --surface: #F2F2F7;
+  --border: #E5E5EA;
+  --blue: #007AFF;
+  --red: #FF3B30;
+  --green: #34C759;
+  --bubble-recv: #E5E5EA;
+  --bubble-recv-text: #1C1C1E;
+  --phone-bg: #F2F2F7;
+  --luna-card-bg: #1C1C1E;
+  --luna-card-text: #FFFFFF;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg: #131316;
+    --text: #E5E4E0;
+    --text-2: #8A8A94;
+    --surface: #1C1C22;
+    --border: #2A2A32;
+  }
+}
+:root[data-theme="dark"]{
+  --bg: #131316;
+  --text: #E5E4E0;
+  --text-2: #8A8A94;
+  --surface: #1C1C22;
+  --border: #2A2A32;
+}
+
+/* ── Base ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',system-ui,-apple-system,sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Layout ── */
+.wrap{max-width:880px;margin:0 auto;padding:0 24px}
+
+/* ── Hero ── */
+.hero{
+  padding:64px 0 20px;
+  text-align:center;
+}
+.hero-label{
+  font-size:0.7rem;
+  font-weight:600;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--red);
+  margin-bottom:12px;
+}
+.hero h1{
+  font-family:'DM Sans',system-ui,sans-serif;
+  font-size:clamp(2.2rem,5vw,3.4rem);
+  font-weight:700;
+  line-height:1;
+  letter-spacing:-0.03em;
+  color:var(--text);
+  margin-bottom:12px;
+  text-wrap:balance;
+}
+.hero-tagline{
+  font-size:1.05rem;
+  color:var(--text-2);
+  max-width:44ch;
+  margin:0 auto;
+}
+
+/* ── Concept line ── */
+.concept{
+  padding:24px 0 48px;
+  text-align:center;
+  border-bottom:1px solid var(--border);
+  margin-bottom:48px;
+}
+.concept p{
+  font-size:0.9rem;
+  line-height:1.7;
+  color:var(--text-2);
+  max-width:56ch;
+  margin:0 auto;
+}
+
+/* ── Ad Grid ── */
+.ad-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+  margin-bottom:56px;
+}
+@media(max-width:640px){.ad-grid{grid-template-columns:1fr;max-width:360px;margin-left:auto;margin-right:auto}}
+
+.ad-card{
+  background:var(--surface);
+  border-radius:12px;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.ad-label{
+  font-size:0.65rem;
+  font-weight:600;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--text-2);
+  margin-bottom:14px;
+  align-self:flex-start;
+}
+
+/* ── Phone Chat (the ad itself) ── */
+.chat-frame{
+  width:100%;
+  max-width:280px;
+  background:var(--phone-bg);
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+/* time bar */
+.chat-time{
+  text-align:center;
+  padding:12px 0 4px;
+  font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:0.6rem;
+  font-weight:600;
+  color:#8E8E93;
+}
+.chat-body{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  padding:8px 14px 10px;
+}
+/* bubbles */
+.bubble{
+  font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:0.82rem;
+  line-height:1.35;
+  padding:8px 14px;
+  border-radius:18px;
+  max-width:80%;
+  width:fit-content;
+}
+.recv{
+  align-self:flex-start;
+  background:var(--bubble-recv);
+  color:var(--bubble-recv-text);
+  border-bottom-left-radius:4px;
+}
+.sent{
+  align-self:flex-end;
+  background:var(--blue);
+  color:#FFFFFF;
+  border-bottom-right-radius:4px;
+}
+
+/* ── Luna stress card ── */
+.luna-card{
+  align-self:flex-start;
+  background:var(--luna-card-bg);
+  border-radius:12px;
+  padding:10px 14px;
+  margin-top:4px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  max-width:88%;
+}
+.luna-accent{
+  width:3px;
+  align-self:stretch;
+  border-radius:2px;
+  flex-shrink:0;
+}
+.luna-accent-red{background:var(--red)}
+.luna-accent-green{background:var(--green)}
+.luna-data{display:flex;flex-direction:column;gap:1px}
+.luna-title{
+  font-family:system-ui,-apple-system,sans-serif;
+  font-size:0.5rem;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:#8E8E93;
+}
+.luna-num{
+  font-family:system-ui,-apple-system,sans-serif;
+  font-size:1.5rem;
+  font-weight:700;
+  line-height:1;
+  color:var(--luna-card-text);
+}
+.luna-num-red{color:var(--red)}
+.luna-num-green{color:var(--green)}
+.luna-status{
+  font-family:system-ui,-apple-system,sans-serif;
+  font-size:0.55rem;
+  font-weight:500;
+}
+.luna-status-red{color:var(--red)}
+.luna-status-green{color:var(--green)}
+
+/* ── Tagline strip at bottom of each ad ── */
+.ad-tagline{
+  width:100%;
+  padding:12px 14px 14px;
+  text-align:center;
+}
+.ad-tagline p{
+  font-family:system-ui,-apple-system,sans-serif;
+  font-size:0.65rem;
+  color:#8E8E93;
+  line-height:1.4;
+}
+.ad-tagline .brand{
+  font-size:0.5rem;
+  font-weight:700;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:#8E8E93;
+  margin-top:4px;
+}
+
+/* ── Billboard ── */
+.billboard-section{
+  border-top:1px solid var(--border);
+  padding:48px 0 56px;
+}
+.section-label{
+  font-size:0.7rem;
+  font-weight:600;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--text-2);
+  margin-bottom:20px;
+}
+.billboard{
+  background:#F2F2F7;
+  border-radius:6px;
+  aspect-ratio:3.5/1;
+  overflow:hidden;
+  box-shadow:0 4px 24px rgba(0,0,0,0.08);
+  display:flex;
+  align-items:center;
+  padding:0 clamp(20px,5vw,56px);
+  gap:clamp(12px,3vw,32px);
+  position:relative;
+}
+@media(max-width:640px){.billboard{aspect-ratio:2.5/1}}
+.bb-bubble{
+  font-family:system-ui,-apple-system,sans-serif;
+  font-size:clamp(0.7rem,1.4vw,1rem);
+  line-height:1.35;
+  padding:clamp(6px,1vw,12px) clamp(10px,2vw,20px);
+  border-radius:20px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.bb-recv{
+  background:#E5E5EA;
+  color:#1C1C1E;
+  border-bottom-left-radius:4px;
+}
+.bb-sent{
+  background:#007AFF;
+  color:#FFFFFF;
+  border-bottom-right-radius:4px;
+}
+.bb-luna{
+  background:#1C1C1E;
+  border-radius:12px;
+  padding:clamp(8px,1.2vw,14px) clamp(12px,1.5vw,20px);
+  display:flex;
+  align-items:center;
+  gap:clamp(6px,1vw,12px);
+  flex-shrink:0;
+}
+.bb-luna-accent{
+  width:3px;
+  align-self:stretch;
+  background:#FF3B30;
+  border-radius:2px;
+}
+.bb-luna-num{
+  font-family:system-ui,-apple-system,sans-serif;
+  font-size:clamp(1.2rem,2.5vw,2rem);
+  font-weight:700;
+  color:#FF3B30;
+  line-height:1;
+}
+.bb-luna-label{
+  font-family:system-ui,-apple-system,sans-serif;
+  font-size:clamp(0.4rem,0.8vw,0.6rem);
+  font-weight:600;
+  color:#8E8E93;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+}
+.bb-tagline{
+  position:absolute;
+  bottom:clamp(8px,1.5vw,16px);
+  right:clamp(16px,3vw,40px);
+  font-family:system-ui,-apple-system,sans-serif;
+  font-size:clamp(0.45rem,0.9vw,0.7rem);
+  color:#8E8E93;
+}
+.bb-brand{
+  position:absolute;
+  bottom:clamp(8px,1.5vw,16px);
+  left:clamp(16px,3vw,40px);
+  font-family:system-ui,-apple-system,sans-serif;
+  font-size:clamp(0.4rem,0.7vw,0.55rem);
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:#AEAEB2;
+}
+
+/* ── Why section ── */
+.why{
+  border-top:1px solid var(--border);
+  padding:48px 0 64px;
+}
+.why h2{
+  font-family:'DM Sans',sans-serif;
+  font-size:1.3rem;
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:20px;
+  letter-spacing:-0.01em;
+}
+.why-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:24px;
+}
+@media(max-width:640px){.why-grid{grid-template-columns:1fr}}
+.why-item h3{
+  font-size:0.85rem;
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:4px;
+}
+.why-item p{
+  font-size:0.82rem;
+  color:var(--text-2);
+  line-height:1.6;
+  max-width:none;
+}
+.why-rule{
+  width:20px;height:2px;
+  margin-bottom:10px;
+}
+
+/* ── Focus ── */
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+</style>
+
+<!-- ████  HERO  ████ -->
+<section class="hero">
+  <div class="wrap">
+    <p class="hero-label">Static Campaign</p>
+    <h1>Left on Read.</h1>
+    <p class="hero-tagline">Your body's been messaging you. You left it on read.</p>
+  </div>
+</section>
+
+<!-- ████  CONCEPT  ████ -->
+<section class="concept">
+  <div class="wrap">
+    <p>Each ad is a text conversation everyone has had. Someone asks how you are. You lie. Luna interrupts with the truth. Four static executions — print, social, OOH, digital — no film, no animation, nothing but a chat thread and a number.</p>
+  </div>
+</section>
+
+<!-- ████  AD SERIES  ████ -->
+<section class="wrap">
+
+  <div class="ad-grid">
+
+    <!-- Ad 1: The Classic -->
+    <div class="ad-card">
+      <p class="ad-label">The Classic</p>
+      <div class="chat-frame">
+        <p class="chat-time">Today 3:47 PM</p>
+        <div class="chat-body">
+          <div class="bubble recv">How are you?</div>
+          <div class="bubble sent">I'm good! :)</div>
+          <div class="luna-card">
+            <div class="luna-accent luna-accent-red"></div>
+            <div class="luna-data">
+              <span class="luna-title">Stress Index</span>
+              <span class="luna-num luna-num-red">87</span>
+              <span class="luna-status luna-status-red">Elevated</span>
+            </div>
+          </div>
+        </div>
+        <div class="ad-tagline">
+          <p>You left your body on read.</p>
+          <p class="brand">Luna &middot; AI-Stress Index</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ad 2: The Work One -->
+    <div class="ad-card">
+      <p class="ad-label">The Work Chat</p>
+      <div class="chat-frame">
+        <p class="chat-time">Today 11:22 AM</p>
+        <div class="chat-body">
+          <div class="bubble recv">How was the meeting?</div>
+          <div class="bubble sent">Went great actually</div>
+          <div class="luna-card">
+            <div class="luna-accent luna-accent-red"></div>
+            <div class="luna-data">
+              <span class="luna-title">Stress Index</span>
+              <span class="luna-num luna-num-red">91</span>
+              <span class="luna-status luna-status-red">High</span>
+            </div>
+          </div>
+        </div>
+        <div class="ad-tagline">
+          <p>You left your body on read.</p>
+          <p class="brand">Luna &middot; AI-Stress Index</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ad 3: The Parent -->
+    <div class="ad-card">
+      <p class="ad-label">The Check-in</p>
+      <div class="chat-frame">
+        <p class="chat-time">Today 9:14 PM</p>
+        <div class="chat-body">
+          <div class="bubble recv">Need anything?</div>
+          <div class="bubble sent">Nah I'm managing fine</div>
+          <div class="luna-card">
+            <div class="luna-accent luna-accent-red"></div>
+            <div class="luna-data">
+              <span class="luna-title">Stress Index</span>
+              <span class="luna-num luna-num-red">83</span>
+              <span class="luna-status luna-status-red">Elevated</span>
+            </div>
+          </div>
+        </div>
+        <div class="ad-tagline">
+          <p>You left your body on read.</p>
+          <p class="brand">Luna &middot; AI-Stress Index</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ad 4: The Payoff -->
+    <div class="ad-card">
+      <p class="ad-label">The Payoff</p>
+      <div class="chat-frame">
+        <p class="chat-time">Today 7:30 PM</p>
+        <div class="chat-body">
+          <div class="bubble recv">How are you now?</div>
+          <div class="bubble sent">Better. Listened this time.</div>
+          <div class="luna-card">
+            <div class="luna-accent luna-accent-green"></div>
+            <div class="luna-data">
+              <span class="luna-title">Stress Index</span>
+              <span class="luna-num luna-num-green">42</span>
+              <span class="luna-status luna-status-green">Balanced</span>
+            </div>
+          </div>
+        </div>
+        <div class="ad-tagline">
+          <p>Luna AI-Stress Index</p>
+          <p class="brand">Know your number. Change it.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ████  BILLBOARD  ████ -->
+<section class="billboard-section">
+  <div class="wrap">
+    <p class="section-label">Billboard / Banner Adaptation</p>
+    <div class="billboard">
+      <div class="bb-bubble bb-recv">How are you?</div>
+      <div class="bb-bubble bb-sent">I'm good! :)</div>
+      <div class="bb-luna">
+        <div class="bb-luna-accent"></div>
+        <div>
+          <p class="bb-luna-num">87</p>
+          <p class="bb-luna-label">Elevated</p>
+        </div>
+      </div>
+      <span class="bb-tagline">You left your body on read.</span>
+      <span class="bb-brand">Luna &middot; AI-Stress Index</span>
+    </div>
+  </div>
+</section>
+
+<!-- ████  WHY  ████ -->
+<section class="why">
+  <div class="wrap">
+    <h2>Why it works</h2>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="why-rule" style="background:var(--blue)"></div>
+        <h3>Three-second read</h3>
+        <p>A chat thread is the most scanned format on earth. No headline to parse, no visual metaphor to decode. You see the lie and the truth in the time it takes to glance at a billboard.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-rule" style="background:var(--red)"></div>
+        <h3>Zero production cost</h3>
+        <p>No photography, no models, no studio time. The ads are text on a screen — the same format the audience lives in all day. Infinitely adaptable to any language, any scenario, any format.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-rule" style="background:var(--green)"></div>
+        <h3>Pattern then payoff</h3>
+        <p>Three red numbers establish the problem. The fourth, in green, breaks the pattern. The product isn't explained — it's felt. The series structure does the selling.</p>
+      </div>
+    </div>
+  </div>
+</section>
