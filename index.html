@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SHOT — UX Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root {
+  --black-950: #050605;
+  --black-900: #0A0A0A;
+  --black-800: #1F1F1F;
+  --black-700: #2B2B2B;
+  --black-600: #3A3A3A;
+  --red-600: #B81A12;
+  --red-500: #E1251B;
+  --red-400: #FF4A3D;
+  --gray-600: #555;
+  --gray-500: #6B6862;
+  --gray-400: #8A8680;
+  --gray-300: #A8A49C;
+  --gray-200: #D4D4D4;
+  --gray-100: #E8E8E6;
+  --gray-50: #F5F5F5;
+  --white: #FFFFFF;
+
+  --color-bg: var(--black-900);
+  --color-bg-raised: var(--black-800);
+  --color-text: var(--white);
+  --color-text-muted: var(--gray-400);
+  --color-text-dim: var(--gray-600);
+  --color-accent: var(--red-500);
+  --color-accent-hover: var(--red-400);
+  --color-border: var(--black-700);
+
+  --font-brand: "Outfit", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "Space Mono", monospace;
+
+  --gutter: 16px;
+  --section-y: 80px;
+  --max-w: 1200px;
+
+  --ease: cubic-bezier(.2, 0, 0, 1);
+}
+@media(min-width:768px){ :root{ --gutter:24px; --section-y:112px; } }
+@media(min-width:1024px){ :root{ --gutter:40px; } }
+@media(min-width:1440px){ :root{ --gutter:64px; --section-y:128px; } }
+
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;font-size:16px}
+body{background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);line-height:1.6}
+img{max-width:100%;display:block}
+a{color:var(--color-accent);text-decoration:none}
+a:hover{color:var(--color-accent-hover)}
+
+/* ── LAYOUT ── */
+.wrap{max-width:var(--max-w);margin:0 auto;padding:0 var(--gutter)}
+section{padding:var(--section-y) 0}
+section+section{border-top:1px solid var(--color-border)}
+
+/* ── TYPOGRAPHY ── */
+.eyebrow{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--color-accent);margin-bottom:12px;
+}
+h1,h2,h3{font-family:var(--font-brand);font-weight:800;letter-spacing:-.02em;line-height:1.05}
+h1{font-size:clamp(2.5rem,8vw,5rem)}
+h2{font-size:clamp(1.75rem,5vw,3rem);margin-bottom:24px}
+h3{font-size:clamp(1.25rem,3vw,1.75rem);margin-bottom:12px}
+.lead{font-size:clamp(1rem,2.5vw,1.25rem);color:var(--color-text-muted);max-width:640px;line-height:1.55}
+.mono{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em}
+.uppercase{text-transform:uppercase}
+.muted{color:var(--color-text-muted)}
+.dim{color:var(--color-text-dim)}
+.accent{color:var(--color-accent)}
+.brand-text{font-family:var(--font-brand);font-weight:900}
+
+/* ── HERO ── */
+.hero{
+  min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  padding:120px 0 80px;position:relative;overflow:hidden;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;border:1px solid var(--color-border);border-radius:999px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;
+  color:var(--color-text-muted);margin-bottom:32px;width:fit-content;
+}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--color-accent)}
+.hero h1{margin-bottom:24px}
+.hero h1 .red{color:var(--color-accent)}
+.hero .lead{margin-bottom:40px}
+.hero-meta{
+  display:flex;flex-wrap:wrap;gap:24px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;
+  color:var(--color-text-dim);text-transform:uppercase;
+}
+
+/* ── GRID HELPERS ── */
+.grid-2{display:grid;gap:32px}
+@media(min-width:768px){.grid-2{grid-template-columns:1fr 1fr}}
+.grid-3{display:grid;gap:24px}
+@media(min-width:768px){.grid-3{grid-template-columns:1fr 1fr 1fr}}
+.grid-5{display:grid;gap:16px}
+@media(min-width:640px){.grid-5{grid-template-columns:repeat(5,1fr)}}
+
+/* ── CARDS ── */
+.card{
+  background:var(--color-bg-raised);border:1px solid var(--color-border);
+  border-radius:12px;padding:24px;
+}
+.card-sm{padding:16px 20px}
+.card .num{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;
+  color:var(--color-accent);display:block;margin-bottom:8px;
+}
+
+/* ── INSIGHT HIGHLIGHT ── */
+.insight{
+  border-left:3px solid var(--color-accent);padding:20px 24px;
+  background:rgba(225,37,27,.04);border-radius:0 8px 8px 0;margin:24px 0;
+}
+.insight p{color:var(--color-text);font-size:15px;line-height:1.6}
+
+/* ── PERSONA CARDS ── */
+.persona{position:relative;overflow:hidden}
+.persona.primary{border-color:var(--color-accent)}
+.persona .tag{
+  display:inline-block;padding:3px 10px;border-radius:999px;
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:12px;
+}
+.persona.primary .tag{background:var(--color-accent);color:var(--white)}
+.persona:not(.primary) .tag{border:1px solid var(--color-border);color:var(--color-text-muted)}
+.persona h3{font-size:1.125rem;margin-bottom:4px}
+.persona .role{font-size:13px;color:var(--color-text-muted);margin-bottom:12px}
+.persona .jtbd{
+  font-size:14px;font-style:italic;color:var(--gray-300);
+  border-top:1px solid var(--color-border);padding-top:12px;margin-top:12px;
+}
+
+/* ── STORYBOARD ── */
+.storyboard{display:grid;gap:2px;grid-template-columns:repeat(3,1fr)}
+@media(max-width:640px){.storyboard{grid-template-columns:1fr 1fr}}
+.story-frame{
+  background:var(--color-bg-raised);padding:20px 16px;position:relative;
+}
+.story-frame .time{
+  font-family:var(--font-mono);font-size:10px;color:var(--color-accent);
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;
+}
+.story-frame h4{font-family:var(--font-body);font-weight:600;font-size:14px;margin-bottom:6px}
+.story-frame p{font-size:12px;color:var(--color-text-muted);line-height:1.5}
+
+/* ── PRINCIPLES ── */
+.principle-card{
+  background:var(--color-bg-raised);border:1px solid var(--color-border);
+  padding:20px;border-radius:4px;
+}
+.principle-card .num{
+  font-family:var(--font-mono);font-size:11px;color:var(--color-accent);
+  letter-spacing:.1em;margin-bottom:8px;display:block;
+}
+.principle-card h4{font-family:var(--font-body);font-weight:700;font-size:15px;margin-bottom:6px}
+.principle-card p{font-size:13px;color:var(--color-text-muted);line-height:1.5}
+
+/* ── PHONE MOCKUP ── */
+.phone-showcase{display:flex;flex-direction:column;gap:64px}
+.screen-section{scroll-margin-top:40px}
+.screen-header{margin-bottom:32px}
+.screen-header .screen-num{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;
+  color:var(--color-text-dim);text-transform:uppercase;margin-bottom:8px;
+}
+.screen-header .screen-persona{
+  font-family:var(--font-mono);font-size:11px;color:var(--color-accent);
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;
+}
+.screen-header .screen-desc{font-size:15px;color:var(--color-text-muted);max-width:640px}
+
+.screen-layout{
+  display:grid;gap:40px;align-items:start;
+}
+@media(min-width:768px){
+  .screen-layout{grid-template-columns:320px 1fr}
+  .screen-layout.reverse{grid-template-columns:1fr 320px}
+  .screen-layout.reverse .phone-frame{order:2}
+  .screen-layout.reverse .annotations{order:1}
+}
+
+.phone-frame{
+  width:300px;max-width:100%;margin:0 auto;
+  background:#000;border-radius:40px;padding:12px;
+  box-shadow:0 0 0 1px var(--black-600),0 40px 80px -20px rgba(0,0,0,.6);
+}
+.phone-screen{
+  background:var(--black-950);border-radius:30px;overflow:hidden;
+  aspect-ratio:9/19.5;position:relative;display:flex;flex-direction:column;
+}
+/* notch */
+.phone-screen::before{
+  content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:80px;height:28px;background:#000;border-radius:0 0 18px 18px;z-index:10;
+}
+/* home indicator */
+.phone-screen::after{
+  content:"";position:absolute;bottom:6px;left:50%;transform:translateX(-50%);
+  width:100px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;z-index:10;
+}
+
+/* ── SCREEN INNER STYLES ── */
+.scr{padding:40px 20px 24px;display:flex;flex-direction:column;height:100%;font-size:13px;color:var(--white)}
+.scr-status{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--font-mono);font-size:10px;font-weight:700;
+  margin-bottom:16px;padding:0 2px;
+}
+.scr-status .time{color:var(--white)}
+.scr-status .icons{display:flex;gap:4px;align-items:center}
+.scr-status .icons span{width:16px;height:8px;border:1px solid rgba(255,255,255,.5);border-radius:2px;display:block}
+
+.scr-topbar{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;
+}
+.scr-pill{
+  padding:4px 14px;border:1px solid var(--gray-600);border-radius:999px;
+  font-size:10px;color:var(--gray-400);font-family:var(--font-mono);letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.scr-avatar{
+  width:28px;height:28px;border-radius:50%;border:1px solid var(--gray-600);
+  display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--gray-400);
+}
+
+.scr-greeting{
+  font-size:11px;color:var(--gray-400);letter-spacing:.08em;
+  text-transform:uppercase;font-family:var(--font-mono);margin-bottom:4px;
+}
+.scr-context{font-size:10px;color:var(--gray-600);margin-bottom:20px;font-family:var(--font-mono)}
+
+/* Hero card for "your usual" */
+.scr-hero-card{
+  flex:1;background:var(--black-800);border-radius:16px;padding:20px;
+  display:flex;flex-direction:column;position:relative;overflow:hidden;
+  border:1px solid var(--black-700);
+}
+.scr-hero-card .label{
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--gray-400);margin-bottom:16px;
+}
+.scr-hero-card .drink-name{
+  font-family:var(--font-brand);font-weight:800;font-size:28px;
+  letter-spacing:-.02em;line-height:1;margin-bottom:6px;
+}
+.scr-hero-card .mods{font-size:12px;color:var(--gray-400);margin-bottom:auto}
+.scr-hero-card .price{font-family:var(--font-body);font-weight:700;font-size:16px;margin-top:16px}
+.scr-hero-card .eta{font-size:10px;color:var(--gray-400);margin-top:2px}
+
+/* Cup illustration placeholder */
+.cup-illus{
+  position:absolute;right:12px;bottom:40px;width:80px;height:120px;
+  border:1px dashed var(--gray-600);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;opacity:.4;
+}
+
+.scr-cta{
+  background:var(--red-500);color:var(--white);border:none;border-radius:14px;
+  padding:16px;font-family:var(--font-body);font-weight:700;font-size:15px;
+  text-align:center;margin-top:12px;width:100%;cursor:pointer;
+}
+.scr-cta:hover{background:var(--red-400)}
+.scr-cta-ghost{
+  text-align:center;font-size:11px;color:var(--gray-400);margin-top:8px;padding:4px;
+}
+
+/* Annotations */
+.annotations{display:flex;flex-direction:column;gap:12px}
+.ann{
+  display:grid;grid-template-columns:28px 1fr;gap:12px;
+  padding:14px 16px;background:var(--color-bg-raised);
+  border:1px solid var(--color-border);border-radius:4px;
+}
+.ann .badge{
+  width:24px;height:24px;border-radius:50%;background:var(--color-accent);
+  color:var(--white);font-family:var(--font-mono);font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.ann h4{font-family:var(--font-body);font-weight:600;font-size:13px;margin-bottom:4px}
+.ann p{font-size:12px;color:var(--color-text-muted);line-height:1.5}
+
+/* ── AFTERNOON SCREEN SPECIFICS ── */
+.scr-afternoon-headline{
+  font-family:var(--font-brand);font-weight:800;font-size:22px;
+  letter-spacing:-.01em;line-height:1.1;margin-bottom:16px;
+}
+.scr-shelf-label{
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--gray-400);margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.scr-shelf-label::after{content:"→";color:var(--gray-600)}
+.pairing-scroll{display:flex;gap:10px;overflow:hidden;margin-bottom:20px}
+.pairing-card{
+  min-width:150px;flex-shrink:0;background:var(--black-800);
+  border-radius:12px;padding:12px;border:1px solid var(--black-700);
+}
+.pairing-card .img{
+  height:80px;background:var(--black-700);border-radius:6px;margin-bottom:10px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.pairing-card h5{font-size:13px;font-weight:700;margin-bottom:2px}
+.pairing-card .sub{font-size:11px;color:var(--gray-400)}
+.pairing-card .price-row{display:flex;gap:8px;align-items:baseline;margin-top:8px}
+.pairing-card .price{font-weight:700;font-size:13px}
+.pairing-card .save{font-size:10px;color:var(--color-accent);font-family:var(--font-mono)}
+
+.scr-usual-mini{
+  background:var(--black-800);border-radius:12px;padding:12px 14px;
+  display:flex;align-items:center;gap:12px;border:1px solid var(--black-700);
+  margin-top:auto;
+}
+.scr-usual-mini .thumb{
+  width:36px;height:36px;background:var(--black-700);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;
+}
+.scr-usual-mini .info{flex:1}
+.scr-usual-mini .info h5{font-size:13px;font-weight:600}
+.scr-usual-mini .info span{font-size:10px;color:var(--gray-400)}
+.scr-usual-mini .reorder{
+  font-size:10px;font-weight:700;color:var(--color-accent);
+  font-family:var(--font-mono);letter-spacing:.06em;white-space:nowrap;
+}
+
+/* ── DRINK BUILDER ── */
+.exploration-grid{display:grid;gap:24px}
+@media(min-width:900px){.exploration-grid{grid-template-columns:repeat(3,1fr)}}
+.exploration-item{display:flex;flex-direction:column;gap:16px}
+.exploration-item .phone-frame{width:260px;border-radius:36px;padding:10px}
+.exploration-item .phone-screen{border-radius:28px}
+.exploration-caption{
+  padding:16px;background:var(--color-bg-raised);border:1px solid var(--color-border);border-radius:4px;
+}
+.exploration-caption .tag{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--color-accent);display:block;margin-bottom:8px;
+}
+.exploration-caption h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.exploration-caption p{font-size:12px;color:var(--color-text-muted);line-height:1.5}
+
+.decision-block{
+  margin-top:32px;padding:20px 24px;background:rgba(225,37,27,.04);
+  border-left:3px solid var(--color-accent);border-radius:0 8px 8px 0;
+}
+.decision-block h3{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--color-accent);margin-bottom:12px;
+}
+.decision-block p{font-size:13px;line-height:1.6;margin-bottom:10px}
+.decision-block p:last-child{margin-bottom:0}
+
+/* ── DRINK BUILDER INNER SCREENS ── */
+.scr-back{font-size:18px;cursor:pointer}
+.scr-title-center{font-size:13px;color:var(--gray-400);text-align:center;flex:1}
+
+/* Sentence builder */
+.sentence{padding:0 4px;line-height:2.2}
+.sentence .word{font-family:var(--font-brand);font-weight:700;font-size:20px}
+.sentence .pill{
+  display:inline-block;padding:4px 12px;border-radius:999px;
+  font-size:14px;font-weight:600;margin:0 2px;
+}
+.sentence .pill-accent{background:var(--red-500);color:var(--white)}
+.sentence .pill-dark{background:var(--white);color:var(--black-900)}
+
+/* Living cup */
+.cup-preview{
+  display:flex;justify-content:center;align-items:flex-end;
+  height:160px;margin-bottom:16px;position:relative;
+}
+.cup-body{
+  width:80px;position:relative;
+}
+.cup-body .lid{
+  width:90px;height:12px;background:var(--black-700);border-radius:4px 4px 0 0;
+  margin:0 auto;position:relative;
+}
+.cup-body .lid::after{
+  content:"";position:absolute;top:-16px;right:10px;width:4px;height:16px;
+  background:var(--red-500);border-radius:2px;
+}
+.cup-body .body{
+  width:80px;height:120px;background:linear-gradient(to bottom,#E8D8B8 0%,#E8D8B8 70%,#3a1a0a 70%,#3a1a0a 100%);
+  border-radius:0 0 6px 6px;margin:0 auto;position:relative;overflow:hidden;
+  border:1px solid var(--gray-600);
+}
+.cup-body .sleeve{
+  position:absolute;top:40%;left:0;right:0;height:32px;
+  background:var(--red-500);display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);font-size:7px;letter-spacing:.15em;color:var(--white);
+}
+.cup-body .ice{
+  position:absolute;top:15%;left:15%;width:12px;height:12px;
+  background:rgba(255,255,255,.7);border-radius:2px;border:1px solid rgba(255,255,255,.3);
+}
+.cup-body .ice-2{left:55%;top:25%;width:10px;height:10px}
+
+.controls-grid{display:flex;flex-direction:column;gap:10px;flex:1}
+.control-row{display:flex;flex-direction:column;gap:4px}
+.control-label{
+  font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--gray-400);
+}
+.seg-control{
+  display:flex;background:var(--black-800);border-radius:8px;overflow:hidden;
+}
+.seg-control span{
+  flex:1;text-align:center;padding:6px 0;font-size:11px;font-weight:500;color:var(--gray-400);
+}
+.seg-control span.active{background:var(--white);color:var(--black-900);border-radius:6px;font-weight:700}
+.seg-control span.active-accent{background:var(--red-500);color:var(--white);border-radius:6px;font-weight:700}
+
+.milk-swatches{display:flex;gap:8px;flex-wrap:wrap}
+.milk-swatch{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+.milk-swatch .dot{
+  width:28px;height:28px;border-radius:50%;border:2px solid transparent;
+}
+.milk-swatch .dot.selected{border-color:var(--red-500)}
+.milk-swatch span{font-size:8px;color:var(--gray-400)}
+
+.sugar-track{
+  height:3px;background:var(--black-700);border-radius:2px;position:relative;margin:8px 0;
+}
+.sugar-track .fill{
+  position:absolute;left:0;top:0;height:100%;width:33%;
+  background:var(--red-500);border-radius:2px;
+}
+.sugar-track .thumb{
+  position:absolute;left:33%;top:50%;transform:translate(-50%,-50%);
+  width:14px;height:14px;border-radius:50%;background:var(--red-500);
+}
+.sugar-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--gray-500)}
+.sugar-labels .active-label{color:var(--red-500);font-weight:700}
+
+/* Recipe stack */
+.recipe-layout{display:flex;gap:10px;flex:1}
+.glass-col{width:30px;flex-shrink:0;display:flex;flex-direction:column;align-items:center}
+.glass-body{
+  width:24px;flex:1;border:1px solid var(--gray-400);border-radius:0 0 4px 4px;
+  overflow:hidden;display:flex;flex-direction:column;position:relative;
+}
+.glass-layer{flex:1}
+.bands-col{flex:1;display:flex;flex-direction:column;gap:6px}
+.band{
+  background:var(--black-800);border-radius:8px;padding:8px 10px;
+  border:1px solid var(--black-700);
+}
+.band.active{background:var(--white);border-color:var(--red-500)}
+.band .band-num{font-family:var(--font-mono);font-size:7px;letter-spacing:.1em;color:var(--gray-400)}
+.band.active .band-num{color:var(--red-500)}
+.band .band-val{font-size:12px;font-weight:600;margin-top:2px}
+.band.active .band-val{color:var(--black-900)}
+
+/* ── TRAY ── */
+.tray-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  background:var(--black-800);border-radius:14px;padding:14px;
+  border:1px dashed var(--gray-600);margin-bottom:16px;
+}
+.tray-cup{
+  aspect-ratio:1;border-radius:50%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-size:10px;
+}
+.tray-cup.filled{background:var(--red-500);color:var(--white)}
+.tray-cup.filled .initial{font-family:var(--font-brand);font-weight:800;font-size:18px}
+.tray-cup.empty{border:2px dashed var(--gray-600)}
+.tray-cup.empty .plus{font-size:20px;color:var(--gray-600)}
+.tray-cup.selected{background:var(--black-700);border:2px solid var(--red-500)}
+.tray-cup.selected .plus{font-size:20px;color:var(--white)}
+
+.cup-name{font-size:9px;font-weight:600;margin-top:6px;text-align:center}
+.cup-drink{font-size:8px;color:var(--gray-400);text-align:center}
+
+.scr-search{
+  background:var(--black-800);border-radius:10px;padding:10px 14px;
+  font-size:12px;color:var(--gray-500);border:1px solid var(--black-700);
+  margin-bottom:12px;
+}
+.recent-list{display:flex;flex-direction:column;gap:6px;margin-bottom:auto}
+.recent-person{
+  display:flex;align-items:center;gap:10px;
+  background:var(--black-800);border-radius:8px;padding:8px 12px;
+  border:1px solid var(--black-700);
+}
+.recent-person .avatar{
+  width:28px;height:28px;border-radius:50%;background:var(--black-700);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;
+}
+.recent-person .name{font-size:12px;font-weight:600}
+.recent-person .drink{font-size:10px;color:var(--gray-400)}
+.scr-cta-disabled{opacity:.5}
+
+/* ── TRACKING ── */
+.timeline{display:flex;flex-direction:column;gap:0;margin-bottom:16px}
+.tl-step{display:flex;align-items:flex-start;gap:12px;position:relative}
+.tl-marker{
+  width:16px;height:16px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:8px;
+}
+.tl-marker.done{background:var(--white);color:var(--black-900)}
+.tl-marker.upcoming{border:1.5px solid var(--gray-600);background:transparent}
+.tl-connector{
+  width:2px;background:var(--gray-600);margin-left:7px;height:16px;
+}
+.tl-connector.done{background:var(--gray-400)}
+.tl-connector.upcoming{background:var(--black-700);border-left:2px dashed var(--gray-600);width:0;margin-left:8px}
+.tl-content{padding-bottom:4px}
+.tl-content .stage{font-size:11px;color:var(--gray-400)}
+.tl-content .time{font-size:9px;color:var(--gray-600);font-family:var(--font-mono)}
+
+.current-stage{
+  background:var(--red-500);border-radius:14px;padding:20px;
+  margin:8px 0;
+}
+.current-stage .label{
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.15em;
+  color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:8px;
+}
+.current-stage .name{font-family:var(--font-brand);font-weight:800;font-size:24px;margin-bottom:6px}
+.current-stage .desc{font-size:12px;color:rgba(255,255,255,.9);margin-bottom:12px}
+.current-stage .progress-bar{
+  height:4px;background:rgba(255,255,255,.25);border-radius:2px;overflow:hidden;
+}
+.current-stage .progress-bar .fill{height:100%;background:var(--white);border-radius:2px;width:55%}
+
+.tl-actions{display:flex;gap:8px;margin-top:auto}
+.tl-action{
+  flex:1;padding:12px;border-radius:10px;border:1px solid var(--gray-600);
+  text-align:center;font-size:11px;color:var(--gray-300);
+}
+
+/* ── DELIVERED ── */
+.delivered-cup{
+  display:flex;flex-direction:column;align-items:center;flex:1;
+  justify-content:center;padding:16px 0;
+}
+.delivered-cup .big-cup{
+  width:120px;height:180px;position:relative;margin-bottom:20px;
+}
+.big-cup .lid{
+  width:130px;height:14px;background:var(--black-700);border-radius:4px 4px 0 0;
+  margin:0 auto;
+}
+.big-cup .lid::after{
+  content:"";position:absolute;top:-18px;right:24px;width:5px;height:18px;
+  background:var(--red-500);border-radius:2px;
+}
+.big-cup .body{
+  width:120px;height:160px;background:var(--gray-50);border-radius:0 0 8px 8px;
+  margin:0 auto;position:relative;overflow:hidden;
+}
+.big-cup .sleeve{
+  position:absolute;top:35%;left:0;right:0;height:40px;background:var(--red-500);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.big-cup .sleeve .shot-text{font-family:var(--font-mono);font-size:7px;letter-spacing:.15em;color:rgba(255,255,255,.8)}
+.big-cup .sleeve .delivered-text{font-size:12px;font-weight:800;color:var(--white);font-family:var(--font-brand)}
+.big-cup .condensation{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.4)}
+
+.delivered-msg{text-align:center;margin-bottom:16px}
+.delivered-msg h3{font-family:var(--font-brand);font-weight:800;font-size:18px;margin-bottom:4px}
+.delivered-msg p{font-size:12px;color:var(--gray-400)}
+
+.scr-cta-schedule{
+  background:var(--red-500);border-radius:14px;padding:14px;text-align:center;width:100%;
+}
+.scr-cta-schedule .main{font-weight:700;font-size:14px;display:block}
+.scr-cta-schedule .sub{font-size:10px;color:rgba(255,255,255,.8);display:block;margin-top:2px}
+.secondary-actions{display:flex;justify-content:center;gap:24px;margin-top:12px}
+.secondary-actions a{font-size:11px;color:var(--gray-400);text-decoration:underline}
+.streak-bar{
+  background:var(--black-800);border-radius:8px;padding:8px;
+  text-align:center;font-size:11px;color:var(--gray-300);margin-top:8px;
+}
+
+/* ── MENU ── */
+.scr-search-bar{
+  background:var(--black-800);border-radius:10px;padding:10px 14px;
+  font-size:12px;color:var(--gray-500);margin-bottom:12px;
+  border:1px solid var(--black-700);
+}
+.chips{display:flex;gap:6px;margin-bottom:16px;overflow:hidden}
+.chip{
+  padding:5px 12px;border-radius:999px;font-size:10px;font-weight:600;
+  white-space:nowrap;flex-shrink:0;
+}
+.chip.active{background:var(--white);color:var(--black-900)}
+.chip:not(.active){background:var(--black-800);color:var(--gray-400);border:1px solid var(--black-700)}
+
+.shelf{margin-bottom:16px}
+.shelf-title{
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--gray-400);margin-bottom:8px;
+}
+.shelf-row{display:flex;gap:8px;overflow:hidden}
+.menu-card{
+  min-width:110px;flex-shrink:0;border-radius:10px;padding:10px;
+  border:1px solid var(--black-700);
+}
+.menu-card.featured{background:var(--white);color:var(--black-900)}
+.menu-card:not(.featured){background:var(--black-800)}
+.menu-card .try-badge{
+  display:inline-block;padding:2px 8px;border-radius:999px;
+  background:var(--red-500);color:var(--white);font-size:7px;font-weight:700;
+  letter-spacing:.06em;margin-bottom:8px;
+}
+.menu-card .swatch{
+  width:10px;height:10px;border-radius:50%;margin-bottom:8px;
+}
+.menu-card h5{font-size:12px;font-weight:700;margin-bottom:2px}
+.menu-card .desc{font-size:9px;color:var(--gray-400);line-height:1.4;margin-bottom:6px}
+.menu-card.featured .desc{color:var(--gray-500)}
+.menu-card .price{font-size:12px;font-weight:700}
+.menu-card.featured .price{color:var(--black-900)}
+
+.sticky-usual{
+  margin-top:auto;background:var(--red-500);border-radius:10px;padding:10px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sticky-usual .left .micro{font-family:var(--font-mono);font-size:7px;letter-spacing:.12em;color:rgba(255,255,255,.7)}
+.sticky-usual .left .drink{font-size:11px;font-weight:600}
+.sticky-usual .right{font-size:10px;font-weight:700;font-family:var(--font-mono);letter-spacing:.06em}
+
+/* ── DECISION TABLE ── */
+.decision-table{margin-top:32px}
+.decision-row{
+  padding:20px 0;border-bottom:1px solid var(--color-border);
+  display:grid;gap:12px;
+}
+@media(min-width:640px){.decision-row{grid-template-columns:240px 1fr}}
+.decision-row:last-child{border-bottom:none}
+.decision-row h4{font-family:var(--font-body);font-weight:700;font-size:14px}
+.decision-row p{font-size:13px;color:var(--color-text-muted);line-height:1.55}
+
+/* ── REFLECTION ── */
+.reflection-grid{display:grid;gap:20px}
+@media(min-width:640px){.reflection-grid{grid-template-columns:1fr 1fr}}
+
+/* ── COMPETITIVE MATRIX ── */
+.comp-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px}
+.comp-table th{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--color-accent);text-align:left;
+  padding:12px 16px;border-bottom:1px solid var(--color-border);
+}
+.comp-table td{
+  padding:12px 16px;border-bottom:1px solid var(--color-border);
+  color:var(--color-text-muted);vertical-align:top;
+}
+.comp-table td:first-child{color:var(--color-text);font-weight:600}
+@media(max-width:640px){
+  .comp-table,
+  .comp-table thead,
+  .comp-table tbody,
+  .comp-table tr,
+  .comp-table td,
+  .comp-table th{display:block}
+  .comp-table thead{display:none}
+  .comp-table tr{padding:16px 0;border-bottom:1px solid var(--color-border)}
+  .comp-table td{padding:4px 0;border:none}
+  .comp-table td::before{
+    content:attr(data-label);display:block;
+    font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--color-accent);margin-bottom:2px;
+  }
+}
+
+/* ── FOOTER ── */
+.site-footer{
+  padding:48px 0;border-top:1px solid var(--color-border);text-align:center;
+}
+.site-footer p{font-size:13px;color:var(--color-text-dim)}
+.site-footer .name{color:var(--color-text);font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero">
+<div class="wrap">
+  <div class="hero-badge"><span class="dot"></span>UX Case Study · 2024</div>
+  <h1><span class="red">SHOT</span> turns a 90-second coffee reorder into a 2-tap, 30-second habit.</h1>
+  <p class="lead">A coffee-first quick-commerce concept for Dubai — designed around habit and time-of-day instead of restaurant discovery. Speculative redesign under the Noon Minutes umbrella.</p>
+  <div class="hero-meta">
+    <span>Role: Product & UX Design</span>
+    <span>Market: Dubai, UAE</span>
+    <span>Format: Mobile-first native app</span>
+    <span>Status: Speculative</span>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ CONTEXT ═══════ -->
+<section>
+<div class="wrap">
+  <span class="eyebrow">01 — Context</span>
+  <h2>What is SHOT?</h2>
+  <p class="lead" style="margin-bottom:32px">SHOT is a concept for a coffee-first quick-commerce ordering experience under the Noon Minutes umbrella in Dubai. Think Zepto or Blinkit, but built specifically around coffee ordering behavior — not general food delivery.</p>
+
+  <div class="insight">
+    <p><strong>Honesty note:</strong> This is a speculative redesign. I have no affiliation with Noon Minutes and did not collaborate with their product team. All research, personas, and design decisions are my own, based on desk research, competitive teardown, and my own experience of the Dubai coffee-delivery market.</p>
+  </div>
+
+  <div class="card" style="margin-top:32px">
+    <h3 style="margin-bottom:8px">The opportunity</h3>
+    <p class="muted" style="font-size:14px;line-height:1.6">The UAE food-delivery market was valued at $3.93B in 2023, projected to reach $11.18B by 2030. Four major players dominate Dubai — Talabat, Careem Food, Deliveroo, and Keeta. <strong style="color:var(--white)">But every one of them treats coffee like just another food item.</strong></p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ RESEARCH ═══════ -->
+<section>
+<div class="wrap">
+  <span class="eyebrow">02 — Research</span>
+  <h2>Competitive landscape</h2>
+  <p class="lead" style="margin-bottom:32px">Four dominant players, all built as restaurant-discovery marketplaces. None optimizes for coffee's unique behavior: habitual, highly customized, time-sensitive, low AOV, one-thumb.</p>
+
+  <div style="overflow-x:auto">
+    <table class="comp-table">
+      <thead>
+        <tr><th>Player</th><th>Positioning</th><th>Key Strength</th><th>Key Weakness</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="Player">Talabat</td>
+          <td data-label="Positioning">Incumbent, largest scale</td>
+          <td data-label="Strength">Personalization engine, 9-country footprint</td>
+          <td data-label="Weakness">Poor failure recovery, cluttered discovery</td>
+        </tr>
+        <tr>
+          <td data-label="Player">Careem Food</td>
+          <td data-label="Positioning">Super-app ecosystem</td>
+          <td data-label="Strength">Bundled wallet + rides + food, Careem Plus</td>
+          <td data-label="Weakness">Tab-switching friction; food is one tab among many</td>
+        </tr>
+        <tr>
+          <td data-label="Player">Keeta</td>
+          <td data-label="Positioning">Disruptor (Meituan-owned)</td>
+          <td data-label="Strength">Aggressive pricing, drone trials, "on-time promise"</td>
+          <td data-label="Weakness">Too new — feature parity gaps expected</td>
+        </tr>
+        <tr>
+          <td data-label="Player">Deliveroo</td>
+          <td data-label="Positioning">Premium curator</td>
+          <td data-label="Strength">Visual restraint, curation, strong photography</td>
+          <td data-label="Weakness">Limited vendor selection vs Talabat</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:40px">
+    <h3 style="margin-bottom:16px">Key insights</h3>
+    <div class="insight"><p><strong>1. Restaurant-first is wrong for coffee.</strong> All four apps make users search for a "restaurant" to find their drink. Coffee drinkers think in drinks, not restaurants.</p></div>
+    <div class="insight"><p><strong>2. Repeat orders are 60–80% of volume, but reordering is slow.</strong> Best-case: ~6 taps, 60+ seconds. Aisha needs it in 2 taps, under 30 seconds.</p></div>
+    <div class="insight"><p><strong>3. No app has time-of-day intelligence.</strong> The home screen at 8am looks identical to 3pm. Morning ordering (habitual, urgent) is completely different from afternoon (exploratory, treat-seeking).</p></div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ USERS ═══════ -->
+<section>
+<div class="wrap">
+  <span class="eyebrow">03 — Users</span>
+  <h2>Four proto-personas</h2>
+  <p class="lead" style="margin-bottom:32px">Built from desk research + competitive teardown. Aisha is the primary persona; the other three stress-test edge cases.</p>
+
+  <div class="grid-2">
+    <div class="card persona primary">
+      <span class="tag">Primary persona</span>
+      <h3>Aisha — Morning Commuter</h3>
+      <p class="role">28 · Marketing Manager · JLT · Metro commuter</p>
+      <p style="font-size:13px;color:var(--color-text-muted);line-height:1.5">4–5 mornings a week, currently uses Talabat. Cognitive state at 7:52am: barely functional. One thumb, standing, about to board a moving train.</p>
+      <p class="jtbd">"Get me my usual coffee to my desk before my 9am call — without making me think."</p>
+    </div>
+    <div class="card persona">
+      <span class="tag">Stress test</span>
+      <h3>Rohan — WFH Afternoon Slump</h3>
+      <p class="role">34 · Freelance UX Designer · JVC · WFH 4 days/wk</p>
+      <p style="font-size:13px;color:var(--color-text-muted);line-height:1.5">3pm treat ~3x/week, uses Deliveroo. Fatigued, decisioned-out, wants a small reward without a 5-minute decision spiral.</p>
+      <p class="jtbd">"Rescue my afternoon with something small and indulgent — without deciding for 5 minutes."</p>
+    </div>
+    <div class="card persona">
+      <span class="tag">Stress test</span>
+      <h3>Maria — Office Coordinator</h3>
+      <p class="role">41 · Executive Assistant · DIFC law firm · Corporate card</p>
+      <p style="font-size:13px;color:var(--color-text-muted);line-height:1.5">Team orders 2–3x/week, 5–8 drinks per order. High cognitive load managing 6 drinks. Meeting composition rotates, but individual drink preferences don't.</p>
+      <p class="jtbd">"Get every partner the exact drink they asked for, with a receipt finance will accept."</p>
+    </div>
+    <div class="card persona">
+      <span class="tag">Stress test</span>
+      <h3>Yousef — Weekend Host</h3>
+      <p class="role">22 · University student · AUD · Al Barsha</p>
+      <p style="font-size:13px;color:var(--color-text-muted);line-height:1.5">Weekend social orders for friends, 3–4 drinks. Instagram-primed, wants photo-worthy delivery. Open to seasonal drinks.</p>
+      <p class="jtbd">"Order coffee that looks good enough to post, without app-hopping for 20 minutes."</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ STORYBOARD ═══════ -->
+<section>
+<div class="wrap">
+  <span class="eyebrow">04 — Journey</span>
+  <h2>Aisha's morning</h2>
+  <p class="lead" style="margin-bottom:32px">Six moments that locate where SHOT does its work. Arc: Groggy → Pressured → Relieved → Ready.</p>
+
+  <div class="storyboard">
+    <div class="story-frame">
+      <div class="time">07:48 · Bedroom</div>
+      <h4>Wake-up lag</h4>
+      <p>Alarm off. Barely functional. Why the home screen must be low-cognitive-load.</p>
+    </div>
+    <div class="story-frame">
+      <div class="time">07:52 · Metro platform</div>
+      <h4>One thumb, one chance</h4>
+      <p>Standing, phone in right hand, train in 2 min. Layout must be one-hand, thumb-first.</p>
+    </div>
+    <div class="story-frame">
+      <div class="time">07:53 · On the train</div>
+      <h4>Two-tap reorder ★</h4>
+      <p>The hero moment. Open → tap "Order now." Done. Under 30 seconds.</p>
+    </div>
+    <div class="story-frame">
+      <div class="time">08:02 · In transit</div>
+      <h4>"Brewing" notification</h4>
+      <p>Handed off. She knows where it is. Tracking + notification design matters.</p>
+    </div>
+    <div class="story-frame">
+      <div class="time">08:41 · Walking to office</div>
+      <h4>"Arriving 2 min"</h4>
+      <p>Timing accuracy is a promise, not a feature.</p>
+    </div>
+    <div class="story-frame">
+      <div class="time">08:45 · Desk</div>
+      <h4>Coffee waiting</h4>
+      <p>The emotional payoff SHOT delivers. Ready before her 9am call.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ PROBLEM STATEMENT ═══════ -->
+<section>
+<div class="wrap" style="text-align:center;max-width:800px">
+  <span class="eyebrow">05 — Problem</span>
+  <h2 style="font-size:clamp(1.5rem,4vw,2.5rem);line-height:1.2">SHOT helps time-pressured Dubai coffee drinkers reorder their usual in under 30 seconds — by replacing restaurant-first food-delivery UX with a habit-first, coffee-native experience built around who they are and when they're ordering.</h2>
+</div>
+</section>
+
+<!-- ═══════ DESIGN PRINCIPLES ═══════ -->
+<section>
+<div class="wrap">
+  <span class="eyebrow">06 — Principles</span>
+  <h2>Five rules every decision was tested against</h2>
+  <div class="grid-5">
+    <div class="principle-card"><span class="num">01</span><h4>Habit over discovery</h4><p>"Your usual" is the app. Menu is secondary.</p></div>
+    <div class="principle-card"><span class="num">02</span><h4>One thumb, no thinking</h4><p>Every primary action reachable in the bottom third.</p></div>
+    <div class="principle-card"><span class="num">03</span><h4>Coffee-native customization</h4><p>Visual pickers, sliders, toggles. Never a form.</p></div>
+    <div class="principle-card"><span class="num">04</span><h4>Time is the interface</h4><p>The app looks different at 8am vs 3pm.</p></div>
+    <div class="principle-card"><span class="num">05</span><h4>Confidence over choice</h4><p>Fewer options, better decisions.</p></div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ SCREENS ═══════ -->
+<section>
+<div class="wrap">
+  <span class="eyebrow">07 — Screens</span>
+  <h2>Seven screens, each earns its layout</h2>
+  <p class="lead" style="margin-bottom:48px">High-fidelity mobile screens built from the wireframe hypotheses. Every unusual placement traces back to a research finding.</p>
+
+  <div class="phone-showcase">
+
+    <!-- ══ SCREEN 01: MORNING HOME ══ -->
+    <div class="screen-section" id="screen-01">
+      <div class="screen-header">
+        <div class="screen-num">Screen 01 · Primary</div>
+        <h3 class="screen-title" style="font-size:clamp(1.25rem,3vw,1.75rem)">Home — Morning mode</h3>
+        <div class="screen-persona">Aisha · 07:52 · Marina metro platform</div>
+        <p class="screen-desc">The entire above-the-fold is "Your usual." Menu access is deliberately deprioritized. This isn't a discovery app pretending to be habit-first — it structurally is one.</p>
+      </div>
+      <div class="screen-layout">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="scr">
+              <div class="scr-status"><span class="time">7:52</span><span class="icons"><span></span></span></div>
+              <div class="scr-topbar">
+                <div class="scr-pill">Menu</div>
+                <div class="scr-avatar">●</div>
+              </div>
+              <div class="scr-greeting">Good morning, Aisha</div>
+              <div class="scr-context">7:52 · 24°C · 🔥 12-day streak</div>
+              <div class="scr-hero-card">
+                <div class="label">Your usual</div>
+                <div class="drink-name">Iced Latte</div>
+                <div class="mods">Oat milk · 1 sugar · Large</div>
+                <div class="cup-illus">☕</div>
+                <div class="price">AED 22</div>
+                <div class="eta">ETA 8:44 · your desk</div>
+              </div>
+              <div class="scr-cta">Order now</div>
+              <div class="scr-cta-ghost">or browse full menu</div>
+            </div>
+          </div>
+        </div>
+        <div class="annotations">
+          <div class="ann"><div class="badge">1</div><div><h4>Menu is a footnote, not a header</h4><p>Standard food apps put search + categories at the top. Here, menu access is a small pill — accessible but deprioritized. Layout signals: the app already knows what you want.</p></div></div>
+          <div class="ann"><div class="badge">2</div><div><h4>Hero card = 60% of the screen</h4><p>The order is not a card in a grid. The order IS the screen. This is the most radical layout choice — and it's what makes the 2-tap reorder physically possible.</p></div></div>
+          <div class="ann"><div class="badge">3</div><div><h4>CTA lives in the thumb zone</h4><p>Bottom third of screen, oversized. Aisha is one-handed on a moving train — reachability is not optional.</p></div></div>
+          <div class="ann"><div class="badge">4</div><div><h4>Streak nudges habit, quietly</h4><p>"12-day streak" sits in a single line with time and weather. Retention lever without gamification cringe.</p></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 02: AFTERNOON HOME ══ -->
+    <div class="screen-section" id="screen-02">
+      <div class="screen-header">
+        <div class="screen-num">Screen 02 · Time-of-day variant</div>
+        <h3 class="screen-title" style="font-size:clamp(1.25rem,3vw,1.75rem)">Home — Afternoon mode</h3>
+        <div class="screen-persona">Rohan · 15:17 · JVC, WFH</div>
+        <p class="screen-desc">Same skeleton, inverted priorities. Curated pairings take the stage; "Your usual" demotes to a small tile. The app has moods.</p>
+      </div>
+      <div class="screen-layout reverse">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="scr">
+              <div class="scr-status"><span class="time">15:17</span><span class="icons"><span></span></span></div>
+              <div class="scr-topbar">
+                <div class="scr-pill">Menu</div>
+                <div class="scr-avatar">●</div>
+              </div>
+              <div class="scr-greeting">Hey Rohan — 3pm slump?</div>
+              <div class="scr-afternoon-headline">Beat it with a warm pair</div>
+              <div class="scr-shelf-label">Curated for now</div>
+              <div class="pairing-scroll">
+                <div class="pairing-card">
+                  <div class="img">☕🥐</div>
+                  <h5>Spanish Latte</h5>
+                  <div class="sub">+ Almond croissant</div>
+                  <div class="price-row"><span class="price">AED 32</span><span class="save">save 6</span></div>
+                </div>
+                <div class="pairing-card">
+                  <div class="img">☕🍫</div>
+                  <h5>Flat White</h5>
+                  <div class="sub">+ Date brownie</div>
+                  <div class="price-row"><span class="price">AED 34</span><span class="save">save 5</span></div>
+                </div>
+              </div>
+              <div class="scr-shelf-label" style="margin-top:auto">Or your usual</div>
+              <div class="scr-usual-mini">
+                <div class="thumb">☕</div>
+                <div class="info"><h5>Iced Latte</h5><span>Oat · 1 sugar · Large</span></div>
+                <div class="reorder">Reorder →</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="annotations">
+          <div class="ann"><div class="badge">1</div><div><h4>Copy shifts, not just data</h4><p>"Good morning, Aisha" becomes "Hey Rohan — 3pm slump?" The greeting is written for the moment, not just the user.</p></div></div>
+          <div class="ann"><div class="badge">2</div><div><h4>Horizontal scroll = discovery without decision cost</h4><p>Each pairing card is a complete decision (drink + pastry + price). Rohan swipes 2–3 options, taps one. His decision fatigue is respected.</p></div></div>
+          <div class="ann"><div class="badge">3</div><div><h4>Usual is demoted, not deleted</h4><p>Still one tap away, sits below the curated row. Same building blocks, different hierarchy — the app has moods.</p></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 03: DRINK BUILDER (3 EXPLORATIONS) ══ -->
+    <div class="screen-section" id="screen-03">
+      <div class="screen-header">
+        <div class="screen-num">Screen 03 · Customization · Three explorations</div>
+        <h3 class="screen-title" style="font-size:clamp(1.25rem,3vw,1.75rem)">Drink builder — how should customization feel?</h3>
+        <div class="screen-persona">Coffee-native customization</div>
+        <p class="screen-desc">Three parallel mental models: language, object, recipe. Each makes drink customization feel like ordering from a barista, not filling out a form.</p>
+      </div>
+
+      <div class="exploration-grid">
+        <!-- VAR A: SENTENCE -->
+        <div class="exploration-item">
+          <div class="phone-frame" style="margin:0 auto">
+            <div class="phone-screen">
+              <div class="scr">
+                <div class="scr-status"><span class="time">7:53</span><span class="icons"><span></span></span></div>
+                <div style="display:flex;align-items:center;margin-bottom:16px">
+                  <span class="scr-back">←</span>
+                  <span class="scr-title-center">Build your drink</span>
+                </div>
+                <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;color:var(--gray-500);text-transform:uppercase;margin-bottom:12px">Tap to adjust</div>
+                <div class="sentence" style="flex:1">
+                  <span class="word">A </span>
+                  <span class="pill pill-accent">large</span>
+                  <span class="word"> </span>
+                  <span class="pill pill-dark">latte</span><br>
+                  <span class="word">with </span>
+                  <span class="pill pill-dark" style="border:2px solid var(--red-500)">oat</span>
+                  <span class="word"> milk,</span><br>
+                  <span class="pill pill-dark">1</span>
+                  <span class="word"> sugar,</span><br>
+                  <span class="word">and </span>
+                  <span class="pill pill-dark">iced</span>
+                  <span class="word">.</span>
+                </div>
+                <div class="scr-cta" style="margin-top:auto">Add to order · AED 22</div>
+              </div>
+            </div>
+          </div>
+          <div class="exploration-caption">
+            <span class="tag">Variation A · Language</span>
+            <h4>The sentence</h4>
+            <p>The drink reads as language — each variable is an inline pill you tap to swap. Feels like describing your order out loud.</p>
+          </div>
+        </div>
+
+        <!-- VAR B: LIVING CUP -->
+        <div class="exploration-item">
+          <div class="phone-frame" style="margin:0 auto">
+            <div class="phone-screen">
+              <div class="scr">
+                <div class="scr-status"><span class="time">7:53</span><span class="icons"><span></span></span></div>
+                <div style="display:flex;align-items:center;margin-bottom:12px">
+                  <span class="scr-back">←</span>
+                  <span class="scr-title-center">Build your drink</span>
+                </div>
+                <div class="cup-preview">
+                  <div class="cup-body">
+                    <div class="lid"></div>
+                    <div class="body">
+                      <div class="ice"></div>
+                      <div class="ice ice-2"></div>
+                      <div class="sleeve">SHOT</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="controls-grid">
+                  <div style="display:flex;gap:8px">
+                    <div class="control-row" style="flex:1"><div class="control-label">Size</div><div class="seg-control"><span>S</span><span class="active">M</span><span>L</span></div></div>
+                    <div class="control-row" style="flex:1"><div class="control-label">Temp</div><div class="seg-control"><span class="active-accent">Iced</span><span>Hot</span></div></div>
+                  </div>
+                  <div class="control-row">
+                    <div class="control-label">Milk</div>
+                    <div class="milk-swatches">
+                      <div class="milk-swatch"><div class="dot" style="background:#fff"></div><span>Whole</span></div>
+                      <div class="milk-swatch"><div class="dot" style="background:#F0E8D8"></div><span>Skim</span></div>
+                      <div class="milk-swatch"><div class="dot selected" style="background:#E8D8B8"></div><span style="color:var(--red-500);font-weight:700">Oat</span></div>
+                      <div class="milk-swatch"><div class="dot" style="background:#E8DCC0"></div><span>Almond</span></div>
+                      <div class="milk-swatch"><div class="dot" style="background:#F0E0C8"></div><span>Soy</span></div>
+                    </div>
+                  </div>
+                  <div class="control-row">
+                    <div class="control-label">Sweet</div>
+                    <div class="sugar-track"><div class="fill"></div><div class="thumb"></div></div>
+                    <div class="sugar-labels"><span>0</span><span class="active-label">1</span><span>2</span><span>3</span></div>
+                  </div>
+                </div>
+                <div class="scr-cta" style="margin-top:12px">Add to order · AED 22</div>
+              </div>
+            </div>
+          </div>
+          <div class="exploration-caption">
+            <span class="tag">Variation B · Object — Recommended</span>
+            <h4>The living cup</h4>
+            <p>The cup itself is the interface — updates live as choices change. Milk color, ice cubes, sleeve label all respond. Everything visible, no scroll.</p>
+          </div>
+        </div>
+
+        <!-- VAR C: RECIPE -->
+        <div class="exploration-item">
+          <div class="phone-frame" style="margin:0 auto">
+            <div class="phone-screen">
+              <div class="scr">
+                <div class="scr-status"><span class="time">7:53</span><span class="icons"><span></span></span></div>
+                <div style="display:flex;align-items:center;margin-bottom:12px">
+                  <span class="scr-back">←</span>
+                  <span class="scr-title-center">Build your drink</span>
+                </div>
+                <div class="recipe-layout">
+                  <div class="glass-col">
+                    <div class="glass-body">
+                      <div class="glass-layer" style="background:rgba(255,255,255,.15)"></div>
+                      <div class="glass-layer" style="background:#E8D8B8"></div>
+                      <div class="glass-layer" style="background:#E8D8B8"></div>
+                      <div class="glass-layer" style="background:#3a1a0a"></div>
+                      <div class="glass-layer" style="background:#0a1a2a"></div>
+                    </div>
+                  </div>
+                  <div class="bands-col">
+                    <div class="band"><div class="band-num">01 · TEMP</div><div class="band-val">Iced</div></div>
+                    <div class="band"><div class="band-num">02 · BASE</div><div class="band-val">Latte · Large</div></div>
+                    <div class="band active"><div class="band-num">03 · MILK · EDITING</div><div class="band-val">Oat</div></div>
+                    <div class="band"><div class="band-num">04 · SWEET</div><div class="band-val">1 sugar</div></div>
+                    <div class="band"><div class="band-num">05 · EXTRAS</div><div class="band-val" style="color:var(--gray-500);font-size:11px">None · tap to add</div></div>
+                  </div>
+                </div>
+                <div style="text-align:center;font-family:var(--font-mono);font-size:9px;color:var(--gray-500);letter-spacing:.1em;margin:8px 0">4 OF 5 LAYERS SET</div>
+                <div class="scr-cta">Add to order · AED 22</div>
+              </div>
+            </div>
+          </div>
+          <div class="exploration-caption">
+            <span class="tag">Variation C · Recipe</span>
+            <h4>The layered stack</h4>
+            <p>A glass fills segment by segment as you build. Bands on the right control each layer. The recipe is visible — you're stacking ingredients into a cup.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="decision-block">
+        <h3>Which one to carry into hi-fi</h3>
+        <p><strong>Variation B (The Living Cup) is the strongest candidate.</strong> The live drink preview does emotional work — you see what you're ordering. Everything visible at once means the fastest possible customization. Each variable gets the input type suited to it.</p>
+        <p><strong>Variation A is the strong fallback.</strong> Simpler to implement, more novel, but relies on reading — cognitive load Aisha doesn't have at 7:52am.</p>
+        <p><strong>Variation C is the most memorable but riskiest.</strong> Stacked bands require more taps and lack the live cup preview. Better for a slower "explore" mode.</p>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 04: TRAY OF 6 ══ -->
+    <div class="screen-section" id="screen-04">
+      <div class="screen-header">
+        <div class="screen-num">Screen 04 · Group flow</div>
+        <h3 class="screen-title" style="font-size:clamp(1.25rem,3vw,1.75rem)">Tray of 6 — visual cup builder</h3>
+        <div class="screen-persona">Maria · 10:47 · assembling a partner-meeting order</div>
+        <p class="screen-desc">The tray is a literal 2×3 grid of cups. Tap an empty cup, assign a person, their default drink pre-fills. Digital flow maps to the physical object.</p>
+      </div>
+      <div class="screen-layout">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="scr">
+              <div class="scr-status"><span class="time">10:47</span><span class="icons"><span></span></span></div>
+              <div style="display:flex;align-items:center;margin-bottom:16px">
+                <span class="scr-back">←</span>
+                <span class="scr-title-center">Tray of 6</span>
+              </div>
+              <div class="tray-grid">
+                <div>
+                  <div class="tray-cup filled"><span class="initial">S</span></div>
+                  <div class="cup-name">Sarah</div>
+                  <div class="cup-drink">Oat cap, no sugar</div>
+                </div>
+                <div>
+                  <div class="tray-cup filled"><span class="initial">D</span></div>
+                  <div class="cup-name">David</div>
+                  <div class="cup-drink">Espresso, ×2</div>
+                </div>
+                <div>
+                  <div class="tray-cup empty"><span class="plus">+</span></div>
+                </div>
+                <div>
+                  <div class="tray-cup filled"><span class="initial">M</span></div>
+                  <div class="cup-name">Maya</div>
+                  <div class="cup-drink">Almond flat white</div>
+                </div>
+                <div>
+                  <div class="tray-cup selected"><span class="plus">+</span></div>
+                  <div class="cup-name" style="color:var(--red-500)">Assign this cup</div>
+                </div>
+                <div>
+                  <div class="tray-cup empty"><span class="plus">+</span></div>
+                </div>
+              </div>
+              <div class="scr-search">🔍 Type a name or add new…</div>
+              <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;color:var(--gray-500);text-transform:uppercase;margin-bottom:8px">Recent at your firm</div>
+              <div class="recent-list">
+                <div class="recent-person">
+                  <div class="avatar">A</div>
+                  <div><div class="name">Ahmed</div><div class="drink">Cortado · 1 sugar</div></div>
+                </div>
+                <div class="recent-person">
+                  <div class="avatar">P</div>
+                  <div><div class="name">Priya</div><div class="drink">Iced Americano</div></div>
+                </div>
+              </div>
+              <div class="scr-cta scr-cta-disabled" style="margin-top:12px">Continue · 3 of 6 cups filled</div>
+            </div>
+          </div>
+        </div>
+        <div class="annotations">
+          <div class="ann"><div class="badge">1</div><div><h4>Digital tray, physical mental model</h4><p>The 2×3 grid mirrors the physical tray she'll receive. She isn't managing "line items in a cart" — she's filling cups.</p></div></div>
+          <div class="ann"><div class="badge">2</div><div><h4>Person = drink, remembered forever</h4><p>Sarah's cup shows "Oat cap, no sugar" — the app remembers per-individual defaults. Meeting composition rotates, individual preferences don't.</p></div></div>
+          <div class="ann"><div class="badge">3</div><div><h4>"Recent at your firm" builds itself</h4><p>No list-maintenance UI. The app quietly learns who Maria orders for over time. By month three, this is her real workflow.</p></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 05: LIVE TRACKING ══ -->
+    <div class="screen-section" id="screen-05">
+      <div class="screen-header">
+        <div class="screen-num">Screen 05 · Order tracking</div>
+        <h3 class="screen-title" style="font-size:clamp(1.25rem,3vw,1.75rem)">Live tracking — time, not geography</h3>
+        <div class="screen-persona">Aisha · 08:02 · on the train</div>
+        <p class="screen-desc">Standard delivery apps lead with a map. But Aisha doesn't care where the rider is on Sheikh Zayed Road — she cares what stage her coffee is in.</p>
+      </div>
+      <div class="screen-layout reverse">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="scr">
+              <div class="scr-status"><span class="time">8:02</span><span class="icons"><span></span></span></div>
+              <div style="display:flex;align-items:center;margin-bottom:16px">
+                <span class="scr-back">←</span>
+                <span class="scr-title-center" style="font-family:var(--font-mono);font-size:11px;letter-spacing:.06em">Order #A7291</span>
+              </div>
+              <div class="timeline">
+                <div class="tl-step">
+                  <div class="tl-marker done">✓</div>
+                  <div class="tl-content"><div class="stage">Ordered</div><div class="time">7:53</div></div>
+                </div>
+                <div class="tl-connector done"></div>
+                <div class="tl-step">
+                  <div class="tl-marker done">✓</div>
+                  <div class="tl-content"><div class="stage">Grinding</div><div class="time">7:58</div></div>
+                </div>
+                <div class="tl-connector done"></div>
+              </div>
+
+              <div class="current-stage">
+                <div class="label">Current stage</div>
+                <div class="name">Brewing</div>
+                <div class="desc">Your barista is pulling the shot. Sealed & out in ~90 seconds.</div>
+                <div class="progress-bar"><div class="fill"></div></div>
+              </div>
+
+              <div class="timeline" style="margin-top:12px">
+                <div class="tl-connector upcoming"></div>
+                <div class="tl-step">
+                  <div class="tl-marker upcoming"></div>
+                  <div class="tl-content"><div class="stage" style="color:var(--gray-500)">Sealed & out</div><div class="time">est. 8:04</div></div>
+                </div>
+                <div class="tl-connector upcoming"></div>
+                <div class="tl-step">
+                  <div class="tl-marker upcoming"></div>
+                  <div class="tl-content"><div class="stage" style="color:var(--gray-500)">Arriving at your desk</div><div class="time">est. 8:44</div></div>
+                </div>
+              </div>
+
+              <div class="tl-actions">
+                <div class="tl-action">📍 View map</div>
+                <div class="tl-action">💬 Chat rider</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="annotations">
+          <div class="ann"><div class="badge">1</div><div><h4>Current stage owns the screen</h4><p>60% of visible real estate. Aisha doesn't scroll to find status — the app tells her exactly where she is. Time-based mental model, not geographic.</p></div></div>
+          <div class="ann"><div class="badge">2</div><div><h4>Coffee-flavored stage names</h4><p>"Grinding" → "Brewing" → "Sealed & out" → "Arriving." These aren't generic delivery states — they're coffee states.</p></div></div>
+          <div class="ann"><div class="badge">3</div><div><h4>Map is a tool, not the interface</h4><p>Available on tap. Chat with the rider is equal-weight — because trust in the last mile is a design problem, not a features problem.</p></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 06: DELIVERED ══ -->
+    <div class="screen-section" id="screen-06">
+      <div class="screen-header">
+        <div class="screen-num">Screen 06 · Delivered / Reorder</div>
+        <h3 class="screen-title" style="font-size:clamp(1.25rem,3vw,1.75rem)">Delivered — close the loop, seed the next</h3>
+        <div class="screen-persona">Aisha · 08:45 · at her desk</div>
+        <p class="screen-desc">Not a rate-your-order modal. The screen becomes the coffee cup itself. The primary action isn't "rate" — it's "schedule tomorrow."</p>
+      </div>
+      <div class="screen-layout">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="scr">
+              <div class="scr-status"><span class="time">8:45</span><span class="icons"><span></span></span></div>
+              <div style="text-align:center;font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;color:var(--red-500);margin-bottom:8px">DELIVERED · 8:45</div>
+
+              <div class="delivered-cup">
+                <div class="big-cup">
+                  <div class="lid"></div>
+                  <div class="body">
+                    <div class="sleeve">
+                      <span class="shot-text">SHOT · #A7291</span>
+                      <span class="delivered-text">Delivered</span>
+                    </div>
+                    <div class="condensation" style="top:15%;left:10%"></div>
+                    <div class="condensation" style="top:70%;right:12%"></div>
+                    <div class="condensation" style="top:85%;left:25%"></div>
+                  </div>
+                </div>
+                <div class="delivered-msg">
+                  <h3>Your Iced Latte is here</h3>
+                  <p>Enjoy — you earned this morning.</p>
+                </div>
+              </div>
+
+              <div class="scr-cta-schedule">
+                <span class="main">Schedule for tomorrow, 8:45</span>
+                <span class="sub">One-tap repeat · cancel anytime</span>
+              </div>
+              <div class="secondary-actions">
+                <a href="#">Rate this shot</a>
+                <a href="#">Receipt</a>
+              </div>
+              <div class="streak-bar">🔥 13-day streak — nice work.</div>
+            </div>
+          </div>
+        </div>
+        <div class="annotations">
+          <div class="ann"><div class="badge">1</div><div><h4>The cup is the celebration</h4><p>Instead of a receipt modal, the coffee cup fills the screen. It's the object of desire, delivered. Emotional moment > receipt UI.</p></div></div>
+          <div class="ann"><div class="badge">2</div><div><h4>Primary action isn't "rate" — it's "reorder"</h4><p>One tap schedules tomorrow's usual for the same time. This turns a single order into a habit loop. The most valuable moment for retention is right after a good experience.</p></div></div>
+          <div class="ann"><div class="badge">3</div><div><h4>Streak reinforcement, not gamification</h4><p>"13-day streak — nice work." Small, warm, no confetti. Rewards the behavior without shouting.</p></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 07: MENU ══ -->
+    <div class="screen-section" id="screen-07">
+      <div class="screen-header">
+        <div class="screen-num">Screen 07 · Discovery</div>
+        <h3 class="screen-title" style="font-size:clamp(1.25rem,3vw,1.75rem)">Menu — familiar, browsable, quietly opinionated</h3>
+        <div class="screen-persona">Yousef · weekend browsing · anyone who wants something new</div>
+        <p class="screen-desc">The app is habit-first, but the menu still needs to serve exploration. This isn't the moment to be radical — it's the moment to be easy. Standard category names, familiar shelves, search always visible.</p>
+      </div>
+      <div class="screen-layout reverse">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="scr" style="gap:0">
+              <div class="scr-status"><span class="time">14:20</span><span class="icons"><span></span></span></div>
+              <div style="display:flex;align-items:center;margin-bottom:12px">
+                <span class="scr-back">←</span>
+                <span class="scr-title-center">Menu</span>
+              </div>
+              <div class="scr-search-bar">🔍 Search drinks or food…</div>
+              <div class="chips">
+                <span class="chip active">All</span>
+                <span class="chip">Espresso</span>
+                <span class="chip">Milk</span>
+                <span class="chip">Cold</span>
+                <span class="chip">Food</span>
+              </div>
+              <div class="shelf">
+                <div class="shelf-title">Espresso</div>
+                <div class="shelf-row">
+                  <div class="menu-card featured">
+                    <div class="try-badge">☀ TRY TODAY</div>
+                    <div class="swatch" style="background:#3a1a0a"></div>
+                    <h5>Ristretto</h5>
+                    <div class="desc">Short, sharp, 3-second ritual</div>
+                    <div class="price">AED 14</div>
+                  </div>
+                  <div class="menu-card">
+                    <div class="swatch" style="background:#3a1a0a"></div>
+                    <h5 style="color:var(--white)">Doppio</h5>
+                    <div class="desc">Two shots, no fuss</div>
+                    <div class="price" style="color:var(--white)">AED 16</div>
+                  </div>
+                </div>
+              </div>
+              <div class="shelf">
+                <div class="shelf-title">Milk-based</div>
+                <div class="shelf-row">
+                  <div class="menu-card featured">
+                    <div class="try-badge">☀ TRY TODAY</div>
+                    <div class="swatch" style="background:#E8D8B8"></div>
+                    <h5>Flat White</h5>
+                    <div class="desc">Silky milk, double ristretto</div>
+                    <div class="price">AED 22</div>
+                  </div>
+                  <div class="menu-card">
+                    <div class="swatch" style="background:#E8D8B8"></div>
+                    <h5 style="color:var(--white)">Cappuccino</h5>
+                    <div class="desc">Foam-forward</div>
+                    <div class="price" style="color:var(--white)">AED 20</div>
+                  </div>
+                </div>
+              </div>
+              <div class="sticky-usual">
+                <div class="left">
+                  <div class="micro">YOUR USUAL</div>
+                  <div class="drink">Iced Latte · Oat · 1 sugar</div>
+                </div>
+                <div class="right">Reorder →</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="annotations">
+          <div class="ann"><div class="badge">1</div><div><h4>Search always visible</h4><p>The goal-directed user shouldn't scroll to find it. No tap-to-open, no hidden state.</p></div></div>
+          <div class="ann"><div class="badge">2</div><div><h4>Standard category names</h4><p>Espresso, Milk, Cold, Food — nothing to decode. Familiar patterns lower cognitive load.</p></div></div>
+          <div class="ann"><div class="badge">3</div><div><h4>One curated pick per shelf</h4><p>"Try today" — a soft editorial touch. One item nudged to the front, slightly wider and inverted. Barista's voice without hiding the rest.</p></div></div>
+          <div class="ann"><div class="badge">4</div><div><h4>Color swatch = visual drink cue</h4><p>A colored dot per card. No stock photos needed. Scans faster, feels editorial.</p></div></div>
+          <div class="ann"><div class="badge">5</div><div><h4>"Your usual" follows you everywhere</h4><p>Sticky bar at the bottom. No matter how deep Yousef browses, the fastest path is never buried.</p></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /phone-showcase -->
+</div>
+</section>
+
+<!-- ═══════ DESIGN DECISIONS ═══════ -->
+<section>
+<div class="wrap">
+  <span class="eyebrow">08 — Decisions & Trade-offs</span>
+  <h2>Choices that shaped the system</h2>
+  <div class="decision-table">
+    <div class="decision-row">
+      <h4>Habit-first as architecture, not a feature</h4>
+      <p>The "Your usual" card isn't a shortcut — it's the app's homepage. This is a structural commitment, not a widget bolted onto a discovery feed.</p>
+    </div>
+    <div class="decision-row">
+      <h4>Time-of-day changes layout, not just copy</h4>
+      <p>Morning and afternoon home screens use the same building blocks but re-choreograph them. This proves the principle isn't cosmetic — it's structural.</p>
+    </div>
+    <div class="decision-row">
+      <h4>Three explorations before committing</h4>
+      <p>The Drink Builder explored three parallel mental models (language, object, recipe) before choosing the Living Cup for the primary path. All three shown to demonstrate visible thinking.</p>
+    </div>
+    <div class="decision-row">
+      <h4>Group orders are people-based, not group-based</h4>
+      <p>Maria's meetings don't have a fixed group week-to-week. The stable thing is individual drink preferences. Memory lives at the person level.</p>
+    </div>
+    <div class="decision-row">
+      <h4>Tracking is time-based, not geographic</h4>
+      <p>Users care where in the process their coffee is, not where the rider is on Sheikh Zayed Road. This directly responds to Talabat's documented "premature delivered" trust problem.</p>
+    </div>
+    <div class="decision-row">
+      <h4>The delivered screen is a retention moment</h4>
+      <p>Primary action converts one order into a habit. The most valuable moment for retention is right after a good experience.</p>
+    </div>
+    <div class="decision-row">
+      <h4>The menu is deliberately conventional</h4>
+      <p>Not every screen should be experimental. Browsing is a job that rewards familiarity. Restraint is a decision.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ REFLECTION ═══════ -->
+<section>
+<div class="wrap">
+  <span class="eyebrow">09 — Reflection</span>
+  <h2>What's next</h2>
+  <div class="reflection-grid">
+    <div class="card">
+      <h3 style="font-size:1rem">What would I test first?</h3>
+      <p class="muted" style="font-size:14px;line-height:1.6">The sentence vs living-cup customization UI (Variation A vs B). Both have strong hypotheses. 3–5 usability tests with real Dubai coffee drinkers would settle it before committing to hi-fi polish.</p>
+    </div>
+    <div class="card">
+      <h3 style="font-size:1rem">What's intentionally out of scope?</h3>
+      <p class="muted" style="font-size:14px;line-height:1.6">No live user testing yet — personas are proto-personas from desk research. No settings, profile, or account screens. No detailed error/edge-case states. Focused on the core purchase loop.</p>
+    </div>
+    <div class="card">
+      <h3 style="font-size:1rem">What would change with a real client?</h3>
+      <p class="muted" style="font-size:14px;line-height:1.6">Real user interviews, one round of usability testing before hi-fi, coordination with backend/operational constraints, accessibility audit (WCAG contrast + screen reader flow).</p>
+    </div>
+    <div class="card">
+      <h3 style="font-size:1rem">What did I learn?</h3>
+      <p class="muted" style="font-size:14px;line-height:1.6">Product design isn't about making screens. It's about making decisions — and defending them with research. The strongest design choice here was structural (habit-first architecture), not visual.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer class="site-footer">
+<div class="wrap">
+  <p><span class="name">SHOT by Noon Minutes</span> — a speculative UX case study.</p>
+  <p style="margin-top:8px">Designed and built as a portfolio project. All research and decisions are my own.</p>
+</div>
+</footer>
+
+</body>
+</html>
