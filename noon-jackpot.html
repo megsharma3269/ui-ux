@@ -1,0 +1,743 @@
+<title>Noon Jackpot</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700;900&family=Inter:wght@500;700;900&display=swap">
+<style>
+  /* Single-theme: dark casino aesthetic */
+  :root {
+    --bg: #1a0a00;
+    --surface: #0d0d0d;
+    --gold: #ffd700;
+    --gold-dark: #b8960f;
+    --gold-light: #fff4a3;
+    --orange: #ff6a00;
+    --red: #ff1a1a;
+    --text: #ffffff;
+    --text-dim: rgba(255,255,255,0.5);
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #1a0a00;
+      --surface: #0d0d0d;
+      color-scheme: dark;
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    perspective: 800px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+
+  .scene {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+    perspective: 900px;
+    transform-style: preserve-3d;
+  }
+
+  /* Radial glow behind machine */
+  .scene::after {
+    content: '';
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    width: 600px;
+    height: 600px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, rgba(255,106,0,0.05) 40%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* 3D Coins */
+  .coin {
+    position: absolute;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 35% 35%, var(--gold-light), var(--gold) 40%, var(--gold-dark) 80%, #7a5a00);
+    box-shadow:
+      inset 0 -3px 6px rgba(0,0,0,0.4),
+      inset 0 2px 4px rgba(255,255,255,0.3),
+      0 0 15px rgba(255,215,0,0.3);
+    animation: coinFloat var(--dur) var(--delay) infinite ease-in-out;
+    transform-style: preserve-3d;
+    z-index: var(--z);
+  }
+
+  .coin::after {
+    content: 'n';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 900;
+    font-size: calc(var(--size) * 0.45);
+    color: rgba(184,150,15,0.6);
+    text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+  }
+
+  @keyframes coinFloat {
+    0% {
+      transform: translateZ(var(--z-start)) translateY(0) rotateY(0deg) scale(var(--s-start));
+      opacity: var(--o-start);
+    }
+    50% {
+      transform: translateZ(var(--z-mid)) translateY(var(--drift)) rotateY(180deg) scale(var(--s-mid));
+      opacity: var(--o-mid);
+    }
+    100% {
+      transform: translateZ(var(--z-end)) translateY(0) rotateY(360deg) scale(var(--s-end));
+      opacity: var(--o-end);
+    }
+  }
+
+  /* Main container */
+  .main {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  /* noon JACKPOT header */
+  .header {
+    text-align: center;
+    position: relative;
+  }
+
+  .noon-text {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.5rem, 10vw, 4rem);
+    color: var(--gold);
+    text-shadow:
+      0 0 20px rgba(255,215,0,0.6),
+      0 0 40px rgba(255,215,0,0.3),
+      0 2px 0 var(--gold-dark);
+    letter-spacing: 0.1em;
+    line-height: 1;
+  }
+
+  .jackpot-text {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 900;
+    font-size: clamp(3rem, 14vw, 5.5rem);
+    line-height: 0.9;
+    letter-spacing: 0.05em;
+    background: linear-gradient(180deg, #ff4444 0%, #cc0000 50%, #880000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    position: relative;
+  }
+
+  /* Marquee bulbs around jackpot text */
+  .marquee-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 4px 0;
+  }
+
+  .bulb {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 6px var(--gold), 0 0 12px rgba(255,215,0,0.4);
+    animation: bulbBlink 1.5s infinite;
+  }
+
+  .bulb:nth-child(even) { animation-delay: 0.75s; }
+
+  @keyframes bulbBlink {
+    0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--gold), 0 0 12px rgba(255,215,0,0.4); }
+    50% { opacity: 0.3; box-shadow: none; }
+  }
+
+  /* Slot machine frame */
+  .machine {
+    width: 100%;
+    max-width: 360px;
+    border-radius: 20px;
+    padding: 6px;
+    background: linear-gradient(135deg, #ffd700 0%, #b8960f 25%, #ffd700 50%, #b8960f 75%, #ffd700 100%);
+    box-shadow:
+      0 0 30px rgba(255,215,0,0.3),
+      0 10px 40px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.3);
+    position: relative;
+  }
+
+  /* Rivets on the frame */
+  .machine::before {
+    content: '';
+    position: absolute;
+    inset: 10px;
+    border-radius: 16px;
+    border: 3px solid var(--orange);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .machine-inner {
+    background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Glass reflection */
+  .machine-inner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(165deg, rgba(255,255,255,0.08) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* Reel window */
+  .reel-window {
+    height: 260px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .reel-strip {
+    transition: transform 0.1s linear;
+    position: absolute;
+    width: 100%;
+    top: 0;
+  }
+
+  .reel-item {
+    height: 86.66px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    position: relative;
+  }
+
+  .reel-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 15%;
+    right: 15%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);
+  }
+
+  .reel-item.highlight {
+    background: rgba(255,215,0,0.05);
+  }
+
+  .reel-label {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .reel-label.red {
+    color: var(--red);
+    font-size: clamp(0.8rem, 3vw, 1rem);
+    text-shadow: 0 0 10px rgba(255,26,26,0.4);
+  }
+
+  .reel-label.white {
+    color: var(--text);
+    font-size: clamp(1.1rem, 4vw, 1.5rem);
+    font-weight: 900;
+    text-shadow: 0 0 15px rgba(255,255,255,0.3);
+  }
+
+  .reel-label.gold {
+    color: var(--gold);
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+    text-shadow: 0 0 10px rgba(255,215,0,0.4);
+  }
+
+  /* Side arrows */
+  .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    z-index: 4;
+    filter: drop-shadow(0 0 4px rgba(255,106,0,0.6));
+  }
+
+  .arrow-left {
+    left: 4px;
+    border-right: 16px solid var(--orange);
+  }
+
+  .arrow-right {
+    right: 4px;
+    border-left: 16px solid var(--orange);
+  }
+
+  /* Bulb border around machine */
+  .machine-bulbs {
+    position: absolute;
+    inset: -2px;
+    border-radius: 22px;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .m-bulb {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 5px var(--gold);
+    animation: bulbBlink 1.2s infinite;
+  }
+
+  /* Turns counter */
+  .turns {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text);
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 8px 28px;
+    border-radius: 30px;
+    backdrop-filter: blur(4px);
+  }
+
+  /* HIT HERE button */
+  .hit-btn {
+    width: 100%;
+    max-width: 360px;
+    padding: 20px;
+    border-radius: 50px;
+    border: 3px solid var(--gold);
+    background: linear-gradient(180deg, #1a1a1a, #000);
+    color: var(--gold);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 900;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 0 20px rgba(255,215,0,0.2), 0 5px 20px rgba(0,0,0,0.5);
+  }
+
+  .hit-btn:hover:not(:disabled) {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(255,215,0,0.4), 0 5px 25px rgba(0,0,0,0.5);
+  }
+
+  .hit-btn:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  .hit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .hit-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 40%, rgba(255,215,0,0.1) 50%, transparent 60%);
+    animation: shimmer 3s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* Details link */
+  .details {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-dim);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 4px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    background: none;
+    transition: color 0.2s;
+  }
+
+  .details:hover { color: var(--text); }
+
+  /* Close button */
+  .close-btn {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 16px);
+    right: calc(max(16px, env(safe-area-inset-right, 0px)) + 4px);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.5);
+    color: var(--text-dim);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  /* Win overlay */
+  .win-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+  }
+
+  .win-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .win-text {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(255,215,0,0.6);
+    text-align: center;
+    animation: winPulse 0.8s ease-in-out infinite alternate;
+  }
+
+  .win-prize {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+    color: var(--text);
+    margin-top: 12px;
+    text-align: center;
+  }
+
+  .win-dismiss {
+    margin-top: 30px;
+    padding: 12px 40px;
+    border-radius: 30px;
+    border: 2px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+  }
+
+  @keyframes winPulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  /* Sparkle particles on win */
+  .sparkle {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    pointer-events: none;
+    z-index: 21;
+    animation: sparkleFade 1s forwards;
+  }
+
+  @keyframes sparkleFade {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0) translateY(-40px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .coin, .bulb, .m-bulb, .hit-btn::before, .win-text { animation: none !important; }
+    .reel-strip { transition: none !important; }
+  }
+</style>
+
+<div class="scene" id="scene"></div>
+
+<button class="close-btn" aria-label="Close">&#x2715;</button>
+
+<div class="main">
+  <div class="header">
+    <div class="marquee-row" id="topBulbs"></div>
+    <div class="noon-text">noon</div>
+    <div class="jackpot-text">JACKPOT</div>
+    <div class="marquee-row" id="bottomBulbs"></div>
+  </div>
+
+  <div class="machine">
+    <div class="machine-bulbs" id="machineBulbs"></div>
+    <div class="machine-inner">
+      <div class="arrow arrow-left"></div>
+      <div class="arrow arrow-right"></div>
+      <div class="reel-window">
+        <div class="reel-strip" id="reelStrip"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="turns" id="turnsLabel">5 TURNS LEFT</div>
+
+  <button class="hit-btn" id="hitBtn">HIT HERE</button>
+
+  <button class="details">Details</button>
+</div>
+
+<div class="win-overlay" id="winOverlay">
+  <div class="win-text" id="winText">YOU WON!</div>
+  <div class="win-prize" id="winPrize"></div>
+  <button class="win-dismiss" id="winDismiss">CLAIM</button>
+</div>
+
+<script>
+  const prizes = [
+    { text: 'FREE DELIVERY\nON NEXT 3 ORDERS', cls: 'red' },
+    { text: '50% OFF\nON NEXT ORDER', cls: 'white' },
+    { text: 'FREE DELIVERY\nON NEXT 3 ORDERS', cls: 'red' },
+    { text: '20% OFF\nON NEXT 2 ORDERS', cls: 'gold' },
+    { text: 'BUY 1 GET 1\nFREE', cls: 'white' },
+    { text: 'FREE DELIVERY\nFOR A WEEK', cls: 'red' },
+    { text: '30% OFF\nON NEXT ORDER', cls: 'gold' },
+    { text: 'FLAT $50 OFF\nON NEXT ORDER', cls: 'white' },
+  ];
+
+  let turnsLeft = 5;
+  let spinning = false;
+  const strip = document.getElementById('reelStrip');
+  const hitBtn = document.getElementById('hitBtn');
+  const turnsLabel = document.getElementById('turnsLabel');
+  const winOverlay = document.getElementById('winOverlay');
+  const winText = document.getElementById('winText');
+  const winPrize = document.getElementById('winPrize');
+  const winDismiss = document.getElementById('winDismiss');
+  const ITEM_H = 86.66;
+
+  // Build reel items (repeat prizes several times for smooth scrolling)
+  function buildReel() {
+    strip.innerHTML = '';
+    const repeated = [];
+    for (let i = 0; i < 8; i++) repeated.push(...prizes);
+    repeated.forEach((p, i) => {
+      const div = document.createElement('div');
+      div.className = 'reel-item' + (p.cls === 'white' ? ' highlight' : '');
+      const lines = p.text.split('\n');
+      div.innerHTML = lines.map(l => `<div class="reel-label ${p.cls}">${l}</div>`).join('');
+      strip.appendChild(div);
+    });
+    strip.style.transform = `translateY(-${ITEM_H * 2}px)`;
+  }
+
+  buildReel();
+
+  // Spin logic
+  hitBtn.addEventListener('click', () => {
+    if (spinning || turnsLeft <= 0) return;
+    spinning = true;
+    hitBtn.disabled = true;
+    turnsLeft--;
+    turnsLabel.textContent = turnsLeft + ' TURN' + (turnsLeft !== 1 ? 'S' : '') + ' LEFT';
+
+    const winIndex = Math.floor(Math.random() * prizes.length);
+    const totalItems = prizes.length * 8;
+    const targetIndex = prizes.length * 5 + winIndex;
+    const targetOffset = targetIndex * ITEM_H;
+
+    strip.style.transition = 'none';
+    strip.style.transform = `translateY(0px)`;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        strip.style.transition = 'transform 3.5s cubic-bezier(0.15, 0.85, 0.25, 1)';
+        strip.style.transform = `translateY(-${targetOffset - ITEM_H}px)`;
+      });
+    });
+
+    setTimeout(() => {
+      spinning = false;
+      hitBtn.disabled = turnsLeft <= 0;
+      showWin(prizes[winIndex]);
+    }, 3700);
+  });
+
+  function showWin(prize) {
+    winPrize.textContent = prize.text.replace('\n', ' ');
+    winOverlay.classList.add('active');
+    burstSparkles();
+  }
+
+  winDismiss.addEventListener('click', () => {
+    winOverlay.classList.remove('active');
+    if (turnsLeft <= 0) {
+      turnsLabel.textContent = 'NO TURNS LEFT';
+      hitBtn.disabled = true;
+    }
+  });
+
+  function burstSparkles() {
+    for (let i = 0; i < 30; i++) {
+      const s = document.createElement('div');
+      s.className = 'sparkle';
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.top = Math.random() * 100 + 'vh';
+      s.style.width = s.style.height = (4 + Math.random() * 6) + 'px';
+      s.style.animationDuration = (0.6 + Math.random() * 0.8) + 's';
+      s.style.background = ['#ffd700','#ff6a00','#fff','#ff4444'][Math.floor(Math.random()*4)];
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 1500);
+    }
+  }
+
+  // Generate header bulbs
+  function makeBulbs(container, count) {
+    for (let i = 0; i < count; i++) {
+      const b = document.createElement('div');
+      b.className = 'bulb';
+      b.style.animationDelay = (i * 0.12) + 's';
+      container.appendChild(b);
+    }
+  }
+  makeBulbs(document.getElementById('topBulbs'), 18);
+  makeBulbs(document.getElementById('bottomBulbs'), 18);
+
+  // Generate machine border bulbs
+  function makeMachineBulbs() {
+    const container = document.getElementById('machineBulbs');
+    const rect = container.parentElement.getBoundingClientRect();
+    const perimeter = 2 * (rect.width + rect.height);
+    const count = 40;
+    const spacing = perimeter / count;
+    const w = rect.width + 4, h = rect.height + 4;
+
+    for (let i = 0; i < count; i++) {
+      const dist = i * spacing;
+      let x, y;
+      if (dist < w) { x = dist; y = -2; }
+      else if (dist < w + h) { x = w; y = dist - w; }
+      else if (dist < 2 * w + h) { x = w - (dist - w - h); y = h; }
+      else { x = -2; y = h - (dist - 2 * w - h); }
+
+      const b = document.createElement('div');
+      b.className = 'm-bulb';
+      b.style.left = x + 'px';
+      b.style.top = y + 'px';
+      b.style.animationDelay = (i * 0.08) + 's';
+      container.appendChild(b);
+    }
+  }
+  setTimeout(makeMachineBulbs, 100);
+
+  // 3D COINS with front-to-back perspective animation
+  function createCoins() {
+    const scene = document.getElementById('scene');
+    const coinCount = 18;
+
+    for (let i = 0; i < coinCount; i++) {
+      const coin = document.createElement('div');
+      coin.className = 'coin';
+      const size = 20 + Math.random() * 45;
+      const x = Math.random() * 100;
+      const startY = Math.random() * 100;
+
+      // Depth movement: some go front-to-back, some back-to-front
+      const goingBack = Math.random() > 0.5;
+      const zNear = 50 + Math.random() * 150;
+      const zFar = -200 - Math.random() * 300;
+      const drift = -30 + Math.random() * 60;
+
+      coin.style.setProperty('--size', size + 'px');
+      coin.style.left = x + '%';
+      coin.style.top = startY + '%';
+      coin.style.setProperty('--dur', (5 + Math.random() * 7) + 's');
+      coin.style.setProperty('--delay', (-Math.random() * 8) + 's');
+      coin.style.setProperty('--drift', drift + 'px');
+
+      if (goingBack) {
+        coin.style.setProperty('--z-start', zNear + 'px');
+        coin.style.setProperty('--z-mid', zFar + 'px');
+        coin.style.setProperty('--z-end', zNear + 'px');
+        coin.style.setProperty('--s-start', 1.2);
+        coin.style.setProperty('--s-mid', 0.4);
+        coin.style.setProperty('--s-end', 1.2);
+        coin.style.setProperty('--o-start', 0.9);
+        coin.style.setProperty('--o-mid', 0.3);
+        coin.style.setProperty('--o-end', 0.9);
+      } else {
+        coin.style.setProperty('--z-start', zFar + 'px');
+        coin.style.setProperty('--z-mid', zNear + 'px');
+        coin.style.setProperty('--z-end', zFar + 'px');
+        coin.style.setProperty('--s-start', 0.4);
+        coin.style.setProperty('--s-mid', 1.2);
+        coin.style.setProperty('--s-end', 0.4);
+        coin.style.setProperty('--o-start', 0.3);
+        coin.style.setProperty('--o-mid', 0.9);
+        coin.style.setProperty('--o-end', 0.3);
+      }
+
+      coin.style.setProperty('--z', goingBack ? 2 : 1);
+      scene.appendChild(coin);
+    }
+  }
+
+  createCoins();
+</script>
