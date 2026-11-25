@@ -1,0 +1,709 @@
+<title>noon Jackpot</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@500;700;800;900&display=swap">
+<style>
+/* Single-theme: dark arcade aesthetic — deliberately single-look */
+:root {
+  --bg: #1a1a2e;
+  --surface: #0f0f23;
+  --gold: #ebe60c;
+  --gold-dark: #c4be0a;
+  --red: #cc0000;
+  --orange: #ff6600;
+  --text: #ffffff;
+  --text-muted: #636363;
+  --text-dark: #1a1a2e;
+  --machine-body: linear-gradient(180deg, #d4c520 0%, #f5e63c 30%, #ebe60c 60%, #d4c520 100%);
+  --slot-bg: #111;
+  color-scheme: dark;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.phone-frame {
+  width: 393px;
+  height: 852px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 44px;
+  background: var(--surface);
+  box-shadow: 0 0 0 4px #333, 0 0 60px rgba(235, 230, 12, 0.15);
+}
+
+/* Status bar */
+.status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 54px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 32px 0;
+  z-index: 20;
+  font-size: 15px;
+  font-weight: 700;
+}
+.status-bar .time { font-size: 16px; font-weight: 700; }
+.status-icons { display: flex; gap: 6px; align-items: center; }
+.status-icons svg { width: 18px; height: 18px; }
+.battery { width: 27px; height: 13px; border: 1.5px solid #fff; border-radius: 3px; position: relative; padding: 1.5px; }
+.battery::after { content: ''; position: absolute; right: -5px; top: 3px; width: 2px; height: 5px; background: #fff; border-radius: 0 1px 1px 0; }
+.battery-fill { width: 100%; height: 100%; background: #fff; border-radius: 1px; }
+
+/* Background pattern */
+.bg-pattern {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.03) 39px, rgba(255,255,255,0.03) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.03) 39px, rgba(255,255,255,0.03) 40px);
+  z-index: 1;
+}
+
+/* Floating coins */
+.coins-container {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.coin {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 35% 35%, #ffe066, #d4a017 50%, #996600);
+  box-shadow: inset -2px -2px 4px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
+  animation: coinFloat var(--dur) var(--delay) infinite ease-in-out;
+  opacity: 0.85;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+}
+.coin::after {
+  content: '';
+  position: absolute;
+  inset: 15%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.3);
+}
+
+@keyframes coinFloat {
+  0% { transform: translateY(0) rotateX(var(--rx)) rotateY(var(--ry)) scale(1); opacity: 0.85; }
+  50% { transform: translateY(-20px) rotateX(calc(var(--rx) + 30deg)) rotateY(calc(var(--ry) + 60deg)) scale(1.05); opacity: 1; }
+  100% { transform: translateY(0) rotateX(var(--rx)) rotateY(var(--ry)) scale(1); opacity: 0.85; }
+}
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.5);
+  background: rgba(0,0,0,0.3);
+  color: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 15;
+  backdrop-filter: blur(4px);
+}
+
+/* noon JACKPOT header */
+.header {
+  position: absolute;
+  top: 70px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 10;
+}
+.noon-text {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 42px;
+  color: var(--gold);
+  text-shadow: 2px 2px 0 #996600, 0 0 20px rgba(235,230,12,0.4);
+  line-height: 1;
+  letter-spacing: 2px;
+}
+.jackpot-text {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 68px;
+  line-height: 0.85;
+  letter-spacing: 3px;
+  background: linear-gradient(180deg, #ff4400 0%, #cc0000 50%, #990000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(2px 3px 0 #660000);
+  position: relative;
+}
+.jackpot-text::before {
+  content: 'JACKPOT';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #ffcc00 0%, #ff8800 40%, #ff4400 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  z-index: -1;
+  transform: translate(-1px, -1px);
+}
+
+/* Machine body */
+.machine {
+  position: absolute;
+  top: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 340px;
+  z-index: 5;
+}
+
+/* Slot display frame */
+.slot-frame {
+  position: relative;
+  width: 310px;
+  margin: 0 auto;
+  border-radius: 20px;
+  padding: 8px;
+  background: linear-gradient(135deg, #d4a017, #ffe066, #d4a017, #996600);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.slot-frame-inner-border {
+  border-radius: 14px;
+  padding: 5px;
+  background: linear-gradient(180deg, #ff6600, #cc3300, #ff6600);
+}
+.slot-dots {
+  position: absolute;
+  inset: 6px;
+  border-radius: 16px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Slot window */
+.slot-window {
+  background: var(--slot-bg);
+  border-radius: 10px;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  height: 280px;
+}
+
+.slot-reel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transition: transform 0.1s;
+}
+
+.prize-row {
+  height: 93.33px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 20px;
+  position: relative;
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.prize-row::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+}
+.prize-row:last-child::after { display: none; }
+
+.prize-title {
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--text-muted);
+}
+.prize-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+.prize-row.highlight .prize-title {
+  color: #fff;
+  font-size: 20px;
+}
+.prize-row.highlight .prize-subtitle {
+  color: #fff;
+  font-size: 16px;
+}
+.prize-row.winner {
+  background: var(--gold);
+  border-radius: 10px;
+}
+.prize-row.winner .prize-title {
+  color: var(--red);
+  font-size: 20px;
+}
+.prize-row.winner .prize-subtitle {
+  color: var(--red);
+  font-size: 16px;
+}
+.prize-row.winner-alt {
+  background: #d0d0d0;
+  border-radius: 10px;
+}
+.prize-row.winner-alt .prize-title {
+  color: var(--text-muted);
+}
+.prize-row.winner-alt .prize-subtitle {
+  color: var(--text-muted);
+}
+
+/* Machine bottom */
+.machine-bottom {
+  background: var(--machine-body);
+  margin-top: -2px;
+  padding: 20px 15px 24px;
+  border-radius: 0 0 30px 30px;
+  position: relative;
+  text-align: center;
+}
+.machine-bottom::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 30px;
+  right: 30px;
+  height: 1px;
+  background: rgba(0,0,0,0.1);
+}
+
+/* Side bolts */
+.bolt {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #ffe066, #d4a017);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.4), 0 1px 3px rgba(0,0,0,0.3);
+}
+.bolt-tl { top: 8px; left: 8px; }
+.bolt-tr { top: 8px; right: 8px; }
+.bolt-bl { bottom: 8px; left: 8px; }
+.bolt-br { bottom: 8px; right: 8px; }
+
+/* Turns counter */
+.turns-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 6px 20px;
+  border-radius: 20px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+/* Bottom section */
+.bottom-section {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--machine-body);
+  padding: 28px 24px 40px;
+  z-index: 5;
+  text-align: center;
+}
+
+/* HIT HERE button */
+.hit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 64px;
+  background: #111;
+  border: 2.5px solid var(--gold);
+  border-radius: 50px;
+  color: var(--gold);
+  font-family: 'Inter', sans-serif;
+  font-weight: 900;
+  font-size: 28px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #000;
+  transition: transform 0.1s, box-shadow 0.1s;
+  position: relative;
+  overflow: hidden;
+}
+.hit-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 #000;
+}
+.hit-btn.spinning {
+  opacity: 0.6;
+  pointer-events: none;
+}
+.hit-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(235,230,12,0.1), transparent);
+  animation: btnShimmer 2s infinite;
+}
+@keyframes btnShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Details link */
+.details-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+  font-size: 11px;
+  color: #333;
+  border: 1px solid #666;
+  border-radius: 12px;
+  padding: 3px 12px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Home indicator */
+.home-indicator {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 134px;
+  height: 5px;
+  background: #000;
+  border-radius: 100px;
+  z-index: 20;
+}
+
+/* Spinning state */
+.slot-window.spinning .slot-reel {
+  animation: slotSpin 0.15s linear infinite;
+}
+@keyframes slotSpin {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-93.33px); }
+}
+
+/* Win animation */
+@keyframes winPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+.slot-frame.won {
+  animation: winPulse 0.5s ease-in-out 3;
+  box-shadow: 0 0 40px rgba(235,230,12,0.5), 0 8px 32px rgba(0,0,0,0.5);
+}
+
+/* Confetti */
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  z-index: 30;
+  pointer-events: none;
+  animation: confettiFall var(--dur) var(--delay) ease-in forwards;
+  opacity: 0;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(calc(852px + 20px)) rotate(720deg); opacity: 0.5; }
+}
+
+/* Light dots around frame */
+.frame-lights {
+  position: absolute;
+  inset: -2px;
+  border-radius: 22px;
+  z-index: 2;
+  pointer-events: none;
+}
+.light-dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 4px var(--gold);
+  animation: lightBlink 0.8s infinite alternate;
+}
+.light-dot:nth-child(odd) { animation-delay: 0.4s; }
+
+@keyframes lightBlink {
+  0% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+@media (max-width: 420px) {
+  .phone-frame {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    border-radius: 0;
+  }
+}
+</style>
+
+<div class="phone-frame">
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 18 18" fill="white"><path d="M1 13h3v4H1zM5.5 10h3v7h-3zM10 7h3v10h-3zM14.5 4h3v13h-3z" opacity="0.95"/></svg>
+      <svg viewBox="0 0 18 18" fill="white"><path d="M9 5.5c2.5 0 4.7 1 6.3 2.7l1.4-1.4C14.6 4.7 11.9 3.5 9 3.5S3.4 4.7 1.3 6.8l1.4 1.4C4.3 6.5 6.5 5.5 9 5.5zm0 4c1.5 0 2.8.6 3.8 1.6l1.4-1.4c-1.3-1.3-3.1-2.2-5.2-2.2s-3.9.9-5.2 2.2l1.4 1.4c1-.9 2.3-1.6 3.8-1.6zM9 13c.8 0 1.6.3 2.1.9l1.4-1.4C11.5 11.5 10.3 11 9 11s-2.5.5-3.5 1.5l1.4 1.4c.5-.6 1.3-.9 2.1-.9zM9 15.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>
+      <div class="battery"><div class="battery-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- Background -->
+  <div class="bg-pattern"></div>
+
+  <!-- Floating coins -->
+  <div class="coins-container" id="coins"></div>
+
+  <!-- Close button -->
+  <div class="close-btn">✕</div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="noon-text">noon</div>
+    <div class="jackpot-text">JACKPOT</div>
+  </div>
+
+  <!-- Slot machine -->
+  <div class="machine">
+    <div class="slot-frame" id="slotFrame">
+      <div class="frame-lights" id="frameLights"></div>
+      <div class="slot-frame-inner-border">
+        <div class="slot-window" id="slotWindow">
+          <div class="slot-reel" id="slotReel"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="machine-bottom">
+      <div class="bolt bolt-tl"></div>
+      <div class="bolt bolt-tr"></div>
+      <div class="bolt bolt-bl"></div>
+      <div class="bolt bolt-br"></div>
+      <div class="turns-counter">
+        <span id="turnsCount">5</span>&nbsp;TURNS LEFT
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom -->
+  <div class="bottom-section">
+    <button class="hit-btn" id="hitBtn" onclick="spin()">HIT HERE</button>
+    <a class="details-link" href="#">Details</a>
+  </div>
+
+  <div class="home-indicator"></div>
+</div>
+
+<script>
+const prizes = [
+  { title: 'FREE DELIVERY', subtitle: 'ON NEXT 3 ORDERS', type: 'normal' },
+  { title: '50% OFF', subtitle: 'ON NEXT ORDER', type: 'highlight' },
+  { title: 'FREE DELIVERY', subtitle: 'ON NEXT 3 ORDERS', type: 'normal' },
+  { title: '20% OFF', subtitle: 'ON NEXT ORDER', type: 'normal' },
+  { title: 'FREE DELIVERY', subtitle: 'ON NEXT 5 ORDERS', type: 'normal' },
+  { title: '30% OFF', subtitle: 'ON NEXT ORDER', type: 'normal' },
+  { title: 'BUY 1 GET 1', subtitle: 'ON NEXT ORDER', type: 'highlight' },
+  { title: 'FREE DELIVERY', subtitle: 'ON NEXT 3 ORDERS', type: 'normal' },
+];
+
+let turnsLeft = 5;
+let isSpinning = false;
+
+function createCoins() {
+  const container = document.getElementById('coins');
+  const positions = [
+    { left: '8%', top: '5%', size: 28 },
+    { left: '75%', top: '3%', size: 22 },
+    { left: '85%', top: '12%', size: 18 },
+    { left: '5%', top: '25%', size: 16 },
+    { left: '90%', top: '30%', size: 24 },
+    { left: '15%', top: '40%', size: 14 },
+    { left: '80%', top: '45%', size: 20 },
+    { left: '3%', top: '50%', size: 12 },
+    { left: '92%', top: '55%', size: 16 },
+    { left: '70%', top: '8%', size: 20 },
+  ];
+  positions.forEach((p, i) => {
+    const coin = document.createElement('div');
+    coin.className = 'coin';
+    coin.style.cssText = `left:${p.left};top:${p.top};--size:${p.size}px;--dur:${2.5+Math.random()*2}s;--delay:${Math.random()*2}s;--rx:${Math.random()*60}deg;--ry:${Math.random()*60}deg`;
+    container.appendChild(coin);
+  });
+}
+
+function createFrameLights() {
+  const container = document.getElementById('frameLights');
+  const perimeter = 2 * (310 + 280);
+  const count = 36;
+  for (let i = 0; i < count; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'light-dot';
+    const progress = i / count;
+    const w = 310, h = 300;
+    let x, y;
+    if (progress < 0.25) { const t = progress / 0.25; x = t * w; y = 0; }
+    else if (progress < 0.5) { const t = (progress - 0.25) / 0.25; x = w; y = t * h; }
+    else if (progress < 0.75) { const t = (progress - 0.5) / 0.25; x = w - t * w; y = h; }
+    else { const t = (progress - 0.75) / 0.25; x = 0; y = h - t * h; }
+    dot.style.left = x + 'px';
+    dot.style.top = y + 'px';
+    container.appendChild(dot);
+  }
+}
+
+function buildReel(winIndex) {
+  const reel = document.getElementById('slotReel');
+  reel.innerHTML = '';
+  const extended = [];
+  for (let i = 0; i < 30; i++) {
+    extended.push(prizes[i % prizes.length]);
+  }
+  if (winIndex !== undefined) {
+    extended[27] = prizes[winIndex];
+  }
+  extended.forEach((prize, i) => {
+    const row = document.createElement('div');
+    row.className = 'prize-row' + (prize.type === 'highlight' ? ' highlight' : '');
+    row.innerHTML = `<div class="prize-title">${prize.title}</div><div class="prize-subtitle">${prize.subtitle}</div>`;
+    reel.appendChild(row);
+  });
+}
+
+function spin() {
+  if (isSpinning || turnsLeft <= 0) return;
+  isSpinning = true;
+  turnsLeft--;
+  document.getElementById('turnsCount').textContent = turnsLeft;
+
+  const btn = document.getElementById('hitBtn');
+  const slotWindow = document.getElementById('slotWindow');
+  const slotFrame = document.getElementById('slotFrame');
+  const reel = document.getElementById('slotReel');
+
+  btn.classList.add('spinning');
+  slotFrame.classList.remove('won');
+
+  const winIndex = Math.floor(Math.random() * prizes.length);
+  buildReel(winIndex);
+
+  slotWindow.classList.add('spinning');
+  reel.style.transition = 'none';
+  reel.style.transform = 'translateY(0)';
+
+  const spinDuration = 2000 + Math.random() * 1000;
+
+  setTimeout(() => {
+    slotWindow.classList.remove('spinning');
+
+    const targetRow = 27;
+    const offset = -(targetRow * 93.33) + 93.33;
+    reel.style.transition = `transform 1.2s cubic-bezier(0.15, 0.85, 0.35, 1)`;
+    reel.style.transform = `translateY(${offset}px)`;
+
+    setTimeout(() => {
+      showWinState(winIndex);
+      btn.classList.remove('spinning');
+      isSpinning = false;
+
+      if (turnsLeft <= 0) {
+        btn.textContent = 'NO TURNS LEFT';
+        btn.style.opacity = '0.4';
+        btn.style.cursor = 'default';
+      }
+    }, 1300);
+  }, spinDuration);
+}
+
+function showWinState(winIndex) {
+  const slotFrame = document.getElementById('slotFrame');
+  slotFrame.classList.add('won');
+
+  const reel = document.getElementById('slotReel');
+  const rows = reel.querySelectorAll('.prize-row');
+  const winRow = rows[27];
+  const prize = prizes[winIndex];
+
+  if (prize.type === 'highlight') {
+    winRow.className = 'prize-row winner';
+  } else {
+    winRow.className = 'prize-row winner-alt';
+  }
+
+  if (rows[26]) rows[26].className = 'prize-row winner-alt';
+  if (rows[28]) rows[28].className = 'prize-row winner-alt';
+
+  launchConfetti();
+}
+
+function launchConfetti() {
+  const frame = document.querySelector('.phone-frame');
+  const colors = ['#ebe60c', '#ff4400', '#ff6600', '#fff', '#cc0000', '#d4a017'];
+  for (let i = 0; i < 40; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `
+      left: ${Math.random() * 100}%;
+      top: -10px;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      --dur: ${1.5 + Math.random() * 2}s;
+      --delay: ${Math.random() * 0.5}s;
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      width: ${4 + Math.random() * 8}px;
+      height: ${4 + Math.random() * 8}px;
+    `;
+    frame.appendChild(piece);
+    setTimeout(() => piece.remove(), 4000);
+  }
+}
+
+createCoins();
+createFrameLights();
+buildReel();
+
+const reel = document.getElementById('slotReel');
+reel.style.transform = 'translateY(0)';
+</script>
