@@ -1,743 +1,423 @@
 <title>Noon Jackpot</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700;900&family=Inter:wght@500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700;900&family=Inter:wght@600;700;800;900&display=swap">
 <style>
-  /* Single-theme: dark casino aesthetic */
   :root {
-    --bg: #1a0a00;
-    --surface: #0d0d0d;
+    --bg-dark: #1c1208;
+    --bg-yellow: #f5d800;
     --gold: #ffd700;
     --gold-dark: #b8960f;
-    --gold-light: #fff4a3;
     --orange: #ff6a00;
-    --red: #ff1a1a;
-    --text: #ffffff;
-    --text-dim: rgba(255,255,255,0.5);
+    --red: #cc1100;
+    --red-muted: rgba(180,40,30,0.7);
+    --text: #fff;
     color-scheme: dark;
   }
   @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) {
-      --bg: #1a0a00;
-      --surface: #0d0d0d;
-      color-scheme: dark;
-    }
+    :root:not([data-theme="dark"]) { color-scheme: dark; }
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html, body {
-    height: 100%;
-    overflow: hidden;
-  }
-
+  html, body { height: 100%; overflow: hidden; }
   body {
-    background: var(--bg);
+    background: var(--bg-dark);
     color: var(--text);
     font-family: 'Inter', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    perspective: 800px;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
+    position: relative;
   }
 
-  .scene {
-    position: fixed;
-    inset: 0;
-    overflow: hidden;
-    z-index: 0;
-    perspective: 900px;
-    transform-style: preserve-3d;
+  /* Two-tone background: dark top, yellow bottom */
+  .bg {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(to bottom, var(--bg-dark) 0%, var(--bg-dark) 55%, #c4a800 58%, var(--bg-yellow) 62%, var(--bg-yellow) 100%);
   }
 
-  /* Radial glow behind machine */
-  .scene::after {
-    content: '';
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    width: 600px;
-    height: 600px;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, rgba(255,106,0,0.05) 40%, transparent 70%);
+  /* Coin scene layer */
+  .coin-scene {
+    position: fixed; inset: 0; z-index: 1;
+    perspective: 800px;
     pointer-events: none;
+    overflow: hidden;
   }
 
   /* 3D Coins */
   .coin {
     position: absolute;
-    width: var(--size);
-    height: var(--size);
+    width: var(--sz);
+    height: var(--sz);
     border-radius: 50%;
-    background: radial-gradient(ellipse at 35% 35%, var(--gold-light), var(--gold) 40%, var(--gold-dark) 80%, #7a5a00);
-    box-shadow:
-      inset 0 -3px 6px rgba(0,0,0,0.4),
-      inset 0 2px 4px rgba(255,255,255,0.3),
-      0 0 15px rgba(255,215,0,0.3);
-    animation: coinFloat var(--dur) var(--delay) infinite ease-in-out;
+    background: radial-gradient(ellipse at 30% 30%, #fff8b0, #ffd700 35%, #b8960f 75%, #6b4e00);
+    box-shadow: inset 0 -2px 5px rgba(0,0,0,0.4), inset 0 2px 3px rgba(255,255,255,0.3);
+    animation: coinDepth var(--dur) var(--del) infinite ease-in-out;
     transform-style: preserve-3d;
-    z-index: var(--z);
   }
-
   .coin::after {
     content: 'n';
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 900;
-    font-size: calc(var(--size) * 0.45);
-    color: rgba(184,150,15,0.6);
-    text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Oswald', sans-serif; font-weight: 900;
+    font-size: calc(var(--sz) * 0.4);
+    color: rgba(120,90,0,0.5);
   }
 
-  @keyframes coinFloat {
-    0% {
-      transform: translateZ(var(--z-start)) translateY(0) rotateY(0deg) scale(var(--s-start));
-      opacity: var(--o-start);
-    }
-    50% {
-      transform: translateZ(var(--z-mid)) translateY(var(--drift)) rotateY(180deg) scale(var(--s-mid));
-      opacity: var(--o-mid);
-    }
-    100% {
-      transform: translateZ(var(--z-end)) translateY(0) rotateY(360deg) scale(var(--s-end));
-      opacity: var(--o-end);
-    }
+  @keyframes coinDepth {
+    0%   { transform: translateZ(var(--z0)) rotateY(0deg)   scale(var(--s0)); opacity: var(--o0); }
+    50%  { transform: translateZ(var(--z1)) rotateY(180deg) scale(var(--s1)); opacity: var(--o1); }
+    100% { transform: translateZ(var(--z0)) rotateY(360deg) scale(var(--s0)); opacity: var(--o0); }
   }
 
-  /* Main container */
-  .main {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
-    max-width: 400px;
+  /* Page content */
+  .page {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; align-items: center;
+    height: 100%;
+    padding-top: env(safe-area-inset-top, 0px);
   }
 
-  /* noon JACKPOT header */
+  /* Close button */
+  .close {
+    position: absolute; top: calc(env(safe-area-inset-top, 0px) + 10px); right: 10px;
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    background: rgba(0,0,0,0.3); color: rgba(255,255,255,0.6);
+    font-size: 12px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 5;
+  }
+
+  /* Header: noon + JACKPOT */
   .header {
     text-align: center;
+    margin-top: clamp(10px, 3vh, 30px);
     position: relative;
   }
 
-  .noon-text {
+  .noon {
     font-family: 'Oswald', sans-serif;
     font-weight: 700;
-    font-size: clamp(2.5rem, 10vw, 4rem);
+    font-size: clamp(3rem, 13vw, 5rem);
     color: var(--gold);
-    text-shadow:
-      0 0 20px rgba(255,215,0,0.6),
-      0 0 40px rgba(255,215,0,0.3),
-      0 2px 0 var(--gold-dark);
-    letter-spacing: 0.1em;
-    line-height: 1;
-  }
-
-  .jackpot-text {
-    font-family: 'Oswald', sans-serif;
-    font-weight: 900;
-    font-size: clamp(3rem, 14vw, 5.5rem);
+    text-shadow: 0 3px 0 #a07800, 0 6px 0 #705200, 0 0 20px rgba(255,215,0,0.4);
     line-height: 0.9;
     letter-spacing: 0.05em;
-    background: linear-gradient(180deg, #ff4444 0%, #cc0000 50%, #880000 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  }
+
+  .jackpot {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 900;
+    font-size: clamp(3.5rem, 16vw, 6.5rem);
+    line-height: 0.85;
+    letter-spacing: 0.03em;
+    color: var(--red);
+    text-shadow:
+      0 0 2px #ff0,
+      1px 1px 0 #ff0,
+      -1px -1px 0 #ff0,
+      2px 0 0 #ff0,
+      -2px 0 0 #ff0,
+      0 2px 0 #ff0,
+      0 -2px 0 #ff0;
+    -webkit-text-stroke: 1px #cc8800;
     position: relative;
   }
 
-  /* Marquee bulbs around jackpot text */
-  .marquee-row {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin: 4px 0;
+  /* Slot machine */
+  .machine-wrap {
+    margin-top: clamp(8px, 2vh, 20px);
+    position: relative;
+    width: min(88vw, 360px);
   }
 
-  .bulb {
-    width: 8px;
-    height: 8px;
+  /* Gold base/pedestal */
+  .machine-base {
+    position: absolute;
+    bottom: -30px; left: 50%; transform: translateX(-50%);
+    width: 110%;
+    height: 80px;
+    background: linear-gradient(180deg, #e8c800 0%, #c4a200 30%, #a08200 60%, #d4b400 100%);
+    border-radius: 0 0 20px 20px;
+    clip-path: polygon(8% 0%, 92% 0%, 100% 100%, 0% 100%);
+    z-index: -1;
+  }
+
+  .machine-outer {
+    background: #1a1a00;
+    border-radius: 16px;
+    padding: 14px;
+    position: relative;
+    border: 3px solid #2a2a00;
+  }
+
+  /* Yellow bulb border */
+  .bulb-border {
+    position: absolute; inset: -6px;
+    border-radius: 20px;
+    pointer-events: none; z-index: 3;
+  }
+  .bulb-dot {
+    position: absolute;
+    width: 10px; height: 10px;
     border-radius: 50%;
     background: var(--gold);
-    box-shadow: 0 0 6px var(--gold), 0 0 12px rgba(255,215,0,0.4);
-    animation: bulbBlink 1.5s infinite;
+    box-shadow: 0 0 4px rgba(255,215,0,0.6);
   }
 
-  .bulb:nth-child(even) { animation-delay: 0.75s; }
-
-  @keyframes bulbBlink {
-    0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--gold), 0 0 12px rgba(255,215,0,0.4); }
-    50% { opacity: 0.3; box-shadow: none; }
-  }
-
-  /* Slot machine frame */
-  .machine {
-    width: 100%;
-    max-width: 360px;
-    border-radius: 20px;
-    padding: 6px;
-    background: linear-gradient(135deg, #ffd700 0%, #b8960f 25%, #ffd700 50%, #b8960f 75%, #ffd700 100%);
-    box-shadow:
-      0 0 30px rgba(255,215,0,0.3),
-      0 10px 40px rgba(0,0,0,0.5),
-      inset 0 1px 0 rgba(255,255,255,0.3);
-    position: relative;
-  }
-
-  /* Rivets on the frame */
-  .machine::before {
-    content: '';
+  /* Dark screws/rivets at corners */
+  .rivet {
     position: absolute;
-    inset: 10px;
-    border-radius: 16px;
-    border: 3px solid var(--orange);
-    pointer-events: none;
-    z-index: 2;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #333 40%, #111 100%);
+    z-index: 4;
   }
+  .rivet.tl { top: 6px; left: 6px; }
+  .rivet.tr { top: 6px; right: 6px; }
+  .rivet.bl { bottom: 6px; left: 6px; }
+  .rivet.br { bottom: 6px; right: 6px; }
 
-  .machine-inner {
-    background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
-    border-radius: 16px;
+  /* Orange inner border */
+  .machine-inner-border {
+    border: 4px solid var(--orange);
+    border-radius: 12px;
     overflow: hidden;
     position: relative;
   }
 
   /* Glass reflection */
-  .machine-inner::before {
+  .machine-inner-border::before {
     content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 60%;
-    background: linear-gradient(165deg, rgba(255,255,255,0.08) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 3;
+    position: absolute; inset: 0;
+    background: linear-gradient(155deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 30%, transparent 55%);
+    pointer-events: none; z-index: 2;
   }
 
-  /* Reel window */
-  .reel-window {
-    height: 260px;
-    overflow: hidden;
+  .machine-display {
+    background: linear-gradient(180deg, #1a1a1a 0%, #111 100%);
+    padding: clamp(18px, 4vh, 30px) clamp(16px, 5vw, 30px);
+    display: flex; flex-direction: column; align-items: center; gap: 0;
     position: relative;
   }
 
-  .reel-strip {
-    transition: transform 0.1s linear;
-    position: absolute;
-    width: 100%;
-    top: 0;
-  }
-
-  .reel-item {
-    height: 86.66px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px;
-    position: relative;
-  }
-
-  .reel-item::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 15%;
-    right: 15%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);
-  }
-
-  .reel-item.highlight {
-    background: rgba(255,215,0,0.05);
-  }
-
-  .reel-label {
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+  .prize-row {
     text-align: center;
-    line-height: 1.2;
+    padding: clamp(14px, 3vh, 22px) 0;
+    width: 100%;
   }
 
-  .reel-label.red {
-    color: var(--red);
-    font-size: clamp(0.8rem, 3vw, 1rem);
-    text-shadow: 0 0 10px rgba(255,26,26,0.4);
+  .divider {
+    width: 75%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
   }
 
-  .reel-label.white {
-    color: var(--text);
-    font-size: clamp(1.1rem, 4vw, 1.5rem);
+  .prize-text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.25;
+    letter-spacing: 0.06em;
+  }
+
+  .prize-text.muted-red {
+    color: var(--red-muted);
+    font-size: clamp(0.85rem, 3.2vw, 1.05rem);
+  }
+
+  .prize-text.bold-white {
+    color: #fff;
+    font-size: clamp(1.3rem, 5vw, 1.7rem);
     font-weight: 900;
-    text-shadow: 0 0 15px rgba(255,255,255,0.3);
+    text-shadow: 0 1px 8px rgba(255,255,255,0.15);
   }
 
-  .reel-label.gold {
-    color: var(--gold);
-    font-size: clamp(0.9rem, 3.5vw, 1.1rem);
-    text-shadow: 0 0 10px rgba(255,215,0,0.4);
-  }
-
-  /* Side arrows */
+  /* Orange side arrows */
   .arrow {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
-    z-index: 4;
-    filter: drop-shadow(0 0 4px rgba(255,106,0,0.6));
+    top: 50%; transform: translateY(-50%);
+    width: 0; height: 0;
+    border-top: 14px solid transparent;
+    border-bottom: 14px solid transparent;
+    z-index: 3;
   }
+  .arrow-l { left: -4px; border-right: 18px solid var(--orange); }
+  .arrow-r { right: -4px; border-left: 18px solid var(--orange); }
 
-  .arrow-left {
-    left: 4px;
-    border-right: 16px solid var(--orange);
-  }
-
-  .arrow-right {
-    right: 4px;
-    border-left: 16px solid var(--orange);
-  }
-
-  /* Bulb border around machine */
-  .machine-bulbs {
-    position: absolute;
-    inset: -2px;
-    border-radius: 22px;
-    pointer-events: none;
-    z-index: 5;
-  }
-
-  .m-bulb {
-    position: absolute;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--gold);
-    box-shadow: 0 0 5px var(--gold);
-    animation: bulbBlink 1.2s infinite;
-  }
-
-  /* Turns counter */
+  /* Turns badge */
   .turns {
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
-    font-size: 0.9rem;
-    letter-spacing: 0.15em;
+    margin-top: clamp(28px, 5vh, 50px);
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--text);
-    background: rgba(0,0,0,0.6);
-    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(30,30,30,0.85);
     padding: 8px 28px;
     border-radius: 30px;
-    backdrop-filter: blur(4px);
   }
 
   /* HIT HERE button */
   .hit-btn {
-    width: 100%;
-    max-width: 360px;
-    padding: 20px;
+    margin-top: clamp(16px, 3vh, 30px);
+    width: min(88vw, 360px);
+    padding: clamp(16px, 3vh, 22px);
     border-radius: 50px;
     border: 3px solid var(--gold);
-    background: linear-gradient(180deg, #1a1a1a, #000);
+    background: #111;
     color: var(--gold);
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 900;
-    font-size: clamp(1.5rem, 5vw, 2rem);
-    letter-spacing: 0.15em;
+    font-size: clamp(1.3rem, 5vw, 1.8rem);
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.1s, box-shadow 0.2s;
-    box-shadow: 0 0 20px rgba(255,215,0,0.2), 0 5px 20px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
-
-  .hit-btn:hover:not(:disabled) {
-    transform: scale(1.02);
-    box-shadow: 0 0 30px rgba(255,215,0,0.4), 0 5px 25px rgba(0,0,0,0.5);
-  }
-
-  .hit-btn:active:not(:disabled) {
-    transform: scale(0.97);
-  }
-
-  .hit-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .hit-btn::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent 40%, rgba(255,215,0,0.1) 50%, transparent 60%);
-    animation: shimmer 3s infinite;
-  }
-
-  @keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-  }
+  .hit-btn:active { transform: scale(0.97); }
 
   /* Details link */
-  .details {
+  .details-link {
+    margin-top: clamp(10px, 2vh, 18px);
     font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--text-dim);
-    border: 1px solid rgba(255,255,255,0.2);
-    padding: 4px 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(50,50,50,0.8);
+    border: 1.5px solid rgba(50,50,50,0.5);
+    padding: 4px 18px;
     border-radius: 20px;
-    cursor: pointer;
     background: none;
-    transition: color 0.2s;
-  }
-
-  .details:hover { color: var(--text); }
-
-  /* Close button */
-  .close-btn {
-    position: fixed;
-    top: calc(env(safe-area-inset-top, 0px) + 16px);
-    right: calc(max(16px, env(safe-area-inset-right, 0px)) + 4px);
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(0,0,0,0.5);
-    color: var(--text-dim);
-    font-size: 14px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-  }
-
-  /* Win overlay */
-  .win-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s;
-  }
-
-  .win-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .win-text {
-    font-family: 'Oswald', sans-serif;
-    font-weight: 900;
-    font-size: clamp(2rem, 8vw, 3.5rem);
-    color: var(--gold);
-    text-shadow: 0 0 30px rgba(255,215,0,0.6);
-    text-align: center;
-    animation: winPulse 0.8s ease-in-out infinite alternate;
-  }
-
-  .win-prize {
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
-    font-size: clamp(1.2rem, 4vw, 1.6rem);
-    color: var(--text);
-    margin-top: 12px;
-    text-align: center;
-  }
-
-  .win-dismiss {
-    margin-top: 30px;
-    padding: 12px 40px;
-    border-radius: 30px;
-    border: 2px solid var(--gold);
-    background: transparent;
-    color: var(--gold);
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
-    font-size: 1rem;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-  }
-
-  @keyframes winPulse {
-    from { transform: scale(1); }
-    to { transform: scale(1.05); }
-  }
-
-  /* Sparkle particles on win */
-  .sparkle {
-    position: fixed;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--gold);
-    pointer-events: none;
-    z-index: 21;
-    animation: sparkleFade 1s forwards;
-  }
-
-  @keyframes sparkleFade {
-    0% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0; transform: scale(0) translateY(-40px); }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .coin, .bulb, .m-bulb, .hit-btn::before, .win-text { animation: none !important; }
-    .reel-strip { transition: none !important; }
+    .coin { animation: none !important; }
   }
 </style>
 
-<div class="scene" id="scene"></div>
+<div class="bg"></div>
 
-<button class="close-btn" aria-label="Close">&#x2715;</button>
+<div class="coin-scene" id="coinScene"></div>
 
-<div class="main">
+<div class="page">
+  <button class="close" aria-label="Close">&#x2715;</button>
+
   <div class="header">
-    <div class="marquee-row" id="topBulbs"></div>
-    <div class="noon-text">noon</div>
-    <div class="jackpot-text">JACKPOT</div>
-    <div class="marquee-row" id="bottomBulbs"></div>
+    <div class="noon">noon</div>
+    <div class="jackpot">JACKPOT</div>
   </div>
 
-  <div class="machine">
-    <div class="machine-bulbs" id="machineBulbs"></div>
-    <div class="machine-inner">
-      <div class="arrow arrow-left"></div>
-      <div class="arrow arrow-right"></div>
-      <div class="reel-window">
-        <div class="reel-strip" id="reelStrip"></div>
+  <div class="machine-wrap">
+    <div class="machine-base"></div>
+    <div class="machine-outer">
+      <div class="bulb-border" id="bulbBorder"></div>
+      <div class="rivet tl"></div>
+      <div class="rivet tr"></div>
+      <div class="rivet bl"></div>
+      <div class="rivet br"></div>
+
+      <div class="machine-inner-border">
+        <div class="arrow arrow-l"></div>
+        <div class="arrow arrow-r"></div>
+        <div class="machine-display">
+          <div class="prize-row">
+            <div class="prize-text muted-red">FREE DELIVERY<br>ON NEXT 3 ORDERS</div>
+          </div>
+          <div class="divider"></div>
+          <div class="prize-row">
+            <div class="prize-text bold-white">50% OFF<br>ON NEXT ORDER</div>
+          </div>
+          <div class="divider"></div>
+          <div class="prize-row">
+            <div class="prize-text muted-red">FREE DELIVERY<br>ON NEXT 3 ORDERS</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="turns" id="turnsLabel">5 TURNS LEFT</div>
+  <div class="turns">5 TURNS LEFT</div>
 
-  <button class="hit-btn" id="hitBtn">HIT HERE</button>
+  <button class="hit-btn">HIT HERE</button>
 
-  <button class="details">Details</button>
-</div>
-
-<div class="win-overlay" id="winOverlay">
-  <div class="win-text" id="winText">YOU WON!</div>
-  <div class="win-prize" id="winPrize"></div>
-  <button class="win-dismiss" id="winDismiss">CLAIM</button>
+  <button class="details-link">Details</button>
 </div>
 
 <script>
-  const prizes = [
-    { text: 'FREE DELIVERY\nON NEXT 3 ORDERS', cls: 'red' },
-    { text: '50% OFF\nON NEXT ORDER', cls: 'white' },
-    { text: 'FREE DELIVERY\nON NEXT 3 ORDERS', cls: 'red' },
-    { text: '20% OFF\nON NEXT 2 ORDERS', cls: 'gold' },
-    { text: 'BUY 1 GET 1\nFREE', cls: 'white' },
-    { text: 'FREE DELIVERY\nFOR A WEEK', cls: 'red' },
-    { text: '30% OFF\nON NEXT ORDER', cls: 'gold' },
-    { text: 'FLAT $50 OFF\nON NEXT ORDER', cls: 'white' },
-  ];
-
-  let turnsLeft = 5;
-  let spinning = false;
-  const strip = document.getElementById('reelStrip');
-  const hitBtn = document.getElementById('hitBtn');
-  const turnsLabel = document.getElementById('turnsLabel');
-  const winOverlay = document.getElementById('winOverlay');
-  const winText = document.getElementById('winText');
-  const winPrize = document.getElementById('winPrize');
-  const winDismiss = document.getElementById('winDismiss');
-  const ITEM_H = 86.66;
-
-  // Build reel items (repeat prizes several times for smooth scrolling)
-  function buildReel() {
-    strip.innerHTML = '';
-    const repeated = [];
-    for (let i = 0; i < 8; i++) repeated.push(...prizes);
-    repeated.forEach((p, i) => {
-      const div = document.createElement('div');
-      div.className = 'reel-item' + (p.cls === 'white' ? ' highlight' : '');
-      const lines = p.text.split('\n');
-      div.innerHTML = lines.map(l => `<div class="reel-label ${p.cls}">${l}</div>`).join('');
-      strip.appendChild(div);
-    });
-    strip.style.transform = `translateY(-${ITEM_H * 2}px)`;
-  }
-
-  buildReel();
-
-  // Spin logic
-  hitBtn.addEventListener('click', () => {
-    if (spinning || turnsLeft <= 0) return;
-    spinning = true;
-    hitBtn.disabled = true;
-    turnsLeft--;
-    turnsLabel.textContent = turnsLeft + ' TURN' + (turnsLeft !== 1 ? 'S' : '') + ' LEFT';
-
-    const winIndex = Math.floor(Math.random() * prizes.length);
-    const totalItems = prizes.length * 8;
-    const targetIndex = prizes.length * 5 + winIndex;
-    const targetOffset = targetIndex * ITEM_H;
-
-    strip.style.transition = 'none';
-    strip.style.transform = `translateY(0px)`;
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        strip.style.transition = 'transform 3.5s cubic-bezier(0.15, 0.85, 0.25, 1)';
-        strip.style.transform = `translateY(-${targetOffset - ITEM_H}px)`;
-      });
-    });
-
-    setTimeout(() => {
-      spinning = false;
-      hitBtn.disabled = turnsLeft <= 0;
-      showWin(prizes[winIndex]);
-    }, 3700);
-  });
-
-  function showWin(prize) {
-    winPrize.textContent = prize.text.replace('\n', ' ');
-    winOverlay.classList.add('active');
-    burstSparkles();
-  }
-
-  winDismiss.addEventListener('click', () => {
-    winOverlay.classList.remove('active');
-    if (turnsLeft <= 0) {
-      turnsLabel.textContent = 'NO TURNS LEFT';
-      hitBtn.disabled = true;
-    }
-  });
-
-  function burstSparkles() {
-    for (let i = 0; i < 30; i++) {
-      const s = document.createElement('div');
-      s.className = 'sparkle';
-      s.style.left = Math.random() * 100 + 'vw';
-      s.style.top = Math.random() * 100 + 'vh';
-      s.style.width = s.style.height = (4 + Math.random() * 6) + 'px';
-      s.style.animationDuration = (0.6 + Math.random() * 0.8) + 's';
-      s.style.background = ['#ffd700','#ff6a00','#fff','#ff4444'][Math.floor(Math.random()*4)];
-      document.body.appendChild(s);
-      setTimeout(() => s.remove(), 1500);
-    }
-  }
-
-  // Generate header bulbs
-  function makeBulbs(container, count) {
-    for (let i = 0; i < count; i++) {
-      const b = document.createElement('div');
-      b.className = 'bulb';
-      b.style.animationDelay = (i * 0.12) + 's';
-      container.appendChild(b);
-    }
-  }
-  makeBulbs(document.getElementById('topBulbs'), 18);
-  makeBulbs(document.getElementById('bottomBulbs'), 18);
-
-  // Generate machine border bulbs
-  function makeMachineBulbs() {
-    const container = document.getElementById('machineBulbs');
-    const rect = container.parentElement.getBoundingClientRect();
-    const perimeter = 2 * (rect.width + rect.height);
-    const count = 40;
-    const spacing = perimeter / count;
-    const w = rect.width + 4, h = rect.height + 4;
+  // Place bulb dots around the machine border
+  (function placeBulbs() {
+    const el = document.getElementById('bulbBorder');
+    const outer = el.parentElement;
+    const rect = outer.getBoundingClientRect();
+    const w = rect.width + 12, h = rect.height + 12;
+    const perimeter = 2 * (w + h);
+    const count = 36;
+    const gap = perimeter / count;
 
     for (let i = 0; i < count; i++) {
-      const dist = i * spacing;
+      const d = i * gap;
       let x, y;
-      if (dist < w) { x = dist; y = -2; }
-      else if (dist < w + h) { x = w; y = dist - w; }
-      else if (dist < 2 * w + h) { x = w - (dist - w - h); y = h; }
-      else { x = -2; y = h - (dist - 2 * w - h); }
+      if (d < w) { x = d; y = 0; }
+      else if (d < w + h) { x = w; y = d - w; }
+      else if (d < 2 * w + h) { x = w - (d - w - h); y = h; }
+      else { x = 0; y = h - (d - 2 * w - h); }
 
-      const b = document.createElement('div');
-      b.className = 'm-bulb';
-      b.style.left = x + 'px';
-      b.style.top = y + 'px';
-      b.style.animationDelay = (i * 0.08) + 's';
-      container.appendChild(b);
+      const dot = document.createElement('div');
+      dot.className = 'bulb-dot';
+      dot.style.left = (x - 5) + 'px';
+      dot.style.top = (y - 5) + 'px';
+      el.appendChild(dot);
     }
-  }
-  setTimeout(makeMachineBulbs, 100);
+  })();
 
-  // 3D COINS with front-to-back perspective animation
-  function createCoins() {
-    const scene = document.getElementById('scene');
-    const coinCount = 18;
+  // Create 3D perspective coins
+  (function createCoins() {
+    const scene = document.getElementById('coinScene');
+    const coins = [
+      // Matching approximate positions from the PDF
+      { x: 8,  y: 5,  sz: 50, back: true },
+      { x: 18, y: 12, sz: 35, back: false },
+      { x: 75, y: 4,  sz: 28, back: true },
+      { x: 85, y: 10, sz: 42, back: false },
+      { x: 60, y: 8,  sz: 22, back: true },
+      { x: 92, y: 18, sz: 18, back: false },
+      { x: 5,  y: 22, sz: 24, back: true },
+      { x: 50, y: 2,  sz: 15, back: false },
+      { x: 30, y: 7,  sz: 20, back: true },
+      { x: 70, y: 16, sz: 30, back: false },
+      { x: 15, y: 30, sz: 18, back: true },
+      { x: 90, y: 28, sz: 25, back: false },
+      { x: 40, y: 15, sz: 16, back: true },
+      { x: 55, y: 20, sz: 20, back: false },
+    ];
 
-    for (let i = 0; i < coinCount; i++) {
-      const coin = document.createElement('div');
-      coin.className = 'coin';
-      const size = 20 + Math.random() * 45;
-      const x = Math.random() * 100;
-      const startY = Math.random() * 100;
+    coins.forEach((c, i) => {
+      const el = document.createElement('div');
+      el.className = 'coin';
+      el.style.left = c.x + '%';
+      el.style.top = c.y + '%';
+      el.style.setProperty('--sz', c.sz + 'px');
+      el.style.setProperty('--dur', (6 + Math.random() * 5) + 's');
+      el.style.setProperty('--del', (-Math.random() * 6) + 's');
 
-      // Depth movement: some go front-to-back, some back-to-front
-      const goingBack = Math.random() > 0.5;
-      const zNear = 50 + Math.random() * 150;
-      const zFar = -200 - Math.random() * 300;
-      const drift = -30 + Math.random() * 60;
-
-      coin.style.setProperty('--size', size + 'px');
-      coin.style.left = x + '%';
-      coin.style.top = startY + '%';
-      coin.style.setProperty('--dur', (5 + Math.random() * 7) + 's');
-      coin.style.setProperty('--delay', (-Math.random() * 8) + 's');
-      coin.style.setProperty('--drift', drift + 'px');
-
-      if (goingBack) {
-        coin.style.setProperty('--z-start', zNear + 'px');
-        coin.style.setProperty('--z-mid', zFar + 'px');
-        coin.style.setProperty('--z-end', zNear + 'px');
-        coin.style.setProperty('--s-start', 1.2);
-        coin.style.setProperty('--s-mid', 0.4);
-        coin.style.setProperty('--s-end', 1.2);
-        coin.style.setProperty('--o-start', 0.9);
-        coin.style.setProperty('--o-mid', 0.3);
-        coin.style.setProperty('--o-end', 0.9);
+      if (c.back) {
+        el.style.setProperty('--z0', (40 + Math.random() * 80) + 'px');
+        el.style.setProperty('--z1', (-150 - Math.random() * 200) + 'px');
+        el.style.setProperty('--s0', '1.1');
+        el.style.setProperty('--s1', '0.5');
+        el.style.setProperty('--o0', '0.95');
+        el.style.setProperty('--o1', '0.35');
       } else {
-        coin.style.setProperty('--z-start', zFar + 'px');
-        coin.style.setProperty('--z-mid', zNear + 'px');
-        coin.style.setProperty('--z-end', zFar + 'px');
-        coin.style.setProperty('--s-start', 0.4);
-        coin.style.setProperty('--s-mid', 1.2);
-        coin.style.setProperty('--s-end', 0.4);
-        coin.style.setProperty('--o-start', 0.3);
-        coin.style.setProperty('--o-mid', 0.9);
-        coin.style.setProperty('--o-end', 0.3);
+        el.style.setProperty('--z0', (-150 - Math.random() * 200) + 'px');
+        el.style.setProperty('--z1', (40 + Math.random() * 80) + 'px');
+        el.style.setProperty('--s0', '0.5');
+        el.style.setProperty('--s1', '1.1');
+        el.style.setProperty('--o0', '0.35');
+        el.style.setProperty('--o1', '0.95');
       }
 
-      coin.style.setProperty('--z', goingBack ? 2 : 1);
-      scene.appendChild(coin);
-    }
-  }
-
-  createCoins();
+      scene.appendChild(el);
+    });
+  })();
 </script>
